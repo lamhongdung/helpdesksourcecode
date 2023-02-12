@@ -195,6 +195,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findUserByEmail(email);
     }
 
+    @Override
+    public long getTotalOfUsers(){
+        return userRepository.getTotalOfUsers();
+    }
+
 //    @Override
 //    public void deleteUser(String username) throws IOException {
 //        User user = userRepository.findUserByUsername(username);

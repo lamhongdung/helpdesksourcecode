@@ -33,7 +33,8 @@ public class User implements Serializable {
     private String phone;
     private String address;
     private String role; // ROLE_CUSTOMER, ROLE_SUPPORTER, ROLE_ADMIN
-    private boolean isActive;
+//    private boolean isActive;
+    private String status;
 //    private String username;
     // WRITE_ONLY: only allow write(set) value of id, but do not allow read id
 //    private String profileImageUrl;

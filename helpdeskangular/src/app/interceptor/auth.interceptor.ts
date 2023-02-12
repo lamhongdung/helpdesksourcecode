@@ -15,7 +15,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
     // 
-    if (httpRequest.url.includes(`${this.authenticationService.host}/user/login`)) {
+    // if (httpRequest.url.includes(`${this.authenticationService.host}/user/login`)) {
+    if (httpRequest.url.includes(`${this.authenticationService.host}/login`)) {
       // let forward it(do nothing)
       return httpHandler.handle(httpRequest);
     }

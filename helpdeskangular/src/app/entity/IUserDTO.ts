@@ -7,5 +7,5 @@ export interface IUserDTO {
     phone: string;
     address: string;
     role: string;
-    isActive: boolean;
+    status: string;
 }

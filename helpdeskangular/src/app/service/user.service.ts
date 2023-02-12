@@ -16,19 +16,26 @@ export class UserService {
 
   // get all users from backend
   public getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.host}/user/list`);
+    return this.http.get<User[]>(`${this.host}/user-list`);
   }
 
   // get all users and paginate
   getAllUsers(index: number): Observable<IUserDTO[]> {
-    console.log(`${this.host}/user/list?index=${index}`);
-    return this.http.get<IUserDTO[]>(`${this.host}/user/list?index=${index}`)
+    // console.log(`${this.host}/user-list?index=${index}`);
+    return this.http.get<IUserDTO[]>(`${this.host}/user-list?index=${index}`)
     // return this.http.get<IUserDTO[]>(`${this.host}/user/list`)
   }
 
   getAllUsersNotPagination(): Observable<IUserDTO[]> {
     // return this.http.get<IUserDTO[]>(this.API + 'users-not-pagination')
-    return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
+    // return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
+    return this.http.get<IUserDTO[]>(`${this.host}/users-not-pagination`)
+  }
+
+  getTotalOfUsers(): Observable<number> {
+    // return this.http.get<IUserDTO[]>(this.API + 'users-not-pagination')
+    // return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
+    return this.http.get<number>(`${this.host}/total-of-users`);
   }
 
   public addUser(formData: FormData): Observable<User> {

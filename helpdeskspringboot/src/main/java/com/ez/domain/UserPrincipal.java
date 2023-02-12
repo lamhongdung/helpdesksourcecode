@@ -1,5 +1,6 @@
 package com.ez.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,6 +61,9 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.user.isActive();
+//        return this.user.isActive();
+//        return (this.user.getStatus().compareTo("Active"));
+        return true;
+//        return StringUtils.equalsIgnoreCase(this.user.getStatus(),"Active");
     }
 }

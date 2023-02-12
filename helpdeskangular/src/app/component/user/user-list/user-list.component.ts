@@ -13,6 +13,8 @@ export class UserListComponent implements OnInit {
   indexPagination: number = 1;
   totalPagination: number;
 
+  totalOfUsers: number;
+
   searchUser = new FormGroup({
     searchTerm: new FormControl(''),
     role: new FormControl(''),
@@ -21,7 +23,7 @@ export class UserListComponent implements OnInit {
 
   users: IUserDTO[] = [];
 
-  listUserNotPagination: IUserDTO[] = [];
+  // listUserNotPagination: IUserDTO[] = [];
 
   constructor(private userService: UserService) { }
 
@@ -32,20 +34,35 @@ export class UserListComponent implements OnInit {
         this.users = data;
       });
 
-    this.userService.getAllUsersNotPagination().subscribe(
-        (data: IUserDTO[]) => {
+    // this.userService.getAllUsersNotPagination().subscribe(
+    //   (data: IUserDTO[]) => {
 
-          this.listUserNotPagination = data;
+    //     this.listUserNotPagination = data;
 
-          if ((this.listUserNotPagination.length % 5) != 0) {
-          this.totalPagination = (Math.round(this.listUserNotPagination.length / 5)) + 1;
-          }
+    //     if ((this.listUserNotPagination.length % 5) != 0) {
+    //       this.totalPagination = (Math.round(this.listUserNotPagination.length / 5)) + 1;
+    //     } else{
+    //       this.totalPagination = this.listUserNotPagination.length / 5;
+    //     }
+    //   }
+    // )
+
+    this.userService.getTotalOfUsers().subscribe(
+      (data: number) => {
+
+        this.totalOfUsers = data;
+
+        if ((this.totalOfUsers % 5) != 0) {
+          this.totalPagination = (Math.round(this.totalOfUsers / 5)) + 1;
+        } else{
+          this.totalPagination = this.totalOfUsers / 5;
         }
+      }
     )
 
   }
 
-  search(){
+  search() {
 
   }
 
@@ -85,13 +102,16 @@ export class UserListComponent implements OnInit {
     } else {
       this.userService.getAllUsers((this.indexPagination * 5) - 5).subscribe(
         (data: IUserDTO[]) => {
-         this.users = data;
+          this.users = data;
         })
     }
   }
 
   lastPage() {
-    this.indexPagination = this.listUserNotPagination.length / 5;
+
+    // this.indexPagination = this.listUserNotPagination.length / 5;
+    this.indexPagination = this.totalPagination;
+
     this.userService.getAllUsers((this.indexPagination * 5) - 5).subscribe(
       (data: IUserDTO[]) => {
         this.users = data;

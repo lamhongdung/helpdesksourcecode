@@ -19,8 +19,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value =  "select a.* " +
                     "from user a " +
-                    "limit ?1,5; ", nativeQuery = true)
+                    "limit ?1,5; ",
+            nativeQuery = true)
     List<User> getAllUsers(int index);
+
+    @Query(value =  " select count(a.id) as totalOfUsers " +
+                    " from user a ",
+            nativeQuery = true)
+    long getTotalOfUsers();
 
 //    List<User> getAllUsers(int index);
 }

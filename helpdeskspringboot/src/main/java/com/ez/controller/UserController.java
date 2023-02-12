@@ -1,40 +1,34 @@
-package com.ez.resource;
+package com.ez.controller;
 
 import com.ez.domain.HttpResponse;
 import com.ez.domain.User;
 import com.ez.domain.UserPrincipal;
 import com.ez.exception.ExceptionHandling;
-import com.ez.exception.domain.*;
 import com.ez.service.UserService;
 import com.ez.utility.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.MessagingException;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import static com.ez.constant.FileConstant.*;
 import static com.ez.constant.SecurityConstant.JWT_TOKEN_HEADER;
-import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.HttpStatus.OK;
+
+
 
 @RestController
-@RequestMapping(path = {"/", "/user"})
-public class UserResource extends ExceptionHandling {
+//@RequestMapping(path = {"/", "/user"})
+public class UserController extends ExceptionHandling {
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
 
     // no need this feature
@@ -44,7 +38,7 @@ public class UserResource extends ExceptionHandling {
     private JWTTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserResource(AuthenticationManager authenticationManager, UserService userService, JWTTokenProvider jwtTokenProvider) {
+    public UserController(AuthenticationManager authenticationManager, UserService userService, JWTTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -109,7 +103,7 @@ public class UserResource extends ExceptionHandling {
 //        return new ResponseEntity<>(user, OK);
 //    }
 
-    @GetMapping("/list")
+    @GetMapping("/user-list")
     public ResponseEntity<List<User>> getAllUsers(@RequestParam int index) {
         List<User> users = userService.getUsers(index);
 //        List<User> users = userService.getUsers(0);
@@ -124,6 +118,16 @@ public class UserResource extends ExceptionHandling {
 //            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
 //        }
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/total-of-users")
+    public ResponseEntity<Long> getTotalOfUsers() {
+//        List<User> users = userService.getAllUserNotPagination();
+        long totalOfUsers = userService.getTotalOfUsers();
+//        if (users.isEmpty()) {
+//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+//        }
+        return new ResponseEntity<Long>(totalOfUsers, HttpStatus.OK);
     }
 
 //    @GetMapping("/resetpassword/{email}")
@@ -185,3 +189,4 @@ public class UserResource extends ExceptionHandling {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 }
+

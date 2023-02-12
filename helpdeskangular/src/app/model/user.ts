@@ -6,7 +6,7 @@ export class User {
   public phone: string;
   public address: string;
   public role: string;
-  public active: boolean;
+  public status: string;
 
   public lastLoginDate: Date;
   public lastLoginDateDisplay: Date;
@@ -25,7 +25,7 @@ export class User {
     this.phone = '';
     this.address = '';
     this.role = '';
-    this.active = false;
+    this.status = 'Inactive';
     
     this.lastLoginDate = null;
     this.lastLoginDateDisplay = null;

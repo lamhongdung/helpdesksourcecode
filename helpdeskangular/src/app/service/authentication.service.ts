@@ -27,7 +27,8 @@ export class AuthenticationService {
   // when user click the "Login" button
   public login(user: User): Observable<HttpResponse<User>> {
     // { observe: 'response' }: want to receive whole response(include header,...)
-    return this.http.post<User>(`${this.host}/user/login`, user, { observe: 'response' });
+    // return this.http.post<User>(`${this.host}/user/login`, user, { observe: 'response' });
+    return this.http.post<User>(`${this.host}/login`, user, { observe: 'response' });
   }
 
   // do not use
