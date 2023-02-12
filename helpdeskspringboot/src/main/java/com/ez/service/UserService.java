@@ -13,6 +13,9 @@ public interface UserService {
 //    User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException;
 
     List<User> getUsers();
+//    List<User> findAll();
+
+    List<User> getUsers(int index);
 
 //    User findUserByUsername(String username);
 

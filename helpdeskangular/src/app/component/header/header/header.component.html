@@ -1,3 +1,4 @@
+<!-- only display the header navigation when user has logged in -->
 <div class="header" *ngIf="loggedInEmail !== '' ">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -7,7 +8,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
           <!-- Users menu -->
+
+          <!-- display the Users menu if user role is "ROLE_ADMIN" -->
           <li class="nav-item dropdown active" *ngIf="['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
             <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-toggle="dropdown"
               aria-expanded="false">

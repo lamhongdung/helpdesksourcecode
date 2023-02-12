@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../model/user';
 import { CustomHttpRespone } from '../model/custom-http-response';
+import { IUserDTO } from '../entity/IUserDTO';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -16,6 +17,18 @@ export class UserService {
   // get all users from backend
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.host}/user/list`);
+  }
+
+  // get all users and paginate
+  getAllUsers(index: number): Observable<IUserDTO[]> {
+    console.log(`${this.host}/user/list?index=${index}`);
+    return this.http.get<IUserDTO[]>(`${this.host}/user/list?index=${index}`)
+    // return this.http.get<IUserDTO[]>(`${this.host}/user/list`)
+  }
+
+  getAllUsersNotPagination(): Observable<IUserDTO[]> {
+    // return this.http.get<IUserDTO[]>(this.API + 'users-not-pagination')
+    return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
   }
 
   public addUser(formData: FormData): Observable<User> {

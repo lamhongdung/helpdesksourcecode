@@ -16,6 +16,8 @@ import { RegisterComponent } from './register/register.component';
 import { UserComponent } from './user/user.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
 import { HeaderComponent } from './component/header/header/header.component';
+import { UserListComponent } from './component/user/user-list/user-list.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -24,14 +26,16 @@ import { HeaderComponent } from './component/header/header/header.component';
     RegisterComponent,
     UserComponent,
     CategoryListComponent,
-    HeaderComponent
+    HeaderComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    NotificationModule
+    NotificationModule,
+    ReactiveFormsModule
   ],
   providers: [NotificationService, AuthenticationGuard, AuthenticationService, UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } ],

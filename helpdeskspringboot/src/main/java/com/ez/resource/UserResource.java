@@ -110,9 +110,20 @@ public class UserResource extends ExceptionHandling {
 //    }
 
     @GetMapping("/list")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getUsers();
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam int index) {
+        List<User> users = userService.getUsers(index);
+//        List<User> users = userService.getUsers(0);
         return new ResponseEntity<>(users, OK);
+    }
+
+    @GetMapping("/users-not-pagination")
+    public ResponseEntity<List<User>> getAllUsersNotPagination() {
+//        List<User> users = userService.getAllUserNotPagination();
+        List<User> users = userService.getUsers();
+//        if (users.isEmpty()) {
+//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+//        }
+        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 
 //    @GetMapping("/resetpassword/{email}")

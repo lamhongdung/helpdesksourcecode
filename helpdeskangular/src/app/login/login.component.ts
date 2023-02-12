@@ -73,7 +73,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           // navigate to '/user/management'
           // this.router.navigateByUrl('/user/management');
-          this.router.navigateByUrl('/category-list');
+          // this.router.navigateByUrl('/category-list');
+          this.router.navigateByUrl('/user-list');
 
           // hide spinner(circle)
           this.showLoading = false;

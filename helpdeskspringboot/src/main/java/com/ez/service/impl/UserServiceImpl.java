@@ -176,6 +176,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 //    @Override
+//    public List<User> findAll() {
+//        return user;
+//    }
+
+    @Override
+    public List<User> getUsers(int index) {
+        return userRepository.getAllUsers(index);
+    }
+
+//    @Override
 //    public User findUserByUsername(String username) {
 //        return userRepository.findUserByUsername(username);
 //    }
