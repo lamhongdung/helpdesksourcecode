@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { User } from '../model/user';
+import { User } from '../entity/user';
 import { UserService } from '../service/user.service';
 import { NotificationService } from '../service/notification.service';
 import { NotificationType } from '../enum/notification-type.enum';
 import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { CustomHttpRespone } from '../model/custom-http-response';
+import { CustomHttpRespone } from '../entity/custom-http-response';
 import { AuthenticationService } from '../service/authentication.service';
 import { Router } from '@angular/router';
-import { FileUploadStatus } from '../model/file-upload.status';
+import { FileUploadStatus } from '../entity/file-upload.status';
 import { Role } from '../enum/role.enum';
 
 @Component({
@@ -34,48 +34,49 @@ export class UserComponent implements OnInit, OnDestroy {
   public fileStatus = new FileUploadStatus();
 
   constructor(private router: Router, private authenticationService: AuthenticationService,
-              private userService: UserService, private notificationService: NotificationService) {}
+    private userService: UserService, private notificationService: NotificationService) { }
 
+  // this method ngOnInit() is run right after constructor
   ngOnInit(): void {
+
     // get user info who has just logged in successful
-    // this.user = this.authenticationService.getUserFromLocalCache();
     this.user = this.authenticationService.getUserFromLocalStorage();
 
     // get all users for loading in the table on the screen
-    this.getUsers(true);
+    // this.getUsers(true);
   }
 
   public changeTitle(title: string): void {
     this.titleSubject.next(title);
   }
 
-  // showNotification:
-  //    - true: will send notification
-  //    - false: no need send notification
-  public getUsers(showNotification: boolean): void {
-    this.refreshing = true;
-    this.subscriptions.push(
+  // // showNotification:
+  // //    - true: will send notification
+  // //    - false: no need send notification
+  // public getUsers(showNotification: boolean): void {
+  //   this.refreshing = true;
+  //   this.subscriptions.push(
 
-      // get all users from backend
-      this.userService.getUsers().subscribe(
-        (response: User[]) => {
-          // add users to local storage for searching user
-          // this.userService.addUsersToLocalCache(response);
+  //     // get all users from backend
+  //     this.userService.getUsers().subscribe(
+  //       (response: User[]) => {
+  //         // add users to local storage for searching user
+  //         // this.userService.addUsersToLocalCache(response);
 
-          this.users = response;
-          this.refreshing = false;
-          if (showNotification) {
-            this.sendNotification(NotificationType.SUCCESS, `${response.length} user(s) loaded successfully.`);
-          }
-        },
-        (errorResponse: HttpErrorResponse) => {
-          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-          this.refreshing = false;
-        }
-      )
-    );
+  //         this.users = response;
+  //         this.refreshing = false;
+  //         if (showNotification) {
+  //           this.sendNotification(NotificationType.SUCCESS, `${response.length} user(s) loaded successfully.`);
+  //         }
+  //       },
+  //       (errorResponse: HttpErrorResponse) => {
+  //         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+  //         this.refreshing = false;
+  //       }
+  //     )
+  //   );
 
-  }
+  // }
 
   // 
   public onSelectUser(selectedUser: User): void {
@@ -84,7 +85,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   public onProfileImageChange(fileName: string, profileImage: File): void {
-    this.fileName =  fileName;
+    this.fileName = fileName;
     this.profileImage = profileImage;
   }
 
@@ -221,19 +222,19 @@ export class UserComponent implements OnInit, OnDestroy {
     );
   }
 
-  public onDeleteUder(username: string): void {
-    this.subscriptions.push(
-      this.userService.deleteUser(username).subscribe(
-        (response: CustomHttpRespone) => {
-          this.sendNotification(NotificationType.SUCCESS, response.message);
-          this.getUsers(false);
-        },
-        (error: HttpErrorResponse) => {
-          this.sendNotification(NotificationType.ERROR, error.error.message);
-        }
-      )
-    );
-  }
+  // public onDeleteUder(username: string): void {
+  //   this.subscriptions.push(
+  //     this.userService.deleteUser(username).subscribe(
+  //       (response: CustomHttpRespone) => {
+  //         this.sendNotification(NotificationType.SUCCESS, response.message);
+  //         this.getUsers(false);
+  //       },
+  //       (error: HttpErrorResponse) => {
+  //         this.sendNotification(NotificationType.ERROR, error.error.message);
+  //       }
+  //     )
+  //   );
+  // }
 
   // public onEditUser(editUser: User): void {
   //   this.editUser = editUser;
@@ -257,24 +258,27 @@ export class UserComponent implements OnInit, OnDestroy {
   //   }
   // }
 
+  // check whether user is an admin or not?
   public get isAdmin(): boolean {
     return this.getUserRole() === Role.ADMIN;
   }
-
+  
+  // check whether user is a customer or not?
   public get isCustomer(): boolean {
     return this.getUserRole() === Role.CUSTOMER;
   }
-
+  
+  // check whether user is a supporter or not?
   public get isSupporter(): boolean {
     return this.getUserRole() === Role.SUPPORTER;
   }
 
   // get user role from user saved in the local storage
   private getUserRole(): string {
-    // return this.authenticationService.getUserFromLocalCache().role;
     return this.authenticationService.getRoleFromLocalStorage();
   }
 
+  // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
     if (message) {
       this.notificationService.notify(notificationType, message);
@@ -287,7 +291,7 @@ export class UserComponent implements OnInit, OnDestroy {
     document.getElementById(buttonId).click();
   }
 
-  // unsubscribe all subscriptions
+  // unsubscribe all subscriptions from this component "UserComponent"
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }

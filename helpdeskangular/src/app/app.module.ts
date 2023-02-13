@@ -14,10 +14,10 @@ import { NotificationService } from './service/notification.service';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserComponent } from './user/user.component';
-import { CategoryListComponent } from './category/category-list/category-list.component';
 import { HeaderComponent } from './component/header/header/header.component';
 import { UserListComponent } from './component/user/user-list/user-list.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { CategoryListComponent } from './component/category/category-list/category-list.component';
 
 @NgModule({
   declarations: [

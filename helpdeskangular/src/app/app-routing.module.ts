@@ -4,8 +4,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserComponent } from './user/user.component';
 import { AuthenticationGuard } from './guard/authentication.guard';
-import { CategoryListComponent } from './category/category-list/category-list.component';
 import { UserListComponent } from './component/user/user-list/user-list.component';
+import { CategoryListComponent } from './component/category/category-list/category-list.component';
 
 
 const routes: Routes = [

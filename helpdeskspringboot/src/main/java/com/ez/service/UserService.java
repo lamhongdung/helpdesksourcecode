@@ -1,11 +1,7 @@
 package com.ez.service;
 
-import com.ez.domain.User;
-import com.ez.exception.domain.*;
-import org.springframework.web.multipart.MultipartFile;
+import com.ez.entity.User;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -15,7 +11,7 @@ public interface UserService {
     List<User> getUsers();
 //    List<User> findAll();
 
-    List<User> getUsers(int index);
+    List<User> getUsers(int page, int size);
 
 //    User findUserByUsername(String username);
 

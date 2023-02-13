@@ -1,4 +1,4 @@
-package com.ez.exception.domain;
+package com.ez.entity;
 
 // exception for username already existed(function of create user)
 public class UsernameExistException extends Exception {

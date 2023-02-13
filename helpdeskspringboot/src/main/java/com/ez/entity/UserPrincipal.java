@@ -1,5 +1,6 @@
-package com.ez.domain;
+package com.ez.entity;
 
+import com.ez.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 
@@ -63,7 +63,7 @@ public class UserPrincipal implements UserDetails {
     public boolean isEnabled() {
 //        return this.user.isActive();
 //        return (this.user.getStatus().compareTo("Active"));
-        return true;
-//        return StringUtils.equalsIgnoreCase(this.user.getStatus(),"Active");
+//        return true;
+        return StringUtils.equalsIgnoreCase(this.user.getStatus(),"Active");
     }
 }

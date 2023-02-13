@@ -1,4 +1,4 @@
-package com.ez.domain;
+package com.ez.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;

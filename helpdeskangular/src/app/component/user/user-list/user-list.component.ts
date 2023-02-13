@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵɵinjectPipeChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IUserDTO } from 'src/app/entity/IUserDTO';
 import { UserService } from 'src/app/service/user.service';
@@ -10,10 +10,14 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class UserListComponent implements OnInit {
 
-  indexPagination: number = 1;
-  totalPagination: number;
-
+  // current page
+  currentPage: number = 1;
+  // total page
+  totalPage: number;
+  // total of users  
   totalOfUsers: number;
+
+  users: IUserDTO[] = [];
 
   searchUser = new FormGroup({
     searchTerm: new FormControl(''),
@@ -21,14 +25,15 @@ export class UserListComponent implements OnInit {
     status: new FormControl('')
   });
 
-  users: IUserDTO[] = [];
 
   // listUserNotPagination: IUserDTO[] = [];
 
   constructor(private userService: UserService) { }
 
+  // this method ngOnInit() is run right after contructor
   ngOnInit(): void {
 
+    // get first page from database
     this.userService.getAllUsers(0).subscribe(
       (data: IUserDTO[]) => {
         this.users = data;
@@ -52,10 +57,13 @@ export class UserListComponent implements OnInit {
 
         this.totalOfUsers = data;
 
-        if ((this.totalOfUsers % 5) != 0) {
-          this.totalPagination = (Math.round(this.totalOfUsers / 5)) + 1;
-        } else{
-          this.totalPagination = this.totalOfUsers / 5;
+        // if ((this.totalOfUsers % 5) != 0) {
+        if ((this.totalOfUsers % this.userService.numOfLinesPerPage) != 0) {
+          // this.totalPage = (Math.round(this.totalOfUsers / 5)) + 1;
+          this.totalPage = (Math.round(this.totalOfUsers / this.userService.numOfLinesPerPage)) + 1;
+        } else {
+          // this.totalPage = this.totalOfUsers / 5;
+          this.totalPage = this.totalOfUsers / this.userService.numOfLinesPerPage;
         }
       }
     )
@@ -66,55 +74,72 @@ export class UserListComponent implements OnInit {
 
   }
 
-  findPaginnation() {
-    this.userService.getAllUsers((this.indexPagination * 5) - 5).subscribe(
-      (data: IUserDTO[]) => {
-        this.users = data;
-      })
+  // count line of toal
+  // ex:  page 1: ord 1 --> ord 5
+  //      page 2: ord 6 --> ord 10 (not repeat: ord 1 --> ord 5)
+  lineOfTotal(currentPage: number, lineOfPage: number): number {
+
+    // this.userService.numOfLinesPerPage = 5
+    return (this.userService.numOfLinesPerPage * (currentPage - 1)) + (lineOfPage + 1);
+  }
+
+  goPaginnation() {
+    // this.userService.getAllUsers((this.currentPage * 5) - 5).subscribe(
+    this.userService.getAllUsers((this.currentPage * this.userService.numOfLinesPerPage) - this.userService.numOfLinesPerPage)
+      .subscribe(
+        (data: IUserDTO[]) => {
+          this.users = data;
+        })
 
   }
 
-  indexPaginationChage(value: number) {
-    this.indexPagination = value;
+  indexPaginationChange(value: number) {
+    this.currentPage = value;
   }
 
   firtPage() {
-    this.indexPagination = 1;
+    this.currentPage = 1;
     this.ngOnInit();
   }
 
   nextPage() {
-    this.indexPagination = this.indexPagination + 1;
-    if (this.indexPagination > this.totalPagination) {
-      this.indexPagination = this.indexPagination - 1;
+    this.currentPage = this.currentPage + 1;
+    if (this.currentPage > this.totalPage) {
+      this.currentPage = this.currentPage - 1;
     }
-    this.userService.getAllUsers((this.indexPagination * 5) - 5).subscribe(
-      (data: IUserDTO[]) => {
-        this.users = data;
-      })
-  }
-
-  prviousPage() {
-    this.indexPagination = this.indexPagination - 1;
-    if (this.indexPagination == 0) {
-      this.indexPagination = 1;
-      this.ngOnInit();
-    } else {
-      this.userService.getAllUsers((this.indexPagination * 5) - 5).subscribe(
+    // this.userService.getAllUsers((this.currentPage * 5) - 5).subscribe(
+    this.userService.getAllUsers((this.currentPage * this.userService.numOfLinesPerPage) - this.userService.numOfLinesPerPage)
+      .subscribe(
         (data: IUserDTO[]) => {
           this.users = data;
         })
+  }
+
+  previousPage() {
+    this.currentPage = this.currentPage - 1;
+    if (this.currentPage == 0) {
+      this.currentPage = 1;
+      this.ngOnInit();
+    } else {
+      // this.userService.getAllUsers((this.currentPage * 5) - 5).subscribe(
+      this.userService.getAllUsers((this.currentPage * this.userService.numOfLinesPerPage) - this.userService.numOfLinesPerPage)
+        .subscribe(
+          (data: IUserDTO[]) => {
+            this.users = data;
+          })
     }
   }
 
   lastPage() {
 
     // this.indexPagination = this.listUserNotPagination.length / 5;
-    this.indexPagination = this.totalPagination;
+    this.currentPage = this.totalPage;
 
-    this.userService.getAllUsers((this.indexPagination * 5) - 5).subscribe(
-      (data: IUserDTO[]) => {
-        this.users = data;
-      })
+    // this.userService.getAllUsers((this.currentPage * 5) - 5).subscribe(
+    this.userService.getAllUsers((this.currentPage * this.userService.numOfLinesPerPage) - this.userService.numOfLinesPerPage)
+      .subscribe(
+        (data: IUserDTO[]) => {
+          this.users = data;
+        })
   }
 }

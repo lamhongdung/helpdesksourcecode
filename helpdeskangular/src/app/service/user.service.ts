@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { User } from '../model/user';
-import { CustomHttpRespone } from '../model/custom-http-response';
+import { User } from '../entity/user';
+import { CustomHttpRespone } from '../entity/custom-http-response';
 import { IUserDTO } from '../entity/IUserDTO';
 
 @Injectable({providedIn: 'root'})
@@ -11,30 +11,34 @@ export class UserService {
 
   // 'http://localhost:8080'
   private host = environment.apiUrl;
+  // number of lines per page(= 5)
+  numOfLinesPerPage = environment.numOfLinesPerPage;
 
   constructor(private http: HttpClient) {}
 
-  // get all users from backend
-  public getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.host}/user-list`);
-  }
+  // // get all users from backend
+  // public getUsers(): Observable<User[]> {
+  //   return this.http.get<User[]>(`${this.host}/user-list`);
+  // }
 
   // get all users and paginate
-  getAllUsers(index: number): Observable<IUserDTO[]> {
-    // console.log(`${this.host}/user-list?index=${index}`);
-    return this.http.get<IUserDTO[]>(`${this.host}/user-list?index=${index}`)
-    // return this.http.get<IUserDTO[]>(`${this.host}/user/list`)
+  getAllUsers(page: number): Observable<IUserDTO[]> {
+
+    console.log(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`);
+    // ex: http://localhost:8080/user-list?page=0&size=5
+    return this.http.get<IUserDTO[]>(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`)
+    
   }
 
-  getAllUsersNotPagination(): Observable<IUserDTO[]> {
-    // return this.http.get<IUserDTO[]>(this.API + 'users-not-pagination')
-    // return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
-    return this.http.get<IUserDTO[]>(`${this.host}/users-not-pagination`)
-  }
+  // getAllUsersNotPagination(): Observable<IUserDTO[]> {
+  //   // return this.http.get<IUserDTO[]>(this.API + 'users-not-pagination')
+  //   // return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
+  //   return this.http.get<IUserDTO[]>(`${this.host}/users-not-pagination`)
+  // }
 
+  // get total of users for count total of pages
   getTotalOfUsers(): Observable<number> {
-    // return this.http.get<IUserDTO[]>(this.API + 'users-not-pagination')
-    // return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
+    // ex: http://localhost:8080/total-of-users
     return this.http.get<number>(`${this.host}/total-of-users`);
   }
 

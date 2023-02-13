@@ -1,8 +1,8 @@
 package com.ez.controller;
 
-import com.ez.domain.HttpResponse;
-import com.ez.domain.User;
-import com.ez.domain.UserPrincipal;
+import com.ez.entity.HttpResponse;
+import com.ez.entity.User;
+import com.ez.entity.UserPrincipal;
 import com.ez.exception.ExceptionHandling;
 import com.ez.service.UserService;
 import com.ez.utility.JWTTokenProvider;
@@ -10,15 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static com.ez.constant.SecurityConstant.JWT_TOKEN_HEADER;
@@ -53,10 +49,37 @@ public class UserController extends ExceptionHandling {
 //        User loginUser = userService.findUserByUsername(user.getUsername());
         User loginUser = userService.findUserByEmail(user.getEmail());
 
-        // get generate JWT and send back to client
+        // get the generated JWT and send back to client
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
+    }
+    @GetMapping("/user-list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam int page, @RequestParam int size) {
+        List<User> users = userService.getUsers(page, size);
+        return new ResponseEntity<>(users, OK);
+    }
+
+    @GetMapping("/users-not-pagination")
+    public ResponseEntity<List<User>> getAllUsersNotPagination() {
+//        List<User> users = userService.getAllUserNotPagination();
+        List<User> users = userService.getUsers();
+//        if (users.isEmpty()) {
+//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+//        }
+        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/total-of-users")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Long> getTotalOfUsers() {
+//        List<User> users = userService.getAllUserNotPagination();
+        long totalOfUsers = userService.getTotalOfUsers();
+//        if (users.isEmpty()) {
+//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+//        }
+        return new ResponseEntity<Long>(totalOfUsers, HttpStatus.OK);
     }
 
 //    @PostMapping("/register")
@@ -103,32 +126,7 @@ public class UserController extends ExceptionHandling {
 //        return new ResponseEntity<>(user, OK);
 //    }
 
-    @GetMapping("/user-list")
-    public ResponseEntity<List<User>> getAllUsers(@RequestParam int index) {
-        List<User> users = userService.getUsers(index);
-//        List<User> users = userService.getUsers(0);
-        return new ResponseEntity<>(users, OK);
-    }
 
-    @GetMapping("/users-not-pagination")
-    public ResponseEntity<List<User>> getAllUsersNotPagination() {
-//        List<User> users = userService.getAllUserNotPagination();
-        List<User> users = userService.getUsers();
-//        if (users.isEmpty()) {
-//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-//        }
-        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-    }
-
-    @GetMapping("/total-of-users")
-    public ResponseEntity<Long> getTotalOfUsers() {
-//        List<User> users = userService.getAllUserNotPagination();
-        long totalOfUsers = userService.getTotalOfUsers();
-//        if (users.isEmpty()) {
-//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-//        }
-        return new ResponseEntity<Long>(totalOfUsers, HttpStatus.OK);
-    }
 
 //    @GetMapping("/resetpassword/{email}")
 //    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email) throws MessagingException, EmailNotFoundException {

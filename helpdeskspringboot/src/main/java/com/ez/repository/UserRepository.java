@@ -1,6 +1,6 @@
 package com.ez.repository;
 
-import com.ez.domain.User;
+import com.ez.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,11 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // get user by email
     User findUserByEmail(String email);
 
-    @Query(value =  "select a.* " +
-                    "from user a " +
-                    "limit ?1,5; ",
+    @Query(value =  " select a.* " +
+                    " from user a " +
+                    " limit ?1,?2 ",
             nativeQuery = true)
-    List<User> getAllUsers(int index);
+    List<User> getAllUsers(int page, int size);
 
     @Query(value =  " select count(a.id) as totalOfUsers " +
                     " from user a ",

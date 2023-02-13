@@ -1,6 +1,5 @@
 package com.ez.repository;
 
-import com.ez.domain.User;
 import com.ez.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

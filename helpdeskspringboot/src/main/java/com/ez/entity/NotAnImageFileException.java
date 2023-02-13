@@ -1,4 +1,4 @@
-package com.ez.exception.domain;
+package com.ez.entity;
 
 public class NotAnImageFileException extends Exception {
     public NotAnImageFileException(String message) {

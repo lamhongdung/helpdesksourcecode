@@ -1,4 +1,4 @@
-package com.ez.exception.domain;
+package com.ez.entity;
 
 // exception for email has not found(function of update user)
 public class EmailNotFoundException extends Exception {

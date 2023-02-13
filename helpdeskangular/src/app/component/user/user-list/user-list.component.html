@@ -10,28 +10,32 @@
         <!-- textbox: SearchTerm -->
         <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
           <label for="searchTerm">Search term</label>
-          <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm">
+          <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
+            placeholder="Search term">
         </div>
         <!-- dropdown: Role -->
         <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
           <label for="role">Role</label>
-          <select id="role" class="form-control" formControlName="role">
-            <option [value]="'ROLE_CUSTOMER'">ROLE_CUSTOMER</option>
-            <option [value]="'ROLE_SUPPORTER'">ROLE_SUPPORTER</option>
-            <option [value]="'ROLE_ADMIN'">ROLE_ADMIN</option>
+          <select id="role" class="form-control" formControlName="role" placeholder="Search term">
+            <option value="">Select role</option>
+            <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+            <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
           </select>
         </div>
         <!-- dropdown: Status -->
         <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
           <label for="status">Status</label>
           <select id="status" class="form-control" formControlName="status">
-            <option [value]="'Active'">Active</option>
-            <option [value]="'Inactive'">Inactive</option>
+            <option value="">Select status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
           </select>
         </div>
+        <!-- the Search button -->
         <div class="col-xl-3 col-lg-3">
           <br>
-          <button id="myBtn" class="btn btn-primary mt-xl-2" style="float: right; width: 100%">
+          <button id="searchButton" class="btn btn-primary mt-xl-2" style="float: right; width: 100%">
             <i class="fa fa-search"></i>
             Search
           </button>
@@ -40,13 +44,14 @@
     </form>
   </div>
 
-
+  <!-- the "Create user" button -->
   <div class="container mt-0">
     <br><br><br>
     <button class="btn btn-primary mt-2 mb-md-3" routerLink="/user-create"><i class="fa fa-plus"></i> Create user
     </button>
   </div>
 
+  <!-- table -->
   <div class="container tab">
     <table class="table table-hover table-bordered">
       <thead>
@@ -64,8 +69,9 @@
       </thead>
       <tbody style="font-size: 16px;text-align: center">
         <tr *ngFor="let user of users,index as i">
-          <td>{{i + 1}}</td>
-          <td style="text-align: left">{{user.id}}</td>
+          <!-- <td>{{(5 *(currentPage - 1)) + (i + 1)}}</td> -->
+          <td style="text-align: right">{{lineOfTotal(currentPage, i)}}</td>
+          <td style="text-align: right">{{user.id}}</td>
           <td>{{user.email}}</td>
           <td>{{user.firstName}}</td>
           <td>{{user.lastName}}</td>
@@ -74,7 +80,7 @@
           <td>{{user.status}}</td>
           <td class="text-center" width="11%">
             <a class="btn btn-primary mr-1" [routerLink]="['/user-edit', user.id]"><i class="fa fa-edit"></i></a>
-          </td>          
+          </td>
         </tr>
       </tbody>
     </table>
@@ -84,26 +90,31 @@
   <div class="mt-3">
     <nav aria-label="Page navigation example">
       <ul class="pagination d-flex justify-content-md-end justify-content-center">
-        <li class="page-item"><a class="page-link" (click)="firtPage()" onmouseover="this.style.cursor='pointer'">First</a></li>
-        <li class="page-item"><a class="page-link" (click)="prviousPage()" onmouseover="this.style.cursor='pointer'">Previous</a></li>
-        <!--                    <li class="page-item active"><a class="page-link" href="#">1</a></li>-->
+        <li class="page-item"><a class="page-link" (click)="firtPage()"
+            onmouseover="this.style.cursor='pointer'">First</a></li>
+        <li class="page-item"><a class="page-link" (click)="previousPage()"
+            onmouseover="this.style.cursor='pointer'">Previous</a></li>
         <li class="page-item col-md-1 col-2  px-0">
-          <!--                        <input class="form-control shadow-none rounded-0" type="text" placeholder="2/5">-->
           <div class="input-group">
-            <input type="number" min="1" [max]="totalPagination" class="form-control text-right rounded-0"
-                   placeholder="2" aria-label="Username"
-                   aria-describedby="basic-addon1" [value]="indexPagination"
-                   (change)="indexPaginationChage($event.target.value)">
+            <input type="number" min="1" [max]="totalPage" class="form-control text-right rounded-0"
+              aria-label="Username" aria-describedby="basic-addon1" [value]="currentPage"
+              (change)="indexPaginationChange($event.target.value)">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">/{{totalPagination}}</span>
+              <span class="input-group-text" id="basic-addon1">/{{totalPage}}</span>
             </div>
           </div>
         </li>
+        <!-- the "Go" button -->
         <li class="page-item">
-          <button class="btn btn-primary rounded-0" (click)="findPaginnation()" onmouseover="this.style.cursor='pointer'">Go</button>
+          <button class="btn btn-primary rounded-0" (click)="goPaginnation()"
+            onmouseover="this.style.cursor='pointer'">Go</button>
         </li>
-        <li class="page-item"><a class="page-link" (click)="nextPage()" onmouseover="this.style.cursor='pointer'">Next</a></li>
-        <li class="page-item"><a class="page-link" (click)="lastPage()" onmouseover="this.style.cursor='pointer'">Last</a></li>
+        <!-- the "Next" button -->
+        <li class="page-item"><a class="page-link" (click)="nextPage()"
+            onmouseover="this.style.cursor='pointer'">Next</a></li>
+        <!-- the "Last" button -->
+        <li class="page-item"><a class="page-link" (click)="lastPage()"
+            onmouseover="this.style.cursor='pointer'">Last</a></li>
       </ul>
     </nav>
   </div>

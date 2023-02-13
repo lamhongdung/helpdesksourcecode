@@ -1,9 +1,8 @@
 package com.ez.service.impl;
 
-import com.ez.domain.User;
-import com.ez.domain.UserPrincipal;
+import com.ez.entity.User;
+import com.ez.entity.UserPrincipal;
 import com.ez.enumeration.Role;
-import com.ez.exception.domain.*;
 import com.ez.repository.UserRepository;
 import com.ez.service.EmailService;
 import com.ez.service.LoginAttemptService;
@@ -181,8 +180,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //    }
 
     @Override
-    public List<User> getUsers(int index) {
-        return userRepository.getAllUsers(index);
+    public List<User> getUsers(int page, int numOfLinesPerPage) {
+        return userRepository.getAllUsers(page, numOfLinesPerPage);
     }
 
 //    @Override

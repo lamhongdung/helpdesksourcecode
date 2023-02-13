@@ -1,6 +1,6 @@
 package com.ez.listener;
 
-import com.ez.domain.UserPrincipal;
+import com.ez.entity.UserPrincipal;
 import com.ez.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
