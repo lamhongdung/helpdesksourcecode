@@ -17,16 +17,20 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // get user by email
     User findUserByEmail(String email);
 
+    // get users by page.
+    // parameters:
+    // - page: page number(ex: 1st, 2nd, 3rd)
+    // - size: number of users per a page(default = 5)
     @Query(value =  " select a.* " +
                     " from user a " +
                     " limit ?1,?2 ",
             nativeQuery = true)
-    List<User> getAllUsers(int page, int size);
+    List<User> getUsersByPage(int page, int size);
 
+    // get total of users for pagination
     @Query(value =  " select count(a.id) as totalOfUsers " +
                     " from user a ",
             nativeQuery = true)
     long getTotalOfUsers();
 
-//    List<User> getAllUsers(int index);
 }

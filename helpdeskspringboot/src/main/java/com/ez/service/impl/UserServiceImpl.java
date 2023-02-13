@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //    }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getUsersByPage() {
         return userRepository.findAll();
     }
 
@@ -180,8 +180,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //    }
 
     @Override
-    public List<User> getUsers(int page, int numOfLinesPerPage) {
-        return userRepository.getAllUsers(page, numOfLinesPerPage);
+    public List<User> getUsersByPage(int page, int numOfLinesPerPage) {
+        return userRepository.getUsersByPage(page, numOfLinesPerPage);
     }
 
 //    @Override

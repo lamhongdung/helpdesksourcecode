@@ -56,20 +56,23 @@ public class UserController extends ExceptionHandling {
     }
     @GetMapping("/user-list")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers(@RequestParam int page, @RequestParam int size) {
-        List<User> users = userService.getUsers(page, size);
+    // parameters:
+    // - page: page number(1st, 2nd, 3rd,...,)
+    // - size: number of users per a page(default = 5)
+    public ResponseEntity<List<User>> getUsersByPage(@RequestParam int page, @RequestParam int size) {
+        List<User> users = userService.getUsersByPage(page, size);
         return new ResponseEntity<>(users, OK);
     }
 
-    @GetMapping("/users-not-pagination")
-    public ResponseEntity<List<User>> getAllUsersNotPagination() {
-//        List<User> users = userService.getAllUserNotPagination();
-        List<User> users = userService.getUsers();
-//        if (users.isEmpty()) {
-//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-//        }
-        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-    }
+//    @GetMapping("/users-not-pagination")
+//    public ResponseEntity<List<User>> getAllUsersNotPagination() {
+////        List<User> users = userService.getAllUserNotPagination();
+//        List<User> users = userService.getUsers();
+////        if (users.isEmpty()) {
+////            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+////        }
+//        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+//    }
 
     @GetMapping("/total-of-users")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")

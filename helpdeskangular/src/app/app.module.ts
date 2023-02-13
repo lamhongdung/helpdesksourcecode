@@ -18,6 +18,16 @@ import { HeaderComponent } from './component/header/header/header.component';
 import { UserListComponent } from './component/user/user-list/user-list.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { CategoryListComponent } from './component/category/category-list/category-list.component';
+import { UserCreateComponent } from './component/user/user-create/user-create.component';
+import { TicketListComponent } from './component/ticket/ticket-list/ticket-list.component';
+import { TicketCreateComponent } from './component/ticket/ticket-create/ticket-create.component';
+import { TeamListComponent } from './component/team/team-list/team-list.component';
+import { TeamCreateComponent } from './component/team/team-create/team-create.component';
+import { CalendarListComponent } from './component/calendar/calendar-list/calendar-list.component';
+import { CalendarCreateComponent } from './component/calendar/calendar-create/calendar-create.component';
+import { PriorityListComponent } from './component/priority/priority-list/priority-list.component';
+import { PriorityCreateComponent } from './component/priority/priority-create/priority-create.component';
+import { CategoryCreateComponent } from './component/category/category-create/category-create.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +37,17 @@ import { CategoryListComponent } from './component/category/category-list/catego
     UserComponent,
     CategoryListComponent,
     HeaderComponent,
-    UserListComponent
+    UserListComponent,
+    UserCreateComponent,
+    TicketListComponent,
+    TicketCreateComponent,
+    TeamListComponent,
+    TeamCreateComponent,
+    CalendarListComponent,
+    CalendarCreateComponent,
+    PriorityListComponent,
+    PriorityCreateComponent,
+    CategoryCreateComponent
   ],
   imports: [
     BrowserModule,

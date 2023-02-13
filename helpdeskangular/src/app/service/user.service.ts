@@ -10,36 +10,28 @@ import { IUserDTO } from '../entity/IUserDTO';
 export class UserService {
 
   // 'http://localhost:8080'
-  private host = environment.apiUrl;
-  // number of lines per page(= 5)
+  host = environment.apiUrl;
+
+  // number of lines(users) per page(default = 5)
   numOfLinesPerPage = environment.numOfLinesPerPage;
 
   constructor(private http: HttpClient) {}
 
-  // // get all users from backend
-  // public getUsers(): Observable<User[]> {
-  //   return this.http.get<User[]>(`${this.host}/user-list`);
-  // }
+  // get users by page
+  getUsersByPage(page: number): Observable<IUserDTO[]> {
 
-  // get all users and paginate
-  getAllUsers(page: number): Observable<IUserDTO[]> {
-
-    console.log(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`);
+    // console.log(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`);
     // ex: http://localhost:8080/user-list?page=0&size=5
     return this.http.get<IUserDTO[]>(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`)
     
   }
 
-  // getAllUsersNotPagination(): Observable<IUserDTO[]> {
-  //   // return this.http.get<IUserDTO[]>(this.API + 'users-not-pagination')
-  //   // return this.http.get<IUserDTO[]>(`${this.host}/user/users-not-pagination`)
-  //   return this.http.get<IUserDTO[]>(`${this.host}/users-not-pagination`)
-  // }
-
   // get total of users for count total of pages
   getTotalOfUsers(): Observable<number> {
+
     // ex: http://localhost:8080/total-of-users
     return this.http.get<number>(`${this.host}/total-of-users`);
+
   }
 
   public addUser(formData: FormData): Observable<User> {
@@ -76,19 +68,5 @@ export class UserService {
     }
     return null;
   }
-
-  // public createUserFormDate(loggedInUsername: string, user: User, profileImage: File): FormData {
-  //   const formData = new FormData();
-  //   formData.append('currentUsername', loggedInUsername);
-  //   formData.append('firstName', user.firstName);
-  //   formData.append('lastName', user.lastName);
-  //   formData.append('username', user.username);
-  //   formData.append('email', user.email);
-  //   formData.append('role', user.role);
-  //   // formData.append('profileImage', profileImage);
-  //   formData.append('isActive', JSON.stringify(user.active));
-  //   // formData.append('isNonLocked', JSON.stringify(user.notLocked));
-  //   return formData;
-  // }
 
 }

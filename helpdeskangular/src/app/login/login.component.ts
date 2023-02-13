@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     // if user already logged in before then navigate to '/user/management'(absoluate path)
     if (this.authenticationService.isUserLoggedIn()) {
 
-      // this.router.navigateByUrl('/user/management');
-      this.router.navigateByUrl('/category-list');
+      // this.router.navigateByUrl('/category-list');
+      this.router.navigateByUrl('/ticket-list');
 
     } else {
 
@@ -71,10 +71,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           // this.authenticationService.addUserToLocalCache(response.body);
           this.authenticationService.saveUserToLocalStorage(response.body);
 
-          // navigate to '/user/management'
-          // this.router.navigateByUrl('/user/management');
           // this.router.navigateByUrl('/category-list');
-          this.router.navigateByUrl('/user-list');
+          this.router.navigateByUrl('/ticket-list');
 
           // hide spinner(circle)
           this.showLoading = false;

@@ -54,7 +54,18 @@
               <li><a class="dropdown-item" routerLink="/priority-create">Create priority</a></li>
               <li><a class="dropdown-item" routerLink="/priority-list">All priorities</a></li>
             </ul>
-          </li>     
+          </li>  
+          <!-- Categories menu -->
+          <li class="nav-item dropdown active" *ngIf="['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarCategory" role="button" data-toggle="dropdown"
+              aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarCategory">
+              <li><a class="dropdown-item" routerLink="/category-create">Create category</a></li>
+              <li><a class="dropdown-item" routerLink="/category-list">All categories</a></li>
+            </ul>
+          </li>               
           <!-- Tickets menu -->
           <li class="nav-item dropdown active" *ngIf="loggedInEmail !== ''">
             <a class="nav-link dropdown-toggle" href="#" id="navbarTicket" role="button" data-toggle="dropdown"

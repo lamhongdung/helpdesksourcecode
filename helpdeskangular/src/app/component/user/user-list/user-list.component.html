@@ -1,3 +1,4 @@
+<!-- the" User list" screen -->
 <div class="container">
   <!-- title -->
   <div>
@@ -32,9 +33,11 @@
             <option value="Inactive">Inactive</option>
           </select>
         </div>
-        <!-- the Search button -->
+        <!-- the "Search" button -->
         <div class="col-xl-3 col-lg-3">
+          <!-- break(insert s line break(carriage-return)) -->
           <br>
+          <!-- "Search button" -->
           <button id="searchButton" class="btn btn-primary mt-xl-2" style="float: right; width: 100%">
             <i class="fa fa-search"></i>
             Search
@@ -69,7 +72,7 @@
       </thead>
       <tbody style="font-size: 16px;text-align: center">
         <tr *ngFor="let user of users,index as i">
-          <!-- <td>{{(5 *(currentPage - 1)) + (i + 1)}}</td> -->
+          <!-- order(line number) -->
           <td style="text-align: right">{{lineOfTotal(currentPage, i)}}</td>
           <td style="text-align: right">{{user.id}}</td>
           <td>{{user.email}}</td>
@@ -78,6 +81,7 @@
           <td>{{user.phone}}</td>
           <td>{{user.role}}</td>
           <td>{{user.status}}</td>
+          <!-- "Edit" button -->
           <td class="text-center" width="11%">
             <a class="btn btn-primary mr-1" [routerLink]="['/user-edit', user.id]"><i class="fa fa-edit"></i></a>
           </td>
@@ -90,9 +94,11 @@
   <div class="mt-3">
     <nav aria-label="Page navigation example">
       <ul class="pagination d-flex justify-content-md-end justify-content-center">
-        <li class="page-item"><a class="page-link" (click)="firtPage()"
+        <!-- move to the "first page" -->
+        <li class="page-item"><a class="page-link" (click)="moveFirst()"
             onmouseover="this.style.cursor='pointer'">First</a></li>
-        <li class="page-item"><a class="page-link" (click)="previousPage()"
+        <!-- move to "previous page" -->
+        <li class="page-item"><a class="page-link" (click)="movePrevious()"
             onmouseover="this.style.cursor='pointer'">Previous</a></li>
         <li class="page-item col-md-1 col-2  px-0">
           <div class="input-group">
@@ -106,14 +112,14 @@
         </li>
         <!-- the "Go" button -->
         <li class="page-item">
-          <button class="btn btn-primary rounded-0" (click)="goPaginnation()"
+          <button class="btn btn-primary rounded-0" (click)="goPage()"
             onmouseover="this.style.cursor='pointer'">Go</button>
         </li>
         <!-- the "Next" button -->
-        <li class="page-item"><a class="page-link" (click)="nextPage()"
+        <li class="page-item"><a class="page-link" (click)="moveNext()"
             onmouseover="this.style.cursor='pointer'">Next</a></li>
         <!-- the "Last" button -->
-        <li class="page-item"><a class="page-link" (click)="lastPage()"
+        <li class="page-item"><a class="page-link" (click)="moveLast()"
             onmouseover="this.style.cursor='pointer'">Last</a></li>
       </ul>
     </nav>
