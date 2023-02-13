@@ -6,7 +6,7 @@ import { User } from '../entity/user';
 import { CustomHttpRespone } from '../entity/custom-http-response';
 import { IUserDTO } from '../entity/IUserDTO';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserService {
 
   // 'http://localhost:8080'
@@ -15,7 +15,7 @@ export class UserService {
   // number of lines(users) per page(default = 5)
   numOfLinesPerPage = environment.numOfLinesPerPage;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // get users by page
   getUsersByPage(page: number): Observable<IUserDTO[]> {
@@ -23,14 +23,19 @@ export class UserService {
     // console.log(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`);
     // ex: http://localhost:8080/user-list?page=0&size=5
     return this.http.get<IUserDTO[]>(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`)
-    
+
+  }
+
+  search(page: number, searchTerm: string, role: string, status: string): Observable<IUserDTO[]> {
+    return this.http.get<IUserDTO[]>(`${this.host}/user-search?page=${page}&size=${this.numOfLinesPerPage}&searchTerm=${searchTerm}&role=${role}&status=${status}`)
   }
 
   // get total of users for count total of pages
-  getTotalOfUsers(): Observable<number> {
+  getTotalOfUsers(searchTerm: string, role: string, status: string): Observable<number> {
 
     // ex: http://localhost:8080/total-of-users
-    return this.http.get<number>(`${this.host}/total-of-users`);
+    // return this.http.get<number>(`${this.host}/total-of-users`);
+    return this.http.get<number>(`${this.host}/total-of-users?searchTerm=${searchTerm}&role=${role}&status=${status}`);
 
   }
 
@@ -48,9 +53,10 @@ export class UserService {
 
   public updateProfileImage(formData: FormData): Observable<HttpEvent<User>> {
     return this.http.post<User>(`${this.host}/user/updateProfileImage`, formData,
-    {reportProgress: true,
-      observe: 'events'
-    });
+      {
+        reportProgress: true,
+        observe: 'events'
+      });
   }
 
   public deleteUser(username: string): Observable<CustomHttpRespone> {
@@ -64,9 +70,10 @@ export class UserService {
 
   public getUsersFromLocalCache(): User[] {
     if (localStorage.getItem('users')) {
-        return JSON.parse(localStorage.getItem('users'));
+      return JSON.parse(localStorage.getItem('users'));
     }
     return null;
   }
+
 
 }

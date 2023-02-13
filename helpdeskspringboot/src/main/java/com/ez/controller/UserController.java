@@ -64,6 +64,17 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(users, OK);
     }
 
+    @GetMapping("/user-search")
+    public ResponseEntity<List<User>> search(@RequestParam int page,
+                                             @RequestParam int size,
+                                                    @RequestParam(defaultValue = "") String searchTerm,
+                                                    @RequestParam(defaultValue = "") String role,
+                                                    @RequestParam(defaultValue = "") String status) {
+        List<User> users = userService.search(page, size, searchTerm, role, status);
+
+        return new ResponseEntity<>(users, OK);
+    }
+
 //    @GetMapping("/users-not-pagination")
 //    public ResponseEntity<List<User>> getAllUsersNotPagination() {
 ////        List<User> users = userService.getAllUserNotPagination();
@@ -76,9 +87,11 @@ public class UserController extends ExceptionHandling {
 
     @GetMapping("/total-of-users")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<Long> getTotalOfUsers() {
+    public ResponseEntity<Long> getTotalOfUsers(@RequestParam(defaultValue = "") String searchTerm,
+                                                @RequestParam(defaultValue = "") String role,
+                                                @RequestParam(defaultValue = "") String status) {
 //        List<User> users = userService.getAllUserNotPagination();
-        long totalOfUsers = userService.getTotalOfUsers();
+        long totalOfUsers = userService.getTotalOfUsers(searchTerm, role, status);
 //        if (users.isEmpty()) {
 //            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
 //        }

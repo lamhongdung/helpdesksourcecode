@@ -184,6 +184,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.getUsersByPage(page, numOfLinesPerPage);
     }
 
+    @Override
+    public List<User> search(int page, int numOfLinesPerPage, String searchTerm, String role, String status) {
+        return userRepository.search(page, numOfLinesPerPage, searchTerm, role, status);
+    }
+
 //    @Override
 //    public User findUserByUsername(String username) {
 //        return userRepository.findUserByUsername(username);
@@ -195,8 +200,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public long getTotalOfUsers(){
-        return userRepository.getTotalOfUsers();
+    public long getTotalOfUsers(String searchTerm, String role, String status){
+        return userRepository.getTotalOfUsers(searchTerm, role, status);
     }
 
 //    @Override
