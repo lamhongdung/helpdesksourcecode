@@ -13,16 +13,19 @@ public interface UserService {
 
 //    User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException;
 
-    List<User> getUsersByPage();
+//    List<User> getUsersByPage();
 //    List<User> findAll();
 
-    List<User> getUsersByPage(int page, int size);
-    List<User> search(int page, int size, String searchTerm, String role, String status);
+//    List<User> getUsersByPage(int page, int size);
 
-//    User findUserByUsername(String username);
+    // search users by page and based on the search criteria
+    List<User> searchUsers(int page, int size, String searchTerm, String role, String status);
 
+
+    // find user by email
     User findUserByEmail(String email);
 
+    // calculate total of users based on the search criteria
     long getTotalOfUsers(String searchTerm, String role, String status);
 
 //    User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException, MessagingException;

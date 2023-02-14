@@ -169,36 +169,34 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //        return user;
 //    }
 
-    @Override
-    public List<User> getUsersByPage() {
-        return userRepository.findAll();
-    }
+//    @Override
+//    public List<User> getUsersByPage() {
+//        return userRepository.findAll();
+//    }
 
 //    @Override
 //    public List<User> findAll() {
 //        return user;
 //    }
 
-    @Override
-    public List<User> getUsersByPage(int page, int numOfLinesPerPage) {
-        return userRepository.getUsersByPage(page, numOfLinesPerPage);
-    }
-
-    @Override
-    public List<User> search(int page, int numOfLinesPerPage, String searchTerm, String role, String status) {
-        return userRepository.search(page, numOfLinesPerPage, searchTerm, role, status);
-    }
-
 //    @Override
-//    public User findUserByUsername(String username) {
-//        return userRepository.findUserByUsername(username);
+//    public List<User> getUsersByPage(int page, int numOfLinesPerPage) {
+//        return userRepository.getUsersByPage(page, numOfLinesPerPage);
 //    }
 
+    // search users by page and based on the search criteria
+    @Override
+    public List<User> searchUsers(int page, int numOfLinesPerPage, String searchTerm, String role, String status) {
+        return userRepository.searchUsers(page, numOfLinesPerPage, searchTerm, role, status);
+    }
+
+    // find user by email
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
 
+    // calculate total of users based on the search criteria
     @Override
     public long getTotalOfUsers(String searchTerm, String role, String status){
         return userRepository.getTotalOfUsers(searchTerm, role, status);

@@ -12,30 +12,35 @@ export class UserService {
   // 'http://localhost:8080'
   host = environment.apiUrl;
 
-  // number of lines(users) per page(default = 5)
-  numOfLinesPerPage = environment.numOfLinesPerPage;
+  // number of users per a page(default = 5)
+  pageSize = environment.pageSize;
 
   constructor(private http: HttpClient) { }
 
-  // get users by page
-  getUsersByPage(page: number): Observable<IUserDTO[]> {
+  // // get users by page
+  // getUsersByPage(page: number): Observable<IUserDTO[]> {
 
-    // console.log(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`);
-    // ex: http://localhost:8080/user-list?page=0&size=5
-    return this.http.get<IUserDTO[]>(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`)
+  //   // console.log(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`);
+  //   // ex: http://localhost:8080/user-list?page=0&size=5
+  //   return this.http.get<IUserDTO[]>(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`)
 
+  // }
+
+  // get users by page and based on the search criteria
+  searchUsers(page: number, searchTerm: string, role: string, status: string): Observable<IUserDTO[]> {
+
+    return this.http.get<IUserDTO[]>(
+      `${this.host}/user-search?page=${page}&size=${this.pageSize}&searchTerm=${searchTerm}&role=${role}&status=${status}`
+    )
   }
 
-  search(page: number, searchTerm: string, role: string, status: string): Observable<IUserDTO[]> {
-    return this.http.get<IUserDTO[]>(`${this.host}/user-search?page=${page}&size=${this.numOfLinesPerPage}&searchTerm=${searchTerm}&role=${role}&status=${status}`)
-  }
-
-  // get total of users for count total of pages
+  // calculate total of users for count total of pages
   getTotalOfUsers(searchTerm: string, role: string, status: string): Observable<number> {
 
-    // ex: http://localhost:8080/total-of-users
-    // return this.http.get<number>(`${this.host}/total-of-users`);
-    return this.http.get<number>(`${this.host}/total-of-users?searchTerm=${searchTerm}&role=${role}&status=${status}`);
+    // ex: http://localhost:8080/total-of-users?searchTerm=""&role=""&status=""
+    return this.http.get<number>(
+      `${this.host}/total-of-users?searchTerm=${searchTerm}&role=${role}&status=${status}`
+    );
 
   }
 
@@ -51,13 +56,13 @@ export class UserService {
     return this.http.get<CustomHttpRespone>(`${this.host}/user/resetpassword/${email}`);
   }
 
-  public updateProfileImage(formData: FormData): Observable<HttpEvent<User>> {
-    return this.http.post<User>(`${this.host}/user/updateProfileImage`, formData,
-      {
-        reportProgress: true,
-        observe: 'events'
-      });
-  }
+  // public updateProfileImage(formData: FormData): Observable<HttpEvent<User>> {
+  //   return this.http.post<User>(`${this.host}/user/updateProfileImage`, formData,
+  //     {
+  //       reportProgress: true,
+  //       observe: 'events'
+  //     });
+  // }
 
   public deleteUser(username: string): Observable<CustomHttpRespone> {
     return this.http.delete<CustomHttpRespone>(`${this.host}/user/delete/${username}`);

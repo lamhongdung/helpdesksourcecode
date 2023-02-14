@@ -5,7 +5,7 @@
     <h2 style="text-align: center">User list</h2>
   </div>
   <div class="container-fluid">
-    <!-- <form [formGroup]="searchUser" (ngSubmit)="search()"> -->
+    <!-- formGroup -->
     <form [formGroup]="searchUser" (ngSubmit)="ngOnInit()">
       <!-- row 1: search function -->
       <div class="search row d-flex justify-content-md-end mb-4 text-right float-right">
@@ -36,7 +36,7 @@
         </div>
         <!-- the "Search" button -->
         <div class="col-xl-3 col-lg-3">
-          <!-- break(insert s line break(carriage-return)) -->
+          <!-- break(insert a line break(carriage-return)) -->
           <br>
           <!-- "Search button" -->
           <button id="searchButton" class="btn btn-primary mt-xl-2" style="float: right; width: 100%">
@@ -57,6 +57,9 @@
 
   <!-- table -->
   <div class="container tab">
+    <div style="float: right;" *ngIf="totalOfPages > 1">There are {{totalOfUsers}} users</div>
+    <div style="float: right;" *ngIf="totalOfPages == 1">There is {{totalOfUsers}} user</div>
+    <div style="float: right;" *ngIf="totalOfPages == 0">There is no user</div>
     <table class="table table-hover table-bordered">
       <thead>
         <tr class="bg-table-header">
@@ -74,7 +77,7 @@
       <tbody style="font-size: 16px;text-align: center">
         <tr *ngFor="let user of users,index as i">
           <!-- order(line number) -->
-          <td style="text-align: right">{{lineOfTotal(currentPage, i)}}</td>
+          <td style="text-align: right">{{indexBasedPage(currentPage, i)}}</td>
           <td style="text-align: right">{{user.id}}</td>
           <td>{{user.email}}</td>
           <td>{{user.firstName}}</td>
@@ -90,9 +93,9 @@
       </tbody>
     </table>
   </div>
-
+  
   <!-- pagination -->
-  <div class="mt-3" *ngIf="totalPage > 0">
+  <div class="mt-3" *ngIf="totalOfPages > 0">
     <nav aria-label="Page navigation example">
       <ul class="pagination d-flex justify-content-md-end justify-content-center">
         <!-- move to the "first page" -->
@@ -101,11 +104,11 @@
         <li class="page-item"><button class="page-link" (click)="movePrevious()" [disabled]="currentPage==1">Previous</button></li>
         <li class="page-item col-md-1 col-2  px-0">
           <div class="input-group">
-            <input type="number" min="1" [max]="totalPage" class="form-control text-right rounded-0"
+            <input type="number" min="1" [max]="totalOfPages" class="form-control text-right rounded-0"
               aria-label="Username" aria-describedby="basic-addon1" [value]="currentPage"
               (change)="indexPaginationChange($event.target.value)">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">/{{totalPage}}</span>
+              <span class="input-group-text" id="basic-addon1">/{{totalOfPages}}</span>
             </div>
           </div>
         </li>
@@ -115,13 +118,13 @@
             onmouseover="this.style.cursor='pointer'">Go</button>
         </li>
         <!-- the "Next" button -->
-        <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalPage">Next</button></li>
+        <li class="page-item"><button class="page-link" (click)="moveNext()" [disabled]="currentPage==totalOfPages">Next</button></li>
 
         <!-- the "Last" button -->
         <!-- <li class="page-item"><a class="page-link" (click)="moveLast()"
             onmouseover="this.style.cursor='pointer'">Last</a></li> -->
         <li class="page-item"><button class="page-link" (click)="moveLast()"
-            [disabled]="currentPage==totalPage">Last</button></li>
+            [disabled]="currentPage==totalOfPages">Last</button></li>
       </ul>
     </nav>
   </div>

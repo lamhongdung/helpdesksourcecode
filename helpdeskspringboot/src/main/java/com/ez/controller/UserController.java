@@ -54,23 +54,31 @@ public class UserController extends ExceptionHandling {
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
     }
-    @GetMapping("/user-list")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    // parameters:
-    // - page: page number(1st, 2nd, 3rd,...,)
-    // - size: number of users per a page(default = 5)
-    public ResponseEntity<List<User>> getUsersByPage(@RequestParam int page, @RequestParam int size) {
-        List<User> users = userService.getUsersByPage(page, size);
-        return new ResponseEntity<>(users, OK);
-    }
+//    @GetMapping("/user-list")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    // parameters:
+//    // - page: page number(1st, 2nd, 3rd,...,)
+//    // - size: number of users per a page(default = 5)
+//    public ResponseEntity<List<User>> getUsersByPage(@RequestParam int page, @RequestParam int size) {
+//        List<User> users = userService.getUsersByPage(page, size);
+//        return new ResponseEntity<>(users, OK);
+//    }
 
+    // search users by page based on the search criteria
+    // parameters:
+    //  - page: page number
+    //  - size: page size(default = 5)
+    //  - searchTerm: word to search
+    //  - role: user role. = empty for all roles
+    //  - status: user status. = empty for all status
     @GetMapping("/user-search")
-    public ResponseEntity<List<User>> search(@RequestParam int page,
-                                             @RequestParam int size,
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam int page,
+                                                    @RequestParam int size,
                                                     @RequestParam(defaultValue = "") String searchTerm,
                                                     @RequestParam(defaultValue = "") String role,
                                                     @RequestParam(defaultValue = "") String status) {
-        List<User> users = userService.search(page, size, searchTerm, role, status);
+        List<User> users = userService.searchUsers(page, size, searchTerm, role, status);
 
         return new ResponseEntity<>(users, OK);
     }
@@ -85,16 +93,18 @@ public class UserController extends ExceptionHandling {
 //        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 //    }
 
+    // calculate total of users based on the search criteria
     @GetMapping("/total-of-users")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Long> getTotalOfUsers(@RequestParam(defaultValue = "") String searchTerm,
                                                 @RequestParam(defaultValue = "") String role,
                                                 @RequestParam(defaultValue = "") String status) {
-//        List<User> users = userService.getAllUserNotPagination();
+
+        // calculate total of users based on the search criteria
         long totalOfUsers = userService.getTotalOfUsers(searchTerm, role, status);
-//        if (users.isEmpty()) {
-//            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-//        }
+    //        if (users.isEmpty()) {
+    //            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+    //        }
         return new ResponseEntity<Long>(totalOfUsers, HttpStatus.OK);
     }
 

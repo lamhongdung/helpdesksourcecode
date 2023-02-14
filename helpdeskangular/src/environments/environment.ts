@@ -7,7 +7,7 @@ export const environment = {
   apiUrl: 'http://localhost:8080',
 
   // number of lines per a page
-  numOfLinesPerPage: 5
+  pageSize: 5
 };
 
 /*
