@@ -1,1 +1,159 @@
-<p>user-create works!</p>
+<div class="text-center">
+    <h3>Create user</h3>
+</div>
+<!-- {{userForm.value | json}} -->
+<div class="container">
+    <form [formGroup]="userForm" (ngSubmit)="createUser()">
+        <div class="row mt-5">
+            <!-- the Left column -->
+            <div class="col-md-6">
+                <div class="container">
+                    <!-- Email -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="email">Email<span class="*">*</span></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="email" formControlName="email"
+                                placeholder="Ex: abc@gmail.com" id="email">
+                            <div class="text-danger" *ngFor="let validation of errorMessages.email">
+                                <div
+                                    *ngIf="userForm.get('email').hasError(validation.type) && (userForm.get('email').dirty || userForm.get('email').touched)">
+                                    {{validation.message}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- First name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="firstName">First name<span class="*">*</span></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
+                                id="firstName">
+                            <div class="text-danger" *ngFor="let validation of errorMessages.firstName">
+                                <div
+                                    *ngIf="userForm.get('firstName').hasError(validation.type) && (userForm.get('firstName').dirty || userForm.get('firstName').touched)">
+                                    {{validation.message}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Last name -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="lastName">Last name<span class="*">*</span></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
+                                id="lastName">
+                            <div class="text-danger" *ngFor="let validation of errorMessages.lastName">
+                                <div
+                                    *ngIf="userForm.get('lastName').hasError(validation.type) && (userForm.get('lastName').dirty || userForm.get('lastName').touched)">
+                                    {{validation.message}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Phone -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="phone">Phone<span class="*">*</span></label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="phone"
+                                placeholder="Phone number(10 digits)" id="phone">
+                            <div class="text-danger" *ngFor="let validation of errorMessages.phone">
+                                <div
+                                    *ngIf="userForm.get('phone').hasError(validation.type) && (userForm.get('phone').dirty || userForm.get('phone').touched)">
+                                    {{validation.message}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Right column -->
+            <div class="col-md-6">
+                <div class="container">
+                    <!-- Address -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="address">Address</label>
+                        </div>
+                        <!-- textbox -->
+                        <div class="col-8">
+                            <input class="form-control" type="text" formControlName="address" id="address">
+                            <div class="text-danger" *ngFor="let validation of errorMessages.address">
+                                <div
+                                    *ngIf="userForm.get('address').hasError(validation.type) && (userForm.get('address').dirty || userForm.get('address').touched)">
+                                    {{validation.message}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Role -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="role">Role<span class="*">*</span></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <!-- default value = "ROLE_CUSTOMER" -->
+                            <select id="role" class="form-control" formControlName="role" placeholder="Role">
+                                <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+                                <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
+                                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Status -->
+                    <div class="row mb-3">
+                        <!-- label -->
+                        <div class="col-4">
+                            <label class="col-form-label" for="status">Status<span class="*">*</span></label>
+                        </div>
+                        <!-- dropdown -->
+                        <div class="col-8">
+                            <!-- default value = "Active" -->
+                            <select id="status" class="form-control" formControlName="status" placeholder="Status">
+                                <!-- <option value="Active" [defaultSelected]=true>Active</option> -->
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- buttons -->
+        <!-- <div class="d-flex justify-content-end"> -->
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- the "Save" button -->
+                <button type="submit" [disabled]="userForm.invalid" style="width: 150px"
+                    class="btn btn-primary mr-2">
+
+                    <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>
+                    <!-- Change label button "Save" to "Saving.." -->
+                    <span *ngIf="showLoading">Saving...</span>
+                    <span *ngIf="!showLoading">Save</span>    
+
+                </button>
+                <!-- the "Cancel" button -->
+                <button class="btn btn-dark" routerLink="/user-list" style="width: 150px">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

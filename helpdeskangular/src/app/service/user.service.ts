@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { User } from '../entity/user';
+import { User } from '../entity/User';
 import { CustomHttpRespone } from '../entity/custom-http-response';
-import { IUserDTO } from '../entity/IUserDTO';
+// import { IUserDTO } from '../entity/IUserDTO';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -17,19 +17,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  // // get users by page
-  // getUsersByPage(page: number): Observable<IUserDTO[]> {
-
-  //   // console.log(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`);
-  //   // ex: http://localhost:8080/user-list?page=0&size=5
-  //   return this.http.get<IUserDTO[]>(`${this.host}/user-list?page=${page}&size=${this.numOfLinesPerPage}`)
-
-  // }
-
   // get users by page and based on the search criteria
-  searchUsers(page: number, searchTerm: string, role: string, status: string): Observable<IUserDTO[]> {
+  searchUsers(page: number, searchTerm: string, role: string, status: string): Observable<User[]> {
 
-    return this.http.get<IUserDTO[]>(
+    return this.http.get<User[]>(
       `${this.host}/user-search?page=${page}&size=${this.pageSize}&searchTerm=${searchTerm}&role=${role}&status=${status}`
     )
   }
@@ -44,8 +35,12 @@ export class UserService {
 
   }
 
-  public addUser(formData: FormData): Observable<User> {
-    return this.http.post<User>(`${this.host}/user/add`, formData);
+  // public addUser(formData: FormData): Observable<User> {
+  //   return this.http.post<User>(`${this.host}/user/add`, formData);
+  // }
+
+  public createUser(user: User): Observable<User> {
+    return this.http.post<User>(`${this.host}/user-create`, user);
   }
 
   public updateUser(formData: FormData): Observable<User> {

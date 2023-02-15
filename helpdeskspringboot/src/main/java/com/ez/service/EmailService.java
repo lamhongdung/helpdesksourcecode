@@ -31,8 +31,8 @@ public class EmailService {
         message.setFrom(new InternetAddress(FROM_EMAIL));
         message.setRecipients(TO, InternetAddress.parse(email, false));
         message.setRecipients(CC, InternetAddress.parse(CC_EMAIL, false));
-        message.setSubject(EMAIL_SUBJECT);
-        message.setText("Hello " + firstName + ", \n \n Your new account password is: " + password + "\n \n The Help Desk Team");
+        message.setSubject(EMAIL_SUBJECT_CREATE_NEW_USER);
+        message.setText("Hello " + firstName + ", \n \n Your password to access the HelpDesk system is: " + password + "\n \n The Help Desk Team");
         message.setSentDate(new Date());
         message.saveChanges();
         return message;

@@ -1,5 +1,6 @@
 package com.ez.controller;
 
+import com.ez.entity.EmailExistException;
 import com.ez.entity.HttpResponse;
 import com.ez.entity.User;
 import com.ez.entity.UserPrincipal;
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 import static com.ez.constant.SecurityConstant.JWT_TOKEN_HEADER;
@@ -83,16 +85,6 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(users, OK);
     }
 
-//    @GetMapping("/users-not-pagination")
-//    public ResponseEntity<List<User>> getAllUsersNotPagination() {
-////        List<User> users = userService.getAllUserNotPagination();
-//        List<User> users = userService.getUsers();
-////        if (users.isEmpty()) {
-////            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-////        }
-//        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-//    }
-
     // calculate total of users based on the search criteria
     @GetMapping("/total-of-users")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -106,6 +98,14 @@ public class UserController extends ExceptionHandling {
     //            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
     //        }
         return new ResponseEntity<Long>(totalOfUsers, HttpStatus.OK);
+    }
+
+    // create new user
+    @PostMapping("/user-create")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<User> createUser(@RequestBody User user) throws EmailExistException, MessagingException {
+        User newUser = userService.createUser(user);
+        return new ResponseEntity<>(newUser, OK);
     }
 
 //    @PostMapping("/register")

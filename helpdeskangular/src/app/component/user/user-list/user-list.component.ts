@@ -1,6 +1,10 @@
 import { Component, OnInit, ɵɵinjectPipeChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { IUserDTO } from 'src/app/entity/IUserDTO';
+import { Subscription } from 'rxjs';
+// import { IUserDTO } from 'src/app/entity/IUserDTO';
+import { User } from 'src/app/entity/User';
+import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -10,6 +14,9 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class UserListComponent implements OnInit {
 
+  // use to unsubcribe all subscribe easily, avoid leak memeory
+  subscriptions: Subscription[] = [];
+
   // current page
   currentPage: number = 1;
   // total page
@@ -17,7 +24,7 @@ export class UserListComponent implements OnInit {
   // total of users(for pagination)
   totalOfUsers: number;
   // user list
-  users: IUserDTO[] = [];
+  users: User[] = [];
   // number of users per a page
   pageSize: number;
   // form controls
@@ -28,7 +35,7 @@ export class UserListComponent implements OnInit {
   });
 
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,private notificationService: NotificationService) { }
 
   // this method ngOnInit() is run right after contructor
   ngOnInit(): void {
@@ -41,6 +48,8 @@ export class UserListComponent implements OnInit {
 
     // assign users from database to this.users variable, and get totalOfPages
     this.searchUsers(0, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
+
+    // this.notificationService.notify(NotificationType.SUCCESS, `There are ${this.totalOfUsers} users`);
 
   } // end of ngOnInit()
 
@@ -62,21 +71,25 @@ export class UserListComponent implements OnInit {
   // get users, total of users and total of pages
   searchUsers(page: number, searchTerm: string, role: string, status: string) {
 
-    // get users
-    this.userService.searchUsers(page, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status)
-      .subscribe((data: IUserDTO[]) => {
-        return this.users = data
-      });
+    this.subscriptions.push(
+      // get users
+      this.userService.searchUsers(page, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status)
+        .subscribe((data: User[]) => {
+          return this.users = data
+        })
+    );
 
-    // get total of users and total of pages
-    this.userService.getTotalOfUsers(this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status)
-    .subscribe(
-      (data: number) => {
-        // total of users
-        this.totalOfUsers = data;
-        // total of pages
-        this.totalOfPages = this.calculateTotalOfPages(this.totalOfUsers, this.pageSize);
-      }
+    this.subscriptions.push(
+      // get total of users and total of pages
+      this.userService.getTotalOfUsers(this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status)
+      .subscribe(
+        (data: number) => {
+          // total of users
+          this.totalOfUsers = data;
+          // total of pages
+          this.totalOfPages = this.calculateTotalOfPages(this.totalOfUsers, this.pageSize);
+        }
+      )
     )
   }
 
@@ -177,5 +190,10 @@ export class UserListComponent implements OnInit {
       // get users, total of users and total of pages
       this.searchUsers(sqlPage, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
     }
+  }
+
+  // unsubscribe all subscriptions from this component "UserComponent"
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

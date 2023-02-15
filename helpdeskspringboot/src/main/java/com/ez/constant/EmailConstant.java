@@ -7,7 +7,7 @@ public class EmailConstant {
     public static final String PASSWORD = "lcwnawybrmwtslgv";
     public static final String FROM_EMAIL = "dunglh13@gmail.com";
     public static final String CC_EMAIL = "";
-    public static final String EMAIL_SUBJECT = "Help Desk System - New Password";
+    public static final String EMAIL_SUBJECT_CREATE_NEW_USER = "Help Desk System - Your Password";
     public static final String GMAIL_SMTP_SERVER = "smtp.gmail.com";
     public static final String SMTP_HOST = "mail.smtp.host";
     public static final String SMTP_AUTH = "mail.smtp.auth";

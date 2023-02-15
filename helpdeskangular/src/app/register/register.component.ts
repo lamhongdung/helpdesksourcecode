@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../service/authentication.service';
 import { NotificationService } from '../service/notification.service';
-import { User } from '../entity/user';
+import { User } from '../entity/User';
 import { NotificationType } from '../enum/notification-type.enum';
 
 @Component({

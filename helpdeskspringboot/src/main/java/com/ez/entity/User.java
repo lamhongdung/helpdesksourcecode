@@ -38,9 +38,9 @@ public class User implements Serializable {
 //    private String username;
     // WRITE_ONLY: only allow write(set) value of id, but do not allow read id
 //    private String profileImageUrl;
-    private Date lastLoginDate;
-    private Date lastLoginDateDisplay;
-    private Date joinDate;
+//    private Date lastLoginDate;
+//    private Date lastLoginDateDisplay;
+//    private Date joinDate;
 //    private String[] authorities;
 
 }

@@ -15,16 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // get user by email
     User findUserByEmail(String email);
 
-    // get users by page.
-    // parameters:
-    // - page: page number(ex: 1st, 2nd, 3rd)
-    // - size: number of users per a page(default = 5)
-//    @Query(value =  " select a.* " +
-//                    " from user a " +
-//                    " limit ?1,?2 "
-//            ,nativeQuery = true)
-//    List<User> getUsersByPage(int page, int size);
-
     // search users by searchTerm, role and status.
     @Query(value =  "" +
             " select a.* " +
@@ -47,7 +37,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> searchUsers(int page, int numOfLinesPerPage, String searchTerm, String role, String status);
 
     // calculate total of users for pagination
-    @Query(value =  " select count(a.id) as totalOfUsers " +
+    @Query(value =  "" +
+                    " select count(a.id) as totalOfUsers " +
                     " from user a " +
                     " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %?1% and " +
                     "       ( " +

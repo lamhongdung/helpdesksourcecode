@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { User } from '../entity/user';
+import { User } from '../entity/User';
 import { UserService } from '../service/user.service';
 import { NotificationService } from '../service/notification.service';
 import { NotificationType } from '../enum/notification-type.enum';
@@ -194,9 +194,9 @@ export class UserComponent implements OnInit, OnDestroy {
   //   }
   // }
 
-  public updateProfileImage(): void {
-    this.clickButton('profile-image-input');
-  }
+  // public updateProfileImage(): void {
+  //   this.clickButton('profile-image-input');
+  // }
 
   public onLogOut(): void {
     this.authenticationService.logOut();
@@ -242,21 +242,6 @@ export class UserComponent implements OnInit, OnDestroy {
   //   this.clickButton('openUserEdit');
   // }
 
-  // public searchUsers(searchTerm: string): void {
-  //   const results: User[] = [];
-  //   for (const user of this.userService.getUsersFromLocalCache()) {
-  //     if (user.firstName.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-  //         user.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-  //         user.username.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-  //         user.userId.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
-  //         results.push(user);
-  //     }
-  //   }
-  //   this.users = results;
-  //   if (results.length === 0 || !searchTerm) {
-  //     this.users = this.userService.getUsersFromLocalCache();
-  //   }
-  // }
 
   // check whether user is an admin or not?
   public get isAdmin(): boolean {

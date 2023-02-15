@@ -18,7 +18,7 @@
         <!-- dropdown: Role -->
         <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
           <label for="role">Role</label>
-          <select id="role" class="form-control" formControlName="role" placeholder="Search term">
+          <select id="role" class="form-control" formControlName="role" placeholder="Role">
             <option value="">Select role</option>
             <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
             <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
@@ -57,9 +57,9 @@
 
   <!-- table -->
   <div class="container tab">
-    <div style="float: right;" *ngIf="totalOfPages > 1">There are {{totalOfUsers}} users</div>
-    <div style="float: right;" *ngIf="totalOfPages == 1">There is {{totalOfUsers}} user</div>
-    <div style="float: right;" *ngIf="totalOfPages == 0">There is no user</div>
+    <div style="float: right;" *ngIf="totalOfUsers > 1">There are {{totalOfUsers}} users</div>
+    <div style="float: right;" *ngIf="totalOfUsers == 1">There is {{totalOfUsers}} user</div>
+    <div style="float: right;" *ngIf="totalOfUsers == 0">There is no user</div>
     <table class="table table-hover table-bordered">
       <thead>
         <tr class="bg-table-header">

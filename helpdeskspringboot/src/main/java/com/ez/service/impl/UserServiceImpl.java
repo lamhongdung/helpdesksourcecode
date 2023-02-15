@@ -1,7 +1,9 @@
 package com.ez.service.impl;
 
+import com.ez.entity.EmailExistException;
 import com.ez.entity.User;
 import com.ez.entity.UserPrincipal;
+import com.ez.entity.UsernameExistException;
 import com.ez.enumeration.Role;
 import com.ez.repository.UserRepository;
 import com.ez.service.EmailService;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -64,10 +67,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else { // found user by email
 //            validateLoginAttempt(user);
 
-            user.setLastLoginDateDisplay(user.getLastLoginDate());
-
-            // update last login date is on current date
-            user.setLastLoginDate(new Date());
+//            user.setLastLoginDateDisplay(user.getLastLoginDate());
+//
+//            // update last login date is on current date
+//            user.setLastLoginDate(new Date());
 
             // update value of lastLoginDate and lastLoginDateDisplay
             userRepository.save(user);
@@ -170,11 +173,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //    }
 
 //    @Override
-//    public List<User> getUsersByPage() {
-//        return userRepository.findAll();
-//    }
-
-//    @Override
 //    public List<User> findAll() {
 //        return user;
 //    }
@@ -200,6 +198,52 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public long getTotalOfUsers(String searchTerm, String role, String status){
         return userRepository.getTotalOfUsers(searchTerm, role, status);
+    }
+
+    // create new user
+    @Override
+    public User createUser(User user) throws MessagingException, EmailExistException {
+        // random password
+        String password;
+        // new user
+        User newUser = new User();
+
+        // check whether email is existing or not
+        if (existEmail(user.getEmail()))
+            throw new EmailExistException(EMAIL_ALREADY_EXISTS);
+
+        //
+        newUser.setEmail(user.getEmail());
+
+        // generate random password
+        password = generatePassword();
+        newUser.setPassword(encodePassword(password));
+
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setPhone(user.getPhone());
+        newUser.setAddress(user.getAddress());
+        newUser.setRole(user.getRole());
+        newUser.setStatus(user.getStatus());
+
+        // save new user into database
+        userRepository.save(newUser);
+        LOGGER.info("New user password: " + password);
+
+        // send an email to user has just created
+        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
+
+        return newUser;
+    }
+
+    // return:
+    //  - true: email already existed before
+    //  - false: email has not existed
+    private boolean existEmail(String email) {
+
+        User userByEmail = findUserByEmail(email);
+
+        return userByEmail != null;
     }
 
 //    @Override
@@ -249,23 +293,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return RandomStringUtils.randomAlphanumeric(10);
     }
 
-    private String generateUserId() {
-        return RandomStringUtils.randomNumeric(10);
-    }
-
-    //
-    // can remove this part
-    //
-//    private void validateLoginAttempt(User user) {
-//        if(user.isNotLocked()) {
-//            if(loginAttemptService.hasExceededMaxAttempts(user.getUsername())) {
-//                user.setNotLocked(false);
-//            } else {
-//                user.setNotLocked(true);
-//            }
-//        } else {
-//            loginAttemptService.evictUserFromLoginAttemptCache(user.getUsername());
-//        }
+//    private String generateUserId() {
+//        return RandomStringUtils.randomNumeric(10);
 //    }
 
 //    private User validateNewEmail(String currentEmail, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
