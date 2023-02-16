@@ -1,12 +1,11 @@
 package com.ez.controller;
 
-import com.ez.entity.EmailExistException;
-import com.ez.entity.HttpResponse;
-import com.ez.entity.User;
-import com.ez.entity.UserPrincipal;
+import com.ez.entity.*;
 import com.ez.exception.ExceptionHandling;
 import com.ez.service.UserService;
 import com.ez.utility.JWTTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,14 +22,16 @@ import static com.ez.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.OK;
 
 
-
 @RestController
 //@RequestMapping(path = {"/", "/user"})
 public class UserController extends ExceptionHandling {
+
+    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
 
     // no need this feature
-    public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
+//    public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private JWTTokenProvider jwtTokenProvider;
@@ -76,16 +77,17 @@ public class UserController extends ExceptionHandling {
     @GetMapping("/user-search")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> searchUsers(@RequestParam int page,
-                                                    @RequestParam int size,
-                                                    @RequestParam(defaultValue = "") String searchTerm,
-                                                    @RequestParam(defaultValue = "") String role,
-                                                    @RequestParam(defaultValue = "") String status) {
+                                                  @RequestParam int size,
+                                                  @RequestParam(defaultValue = "") String searchTerm,
+                                                  @RequestParam(defaultValue = "") String role,
+                                                  @RequestParam(defaultValue = "") String status) {
         List<User> users = userService.searchUsers(page, size, searchTerm, role, status);
 
         return new ResponseEntity<>(users, OK);
     }
 
-    // calculate total of users based on the search criteria
+    // calculate total of users based on the search criteria.
+    // use this total of users value to calculate total of pages for pagination.
     @GetMapping("/total-of-users")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Long> getTotalOfUsers(@RequestParam(defaultValue = "") String searchTerm,
@@ -94,9 +96,7 @@ public class UserController extends ExceptionHandling {
 
         // calculate total of users based on the search criteria
         long totalOfUsers = userService.getTotalOfUsers(searchTerm, role, status);
-    //        if (users.isEmpty()) {
-    //            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-    //        }
+
         return new ResponseEntity<Long>(totalOfUsers, HttpStatus.OK);
     }
 
@@ -106,6 +106,27 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<User> createUser(@RequestBody User user) throws EmailExistException, MessagingException {
         User newUser = userService.createUser(user);
         return new ResponseEntity<>(newUser, OK);
+    }
+
+    // find user by id
+    @GetMapping("/user-list/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<User> findById(@PathVariable Long id) throws UserNotFoundException {
+
+        LOGGER.info("find user by id: " + id) ;
+
+        User user = userService.findById(id);
+
+        return new ResponseEntity<>(user, OK);
+    }
+
+    // edit existing user
+    @PutMapping("/user-edit")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<User> editUser(@RequestBody User user) throws EmailExistException, MessagingException, UserNotFoundException {
+
+        User currentUser = userService.updateUser(user);
+        return new ResponseEntity<>(currentUser, OK);
     }
 
 //    @PostMapping("/register")
@@ -151,7 +172,6 @@ public class UserController extends ExceptionHandling {
 //        User user = userService.findUserByUsername(username);
 //        return new ResponseEntity<>(user, OK);
 //    }
-
 
 
 //    @GetMapping("/resetpassword/{email}")

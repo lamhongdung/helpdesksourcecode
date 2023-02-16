@@ -1,9 +1,6 @@
 package com.ez.service.impl;
 
-import com.ez.entity.EmailExistException;
-import com.ez.entity.User;
-import com.ez.entity.UserPrincipal;
-import com.ez.entity.UsernameExistException;
+import com.ez.entity.*;
 import com.ez.enumeration.Role;
 import com.ez.repository.UserRepository;
 import com.ez.service.EmailService;
@@ -63,7 +60,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (user == null) {
             LOGGER.error(NO_USER_FOUND_BY_EMAIL + email);
 //            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
-            throw new UsernameNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+            try {
+                throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+            } catch (EmailNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         } else { // found user by email
 //            validateLoginAttempt(user);
 
@@ -80,6 +81,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             LOGGER.info(FOUND_USER_BY_EMAIL + email);
             return userPrincipal;
         }
+    }
+
+    @Override
+    public User findById(Long id) throws UserNotFoundException {
+
+        // find user by user id
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + id));
     }
 
 //    @Override
@@ -184,8 +192,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // search users by page and based on the search criteria
     @Override
-    public List<User> searchUsers(int page, int numOfLinesPerPage, String searchTerm, String role, String status) {
-        return userRepository.searchUsers(page, numOfLinesPerPage, searchTerm, role, status);
+    public List<User> searchUsers(int page, int pageSize, String searchTerm, String role, String status) {
+        return userRepository.searchUsers(page, pageSize, searchTerm, role, status);
     }
 
     // find user by email
@@ -212,7 +220,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (existEmail(user.getEmail()))
             throw new EmailExistException(EMAIL_ALREADY_EXISTS);
 
-        //
+        // set email
         newUser.setEmail(user.getEmail());
 
         // generate random password
@@ -230,10 +238,33 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(newUser);
         LOGGER.info("New user password: " + password);
 
+        LOGGER.info("send an email to user has just created");
         // send an email to user has just created
         emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
 
         return newUser;
+    }
+
+    // update existing user
+    @Override
+    public User updateUser(User user) throws MessagingException, UserNotFoundException {
+
+        // get current user
+        User currentUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
+
+        // set new values to current user
+        currentUser.setFirstName(user.getFirstName());
+        currentUser.setLastName(user.getLastName());
+        currentUser.setPhone(user.getPhone());
+        currentUser.setAddress(user.getAddress());
+        currentUser.setRole(user.getRole());
+        currentUser.setStatus(user.getStatus());
+
+        userRepository.save(currentUser);
+
+        LOGGER.info("Updated new user with user id: " + currentUser.getId());
+
+        return currentUser;
     }
 
     // return:

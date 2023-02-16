@@ -12,6 +12,9 @@ import java.util.List;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    // find user by user id
+//    User findById(long id);
+
     // get user by email
     User findUserByEmail(String email);
 
@@ -34,7 +37,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "       ) " +
             " limit ?1,?2 "
             ,nativeQuery = true)
-    List<User> searchUsers(int page, int numOfLinesPerPage, String searchTerm, String role, String status);
+    List<User> searchUsers(int page, int pageSize, String searchTerm, String role, String status);
 
     // calculate total of users for pagination
     @Query(value =  "" +

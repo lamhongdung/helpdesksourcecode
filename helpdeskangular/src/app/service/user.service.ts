@@ -39,25 +39,28 @@ export class UserService {
   //   return this.http.post<User>(`${this.host}/user/add`, formData);
   // }
 
+  // create new user
   public createUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.host}/user-create`, user);
   }
 
-  public updateUser(formData: FormData): Observable<User> {
-    return this.http.post<User>(`${this.host}/user/update`, formData);
+  // edit existing user
+  public editUser(user: User): Observable<User> {
+    return this.http.put<User>(`${this.host}/user-edit`, user);
+  }
+
+  // public updateUser(formData: FormData): Observable<User> {
+  //   return this.http.post<User>(`${this.host}/user/update`, formData);
+  // }
+
+  // find user by user id
+  findById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.host}/user-list/${id}`);
   }
 
   public resetPassword(email: string): Observable<CustomHttpRespone> {
     return this.http.get<CustomHttpRespone>(`${this.host}/user/resetpassword/${email}`);
   }
-
-  // public updateProfileImage(formData: FormData): Observable<HttpEvent<User>> {
-  //   return this.http.post<User>(`${this.host}/user/updateProfileImage`, formData,
-  //     {
-  //       reportProgress: true,
-  //       observe: 'events'
-  //     });
-  // }
 
   public deleteUser(username: string): Observable<CustomHttpRespone> {
     return this.http.delete<CustomHttpRespone>(`${this.host}/user/delete/${username}`);

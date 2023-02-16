@@ -2,6 +2,7 @@ package com.ez.service;
 
 import com.ez.entity.EmailExistException;
 import com.ez.entity.User;
+import com.ez.entity.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,9 @@ public interface UserService {
 //    List<User> getUsersByPage();
 //    List<User> findAll();
 
+    // find user by user id
+    User findById(Long id) throws UserNotFoundException;
+
 //    List<User> getUsersByPage(int page, int size);
 
     // search users by page and based on the search criteria
@@ -30,7 +34,13 @@ public interface UserService {
     // calculate total of users based on the search criteria
     long getTotalOfUsers(String searchTerm, String role, String status);
 
+    // create new user
     User createUser(User user) throws MessagingException, EmailExistException;
+
+    // update existing user
+    User updateUser(User user) throws MessagingException, EmailExistException, UserNotFoundException;
+
+
 //    User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException, MessagingException;
 //    User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isActive) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException, MessagingException;
 

@@ -23,15 +23,6 @@ export class UserCreateComponent implements OnInit {
   userForm: FormGroup;
   user: User;
 
-  // isSuccessful = false;
-  // isSignUpFailed = false;
-  // errorMessage = '';
-  // isSubmited = false;
-  // formValid = false;
-
-  constructor(private router: Router, private userService: UserService,
-    private notificationService: NotificationService) { }
-
   errorMessages = {
     email: [
       { type: 'required', message: 'Please input an email' },
@@ -61,6 +52,9 @@ export class UserCreateComponent implements OnInit {
     //   { type: 'required', message: 'Please select status' }
     // ]
   };
+  
+  constructor(private router: Router, private userService: UserService,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
 

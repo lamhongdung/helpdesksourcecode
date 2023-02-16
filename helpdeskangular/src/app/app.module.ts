@@ -28,6 +28,7 @@ import { CalendarCreateComponent } from './component/calendar/calendar-create/ca
 import { PriorityListComponent } from './component/priority/priority-list/priority-list.component';
 import { PriorityCreateComponent } from './component/priority/priority-create/priority-create.component';
 import { CategoryCreateComponent } from './component/category/category-create/category-create.component';
+import { UserEditComponent } from './component/user/user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { CategoryCreateComponent } from './component/category/category-create/ca
     CalendarCreateComponent,
     PriorityListComponent,
     PriorityCreateComponent,
-    CategoryCreateComponent
+    CategoryCreateComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,
