@@ -60,7 +60,8 @@
     <div style="float: right;" *ngIf="totalOfUsers > 1">There are {{totalOfUsers}} users</div>
     <div style="float: right;" *ngIf="totalOfUsers == 1">There is {{totalOfUsers}} user</div>
     <div style="float: right;" *ngIf="totalOfUsers == 0">There is no user</div>
-    <table class="table table-hover table-bordered">
+    <!-- <table class="table table-hover table-bordered"> -->
+    <table class="table table-hover table-striped table-bordered">
       <thead>
         <tr class="bg-table-header">
           <th scope="col">Ord</th>
@@ -77,14 +78,14 @@
       <tbody style="font-size: 16px;text-align: center">
         <tr *ngFor="let user of users,index as i">
           <!-- order(line number) -->
-          <td style="text-align: right">{{indexBasedPage(currentPage, i)}}</td>
-          <td style="text-align: right">{{user.id}}</td>
-          <td>{{user.email}}</td>
-          <td>{{user.firstName}}</td>
-          <td>{{user.lastName}}</td>
-          <td>{{user.phone}}</td>
-          <td>{{user.role}}</td>
-          <td>{{user.status}}</td>
+          <td style="text-align: right"><a [routerLink]="['/user-view', user.id]">{{indexBasedPage(currentPage, i)}}</a></td>
+          <td style="text-align: right"><a [routerLink]="['/user-view', user.id]">{{user.id}}</a></td>
+          <td><a [routerLink]="['/user-view', user.id]">{{user.email}}</a></td>
+          <td><a [routerLink]="['/user-view', user.id]">{{user.firstName}}</a></td>
+          <td><a [routerLink]="['/user-view', user.id]">{{user.lastName}}</a></td>
+          <td><a [routerLink]="['/user-view', user.id]">{{user.phone}}</a></td>
+          <td><a [routerLink]="['/user-view', user.id]">{{user.role}}</a></td>
+          <td><a [routerLink]="['/user-view', user.id]">{{user.status}}</a></td>
           <!-- "Edit" button -->
           <td class="text-center" width="11%">
             <a class="btn btn-primary mr-1" [routerLink]="['/user-edit', user.id]"><i class="fa fa-edit"></i></a>
