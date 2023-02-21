@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.ez.constant.FileConstant.USER_FOLDER;
+//import static com.ez.constant.FileConstant.USER_FOLDER;
 
 @SpringBootApplication
 public class HelpdeskApplication {
@@ -20,7 +20,7 @@ public class HelpdeskApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HelpdeskApplication.class, args);
 
-		new File(USER_FOLDER).mkdirs();
+//		new File(USER_FOLDER).mkdirs();
 	}
 
 	@Bean

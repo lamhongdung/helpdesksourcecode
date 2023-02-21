@@ -41,10 +41,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+
             // get token value without prefix 'Bearer'
             String token = authorizationHeader.substring(TOKEN_PREFIX.length());
+
             // get username from token
             String username = jwtTokenProvider.getSubject(token);
+
             if (jwtTokenProvider.isTokenValid(username, token) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 List<GrantedAuthority> authorities = jwtTokenProvider.getAuthorities(token);
                 Authentication authentication = jwtTokenProvider.getAuthentication(username, authorities, request);

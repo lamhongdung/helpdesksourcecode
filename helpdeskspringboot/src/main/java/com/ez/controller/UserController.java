@@ -30,8 +30,6 @@ public class UserController extends ExceptionHandling {
 
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
 
-    // no need this feature
-//    public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private JWTTokenProvider jwtTokenProvider;
@@ -43,52 +41,50 @@ public class UserController extends ExceptionHandling {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // login to the Help Desk system
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
+
         // if username or password is invalid then throw an exception
         authenticate(user.getEmail(), user.getPassword());
 
         // authenticate success(username and password are correct)
-//        User loginUser = userService.findUserByUsername(user.getUsername());
         User loginUser = userService.findUserByEmail(user.getEmail());
 
         // get the generated JWT and send back to client
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+
+        // return user and jwt token
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
     }
-//    @GetMapping("/user-list")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    // parameters:
-//    // - page: page number(1st, 2nd, 3rd,...,)
-//    // - size: number of users per a page(default = 5)
-//    public ResponseEntity<List<User>> getUsersByPage(@RequestParam int page, @RequestParam int size) {
-//        List<User> users = userService.getUsersByPage(page, size);
-//        return new ResponseEntity<>(users, OK);
-//    }
 
     // search users by page based on the search criteria
     // parameters:
     //  - page: page number
     //  - size: page size(default = 5)
-    //  - searchTerm: word to search
-    //  - role: user role. = empty for all roles
-    //  - status: user status. = empty for all status
+    //  - searchTerm: word to search(ID, email, firstName, lastName, phone). '' is for search all
+    //  - role: user role. '' is for all roles
+    //  - status: user status. '' is for all status
     @GetMapping("/user-search")
+    // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> searchUsers(@RequestParam int page,
                                                   @RequestParam int size,
                                                   @RequestParam(defaultValue = "") String searchTerm,
                                                   @RequestParam(defaultValue = "") String role,
                                                   @RequestParam(defaultValue = "") String status) {
+
+        // get all users of 1 page
         List<User> users = userService.searchUsers(page, size, searchTerm, role, status);
 
         return new ResponseEntity<>(users, OK);
     }
 
     // calculate total of users based on the search criteria.
-    // use this total of users value to calculate total of pages for pagination.
+    // use this total of users value to calculate total pages for pagination.
     @GetMapping("/total-of-users")
+    // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Long> getTotalOfUsers(@RequestParam(defaultValue = "") String searchTerm,
                                                 @RequestParam(defaultValue = "") String role,
@@ -102,14 +98,18 @@ public class UserController extends ExceptionHandling {
 
     // create new user
     @PostMapping("/user-create")
+    // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody User user) throws EmailExistException, MessagingException {
+
         User newUser = userService.createUser(user);
+
         return new ResponseEntity<>(newUser, OK);
     }
 
     // find user by id
     @GetMapping("/user-list/{id}")
+    // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<User> findById(@PathVariable Long id) throws UserNotFoundException {
 
@@ -122,10 +122,12 @@ public class UserController extends ExceptionHandling {
 
     // edit existing user
     @PutMapping("/user-edit")
+    // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<User> editUser(@RequestBody User user) throws EmailExistException, MessagingException, UserNotFoundException {
 
         User currentUser = userService.updateUser(user);
+
         return new ResponseEntity<>(currentUser, OK);
     }
 
@@ -219,13 +221,16 @@ public class UserController extends ExceptionHandling {
 //    }
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
+
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase().toUpperCase(),
                 message), httpStatus);
     }
 
     private HttpHeaders getJwtHeader(UserPrincipal user) {
+
         HttpHeaders headers = new HttpHeaders();
         headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(user));
+
         return headers;
     }
 

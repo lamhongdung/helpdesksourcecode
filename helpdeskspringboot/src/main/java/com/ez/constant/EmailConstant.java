@@ -4,6 +4,8 @@ package com.ez.constant;
 public class EmailConstant {
     public static final String SIMPLE_MAIL_TRANSFER_PROTOCOL = "smtps";
     public static final String USERNAME = "dunglh13@gmail.com";
+
+    // password of 2 layer password
     public static final String PASSWORD = "lcwnawybrmwtslgv";
     public static final String FROM_EMAIL = "dunglh13@gmail.com";
     public static final String CC_EMAIL = "";

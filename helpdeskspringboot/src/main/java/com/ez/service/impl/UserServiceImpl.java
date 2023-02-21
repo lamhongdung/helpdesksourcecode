@@ -4,7 +4,7 @@ import com.ez.entity.*;
 import com.ez.enumeration.Role;
 import com.ez.repository.UserRepository;
 import com.ez.service.EmailService;
-import com.ez.service.LoginAttemptService;
+//import com.ez.service.LoginAttemptService;
 import com.ez.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -35,25 +35,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
-    private LoginAttemptService loginAttemptService;
+//    private LoginAttemptService loginAttemptService;
     private EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.loginAttemptService = loginAttemptService;
+//        this.loginAttemptService = loginAttemptService;
         this.emailService = emailService;
     }
 
-    // get user info by email id
+    // get user info by email
     @Override
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     public UserDetails loadUserByUsername(String email) {
-//        User user = userRepository.findUserByUsername(username);
 
-        // get user by email id
+        // get user by email
         User user = userRepository.findUserByEmail(email);
 
         // not found user by email
@@ -66,15 +65,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 throw new RuntimeException(e);
             }
         } else { // found user by email
-//            validateLoginAttempt(user);
-
-//            user.setLastLoginDateDisplay(user.getLastLoginDate());
-//
-//            // update last login date is on current date
-//            user.setLastLoginDate(new Date());
 
             // update value of lastLoginDate and lastLoginDateDisplay
-            userRepository.save(user);
+//            userRepository.save(user);
 
             UserPrincipal userPrincipal = new UserPrincipal(user);
 
@@ -114,53 +107,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //    }
 
 //    @Override
-////    public User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException, MessagingException {
-//    public User addNewUser(String email, String firstName, String lastName, String phone, String address, String role, boolean isActive) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException, MessagingException {
-////        validateNewEmail(EMPTY, username, email);
-//        validateNewEmail(EMPTY, email);
-//        User user = new User();
-//        user.setEmail(email);
-//        String password = generatePassword();
-//        user.setPassword(encodePassword(password));
-////        user.setUserId(generateUserId());
-//        user.setFirstName(firstName);
-//        user.setLastName(lastName);
-//        user.setPhone(phone);
-//        user.setAddress(address);
-//        user.setRole(getRoleEnumName(role).name());
-//        user.setActive(isActive);
-//
-//        user.setJoinDate(new Date());
-////        user.setUsername(username);
-////        user.setNotLocked(isNonLocked);
-////        user.setAuthorities(getRoleEnumName(role).getAuthorities());
-////        user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
-//        userRepository.save(user);
-////        saveProfileImage(user, profileImage);
-//        LOGGER.info("New user password: " + password);
-//        emailService.sendNewPasswordEmail(firstName, password, email);
-//        return user;
-//    }
-
-//    @Override
-//    public User updateUser(String currentEmail, String newFirstName, String newLastName, String newPhone, String newAddress, String newRole, boolean isActive) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
-////        public User addNewUser(String email, String firstName, String lastName, String phone, String address, String role, boolean isActive) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException, MessagingException {
-//
-//        User currentUser = validateNewEmail(currentEmail, newEmail);
-//        currentUser.setFirstName(newFirstName);
-//        currentUser.setLastName(newLastName);
-//        currentUser.setUsername(newUsername);
-//        currentUser.setEmail(newEmail);
-//        currentUser.setActive(isActive);
-////        currentUser.setNotLocked(isNonLocked);
-//        currentUser.setRole(getRoleEnumName(role).name());
-////        currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
-//        userRepository.save(currentUser);
-//        saveProfileImage(currentUser, profileImage);
-//        return currentUser;
-//    }
-
-//    @Override
 //    public void resetPassword(String email) throws MessagingException, EmailNotFoundException {
 //        User user = userRepository.findUserByEmail(email);
 //        if (user == null) {
@@ -171,13 +117,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //        userRepository.save(user);
 //        LOGGER.info("New user password: " + password);
 //        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
-//    }
-
-//    @Override
-//    public User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
-//        User user = validateNewEmail(username, null, null);
-//        saveProfileImage(user, profileImage);
-//        return user;
 //    }
 
 //    @Override
@@ -211,8 +150,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     // create new user
     @Override
     public User createUser(User user) throws MessagingException, EmailExistException {
+
+        LOGGER.info("create new user");
+
         // random password
         String password;
+
         // new user
         User newUser = new User();
 
@@ -238,7 +181,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(newUser);
         LOGGER.info("New user password: " + password);
 
-        LOGGER.info("send an email to user has just created");
+        LOGGER.info("Send random password to user via email");
         // send an email to user has just created
         emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
 
@@ -249,22 +192,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User updateUser(User user) throws MessagingException, UserNotFoundException {
 
-        // get current user
-        User currentUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
+        // get current user(persistent)
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
 
-        // set new values to current user
-        currentUser.setFirstName(user.getFirstName());
-        currentUser.setLastName(user.getLastName());
-        currentUser.setPhone(user.getPhone());
-        currentUser.setAddress(user.getAddress());
-        currentUser.setRole(user.getRole());
-        currentUser.setStatus(user.getStatus());
+        // set new values to existing user
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setAddress(user.getAddress());
+        existingUser.setRole(user.getRole());
+        existingUser.setStatus(user.getStatus());
 
-        userRepository.save(currentUser);
+        userRepository.save(existingUser);
 
-        LOGGER.info("Updated new user with user id: " + currentUser.getId());
+        LOGGER.info("Updated user with user id: " + existingUser.getId());
 
-        return currentUser;
+        return existingUser;
     }
 
     // return:
@@ -277,44 +220,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userByEmail != null;
     }
 
-//    @Override
-//    public void deleteUser(String username) throws IOException {
-//        User user = userRepository.findUserByUsername(username);
-//        Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
-//        FileUtils.deleteDirectory(new File(userFolder.toString()));
-//        userRepository.deleteById(user.getId());
+//    private Role getRoleEnumName(String role) {
+//        return Role.valueOf(role.toUpperCase());
 //    }
-
-//    private void saveProfileImage(User user, MultipartFile profileImage) throws IOException, NotAnImageFileException {
-//        if (profileImage != null) { // ex: user/home/supportportal/user/rick
-//            if(!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE).contains(profileImage.getContentType())) {
-//                throw new NotAnImageFileException(profileImage.getOriginalFilename() + NOT_AN_IMAGE_FILE);
-//            }
-//            Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
-//            if(!Files.exists(userFolder)) {
-//                Files.createDirectories(userFolder);
-//                LOGGER.info(DIRECTORY_CREATED + userFolder);
-//            }
-//            Files.deleteIfExists(Paths.get(userFolder + user.getUsername() + DOT + JPG_EXTENSION));
-//            Files.copy(profileImage.getInputStream(), userFolder.resolve(user.getUsername() + DOT + JPG_EXTENSION), REPLACE_EXISTING);
-////            user.setProfileImageUrl(setProfileImageUrl(user.getUsername()));
-//            userRepository.save(user);
-//            LOGGER.info(FILE_SAVED_IN_FILE_SYSTEM + profileImage.getOriginalFilename());
-//        }
-//    }
-
-    private String setProfileImageUrl(String username) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH + username + FORWARD_SLASH
-        + username + DOT + JPG_EXTENSION).toUriString();
-    }
-
-    private Role getRoleEnumName(String role) {
-        return Role.valueOf(role.toUpperCase());
-    }
-
-    private String getTemporaryProfileImageUrl(String username) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(DEFAULT_USER_IMAGE_PATH + username).toUriString();
-    }
 
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
@@ -323,35 +231,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private String generatePassword() {
         return RandomStringUtils.randomAlphanumeric(10);
     }
-
-//    private String generateUserId() {
-//        return RandomStringUtils.randomNumeric(10);
-//    }
-
-//    private User validateNewEmail(String currentEmail, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
-////        User userByNewUsername = findUserByUsername(newUsername);
-//        User userByNewEmail = findUserByEmail(newEmail);
-//        if(StringUtils.isNotBlank(currentEmail)) {
-//            User currentUser = findUserByUsername(currentEmail);
-//            if(currentUser == null) {
-//                throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME + currentEmail);
-//            }
-//            if(userByNewUsername != null && !currentUser.getId().equals(userByNewUsername.getId())) {
-//                throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
-//            }
-//            if(userByNewEmail != null && !currentUser.getId().equals(userByNewEmail.getId())) {
-//                throw new EmailExistException(EMAIL_ALREADY_EXISTS);
-//            }
-//            return currentUser;
-//        } else {
-//            if(userByNewUsername != null) {
-//                throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
-//            }
-//            if(userByNewEmail != null) {
-//                throw new EmailExistException(EMAIL_ALREADY_EXISTS);
-//            }
-//            return null;
-//        }
-//    }
 
 }

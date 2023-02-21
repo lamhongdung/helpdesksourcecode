@@ -1,4 +1,4 @@
-package com.ez.configuration;
+package com.ez.config;
 
 import com.ez.filter.JwtAccessDeniedHandler;
 import com.ez.filter.JwtAuthenticationEntryPoint;
@@ -37,8 +37,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public SecurityConfiguration(JwtAuthorizationFilter jwtAuthorizationFilter,
                                  JwtAccessDeniedHandler jwtAccessDeniedHandler,
                                  JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-                                 // user UserServiceImpl
+
+                                 // use the class UserServiceImpl(bean name = userDetailsService)
                                  @Qualifier("userDetailsService")UserDetailsService userDetailsService,
+
                                  BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
@@ -56,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
                 .sessionManagement().sessionCreationPolicy(STATELESS)
-                // do not need authenticate for PUBLIC_URLs
+                // do not need to authenticate for PUBLIC_URLs
                 .and().authorizeRequests().antMatchers(PUBLIC_URLS).permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -65,19 +67,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
-//        http.csrf().disable().cors().and()
-//                .sessionManagement().sessionCreationPolicy(STATELESS)
-//                // do not need authenticate for PUBLIC_URLs
-//                .and().authorizeRequests()
-////                .antMatchers("/delete").hasAnyRole("ADMIN", "SUPER_ADMIN")
-//                .antMatchers("/delete").hasAnyRole("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
-//                .antMatchers(PUBLIC_URLS).permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
-//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//                .and()
-//                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

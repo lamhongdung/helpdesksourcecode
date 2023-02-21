@@ -8,7 +8,7 @@
 <div class="container">
     <form [formGroup]="userForm" (ngSubmit)="editUser()">
         <div class="row mt-5">
-            <!-- the Left column -->
+            <!-- the "Left" column -->
             <div class="col-md-6">
                 <div class="container">
                     <!-- ID -->
@@ -44,10 +44,10 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
                                 id="firstName">
-                            <div class="text-danger" *ngFor="let validation of errorMessages.firstName">
+                            <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <div
-                                    *ngIf="userForm.get('firstName').hasError(validation.type) && (userForm.get('firstName').dirty || userForm.get('firstName').touched)">
-                                    {{validation.message}}
+                                    *ngIf="userForm.get('firstName').hasError(e.type) && (userForm.get('firstName').dirty || userForm.get('firstName').touched)">
+                                    {{e.message}}
                                 </div>
                             </div>
                         </div>
@@ -63,18 +63,17 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
                                 id="lastName">
-                            <div class="text-danger" *ngFor="let validation of errorMessages.lastName">
+                            <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <div
-                                    *ngIf="userForm.get('lastName').hasError(validation.type) && (userForm.get('lastName').dirty || userForm.get('lastName').touched)">
-                                    {{validation.message}}
+                                    *ngIf="userForm.get('lastName').hasError(e.type) && (userForm.get('lastName').dirty || userForm.get('lastName').touched)">
+                                    {{e.message}}
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <!-- Right column -->
+            <!-- the "Right" column -->
             <div class="col-md-6">
                 <div class="container">
                     <!-- Phone -->
@@ -87,10 +86,10 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
                                 placeholder="ex: 0986111222(10 digits)" id="phone">
-                            <div class="text-danger" *ngFor="let validation of errorMessages.phone">
+                            <div class="text-danger" *ngFor="let e of errorMessages.phone">
                                 <div
-                                    *ngIf="userForm.get('phone').hasError(validation.type) && (userForm.get('phone').dirty || userForm.get('phone').touched)">
-                                    {{validation.message}}
+                                    *ngIf="userForm.get('phone').hasError(e.type) && (userForm.get('phone').dirty || userForm.get('phone').touched)">
+                                    {{e.message}}
                                 </div>
                             </div>
                         </div>
@@ -105,10 +104,10 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
                                 placeholder="Address">
-                            <div class="text-danger" *ngFor="let validation of errorMessages.address">
+                            <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <div
-                                    *ngIf="userForm.get('address').hasError(validation.type) && (userForm.get('address').dirty || userForm.get('address').touched)">
-                                    {{validation.message}}
+                                    *ngIf="userForm.get('address').hasError(e.type) && (userForm.get('address').dirty || userForm.get('address').touched)">
+                                    {{e.message}}
                                 </div>
                             </div>
                         </div>
@@ -147,20 +146,21 @@
             </div>
         </div>
 
-        <!-- buttons: Save and Cancel -->
+        <!-- buttons: "Save" and "Cancel" -->
         <div class="d-flex justify-content-center">
             <div>
                 <!-- the "Save" button -->
                 <!-- if userForm is invalid then disabled the button "Save" -->
                 <button type="submit" [disabled]="userForm.invalid" style="width: 150px" class="btn btn-primary mr-2">
-                    <!-- if "showLoading" = true then show spinner -->
+                    <!-- show the spinner icon in the "Save" button -->
                     <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>
                     <!-- Change label button "Save" to "Saving.." -->
                     <span *ngIf="showLoading">Saving...</span>
-                    <!-- after save finished then re-change the button to "Save"  -->
+                    <!-- after save finished then re-changes the button to "Save"  -->
                     <span *ngIf="!showLoading">Save</span>
                 </button>
                 <!-- the "Cancel" button -->
+                <!-- re-directs to the "user-list" page -->
                 <button class="btn btn-dark" routerLink="/user-list" style="width: 150px">Cancel</button>
             </div>
         </div>

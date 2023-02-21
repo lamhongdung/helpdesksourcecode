@@ -24,8 +24,13 @@ export class UserViewComponent implements OnInit {
   // user id
   id: number;
 
-  constructor(private router: Router, private userService: UserService, private notificationService: NotificationService,
-    private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute) { }
+  constructor(private router: Router,
+    private userService: UserService,
+    private notificationService: NotificationService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute) { 
+
+  }
 
   // initial values
   ngOnInit(): void {
@@ -39,38 +44,48 @@ export class UserViewComponent implements OnInit {
       lastName: [''],
       phone: [''],
       address: [''],
-      role: [{value: '', disabled: true}],
-      status: [{value: '', disabled: true}]
+
+      // initial empty value to the role, and disable it
+      role: [{ value: '', disabled: true }],
+
+      // initial empty value to the status, and disable it
+      status: [{ value: '', disabled: true }]
 
     });
 
-    // get user id from params of active route.
+    // get user id from params of the active route.
     // and get user based on user id from database
-    this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+    this.activatedRoute.paramMap.subscribe(
+      
+      (params: ParamMap) => {
 
-      // get id from param of active route.
-      // ex: http://localhost:4200/user-view/:id
-      // ex: http://localhost:4200/user-view/3
-      this.id = +params.get('id');
+        // get id from param of active route.
+        // ex: http://localhost:4200/user-view/:id
+        // ex: http://localhost:4200/user-view/3
+        // the sign "+": use to convert from string to number
+        this.id = +params.get('id');
 
-      // get user by user id
-      this.userService.findById(this.id).subscribe(
+        // get user by user id
+        this.userService.findById(this.id).subscribe(
+          
+          // if there is no error when get data from backend
+          (data: User) => {
 
-        (data: User) => {
+            this.user = data;
 
-          this.user = data;
+            // load user information to the userForm
+            this.userForm.patchValue(data);
 
-          // load user information to the userForm
-          this.userForm.patchValue(data);
+          },
+          // if there is error when get data from backend
+          (errorResponse: HttpErrorResponse) => {
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+          }
+        );
+      } // end of (params: ParamMap)
+    ); // end of this.activatedRoute.paramMap.subscribe()
 
-        },
-        (errorResponse: HttpErrorResponse) => {
-          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-        }
-      );
-    });
-
-  }
+  } // end of ngOnInit()
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {

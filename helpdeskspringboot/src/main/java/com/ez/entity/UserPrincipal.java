@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.Arrays.stream;
-
-// map User to Spring security
+// map User to UserPrincipal of Spring security
 public class UserPrincipal implements UserDetails {
     private User user;
 
@@ -24,10 +22,10 @@ public class UserPrincipal implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
+
+        // add role
         authorities.add(new SimpleGrantedAuthority(this.user.getRole()));
 
-        // convert Array of String to List<SimpleGrantedAuthority>
-//        return stream(this.user.getAuthorities()).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         return authorities;
     }
 
@@ -50,7 +48,6 @@ public class UserPrincipal implements UserDetails {
     // account has never locked
     @Override
     public boolean isAccountNonLocked() {
-//        return this.user.isNotLocked();
         return true;
     }
 
@@ -61,9 +58,8 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-//        return this.user.isActive();
-//        return (this.user.getStatus().compareTo("Active"));
-//        return true;
+
+        // return (status == "Active")
         return StringUtils.equalsIgnoreCase(this.user.getStatus(),"Active");
     }
 }

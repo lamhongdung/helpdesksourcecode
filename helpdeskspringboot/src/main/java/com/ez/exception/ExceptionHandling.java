@@ -32,15 +32,15 @@ public class ExceptionHandling implements ErrorController {
     private static final String INTERNAL_SERVER_ERROR_MSG = "An error occurred while processing the request";
     private static final String INCORRECT_CREDENTIALS = "Username / password is not correct. Please try again";
     private static final String ACCOUNT_DISABLED = "Your account has been disabled. If this is an error, please contact administration";
-    private static final String ERROR_PROCESSING_FILE = "Error occurred while processing file";
+//    private static final String ERROR_PROCESSING_FILE = "Error occurred while processing file";
     private static final String NOT_ENOUGH_PERMISSION = "You do not have enough permission";
     public static final String ERROR_PATH = "/error";
 
     // no need this method
-    @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<HttpResponse> accountDisabledException() {
-        return createHttpResponse(BAD_REQUEST, ACCOUNT_DISABLED);
-    }
+//    @ExceptionHandler(DisabledException.class)
+//    public ResponseEntity<HttpResponse> accountDisabledException() {
+//        return createHttpResponse(BAD_REQUEST, ACCOUNT_DISABLED);
+//    }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<HttpResponse> badCredentialsException() {
@@ -52,25 +52,26 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(FORBIDDEN, NOT_ENOUGH_PERMISSION);
     }
 
-    @ExceptionHandler(LockedException.class)
-    public ResponseEntity<HttpResponse> lockedException() {
-        return createHttpResponse(UNAUTHORIZED, ACCOUNT_LOCKED);
-    }
+//    @ExceptionHandler(LockedException.class)
+//    public ResponseEntity<HttpResponse> lockedException() {
+//        return createHttpResponse(UNAUTHORIZED, ACCOUNT_LOCKED);
+//    }
 
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<HttpResponse> tokenExpiredException(TokenExpiredException exception) {
         return createHttpResponse(UNAUTHORIZED, exception.getMessage());
     }
 
+    // handle for error of duplicate email when creating new user
     @ExceptionHandler(EmailExistException.class)
     public ResponseEntity<HttpResponse> emailExistException(EmailExistException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(UsernameExistException.class)
-    public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
+//    @ExceptionHandler(UsernameExistException.class)
+//    public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException exception) {
+//        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+//    }
 
     @ExceptionHandler(EmailNotFoundException.class)
     public ResponseEntity<HttpResponse> emailNotFoundException(EmailNotFoundException exception) {
@@ -102,11 +103,11 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
     }
 
-    @ExceptionHandler(NotAnImageFileException.class)
-    public ResponseEntity<HttpResponse> notAnImageFileException(NotAnImageFileException exception) {
-        LOGGER.error(exception.getMessage());
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
+//    @ExceptionHandler(NotAnImageFileException.class)
+//    public ResponseEntity<HttpResponse> notAnImageFileException(NotAnImageFileException exception) {
+//        LOGGER.error(exception.getMessage());
+//        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+//    }
 
     @ExceptionHandler(NoResultException.class)
     public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {
@@ -114,11 +115,11 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(NOT_FOUND, exception.getMessage());
     }
 
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<HttpResponse> iOException(IOException exception) {
-        LOGGER.error(exception.getMessage());
-        return createHttpResponse(INTERNAL_SERVER_ERROR, ERROR_PROCESSING_FILE);
-    }
+//    @ExceptionHandler(IOException.class)
+//    public ResponseEntity<HttpResponse> iOException(IOException exception) {
+//        LOGGER.error(exception.getMessage());
+//        return createHttpResponse(INTERNAL_SERVER_ERROR, ERROR_PROCESSING_FILE);
+//    }
 
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus,

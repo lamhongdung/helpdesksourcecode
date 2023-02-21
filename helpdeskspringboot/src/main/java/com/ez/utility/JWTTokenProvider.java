@@ -31,10 +31,13 @@ public class JWTTokenProvider {
 
     // generate JWT
     public String generateJwtToken(UserPrincipal userPrincipal) {
+
         String[] claims = getClaimsFromUser(userPrincipal);
+
         // generate token
         return JWT.create().withIssuer(HELP_DESK).withAudience(HELP_DESK_ADMINISTRATION)
-                .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
+                .withIssuedAt(new Date())
+                .withSubject(userPrincipal.getUsername()) // use email as userName
                 .withArrayClaim(AUTHORITIES, claims).withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }
@@ -56,6 +59,7 @@ public class JWTTokenProvider {
         return StringUtils.isNotEmpty(username) && !isTokenExpired(verifier, token);
     }
 
+    // get email
     public String getSubject(String token) {
         JWTVerifier verifier = getJWTVerifier();
         return verifier.verify(token).getSubject();

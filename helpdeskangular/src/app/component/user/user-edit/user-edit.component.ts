@@ -15,9 +15,9 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class UserEditComponent implements OnInit {
 
-  // allow display spinner or not
-  // =true: allow to display spinner
-  // =false: do not allow to display spinner
+  // allow display spinner icon or not
+  // =true: allow to display spinner in the "Save" button
+  // =false: do not allow to display spinner in the "Save" button
   showLoading: boolean;
 
   // use to unsubcribe all subscribe easily, avoid leak memeory
@@ -29,6 +29,7 @@ export class UserEditComponent implements OnInit {
   // user id
   id: number;
 
+  // error messages
   errorMessages = {
     // email: [
     //   { type: 'required', message: 'Please input an email' },
@@ -36,13 +37,13 @@ export class UserEditComponent implements OnInit {
     // ],
     firstName: [
       { type: 'required', message: 'Please input the first name' },
+      // { type: 'minlength', message: 'First name must be at least 1 character' },
       { type: 'maxlength', message: 'First name cannot be longer than 50 characters' },
-      { type: 'minlength', message: 'First name must be at least 1 character' },
     ],
     lastName: [
       { type: 'required', message: 'Please input the last name' },
+      // { type: 'minlength', message: 'Last name must be at least 1 character' },
       { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
-      { type: 'minlength', message: 'FIrst name must be at least 1 character' },
     ],
     phone: [
       { type: 'required', message: 'Please input phone number' },
@@ -53,8 +54,13 @@ export class UserEditComponent implements OnInit {
     ]
   };
 
-  constructor(private router: Router, private userService: UserService, private notificationService: NotificationService,
-    private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute) { }
+  constructor(private router: Router,
+    private userService: UserService,
+    private notificationService: NotificationService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute) {
+
+  }
 
   // initial values
   ngOnInit(): void {
@@ -64,46 +70,50 @@ export class UserEditComponent implements OnInit {
       // do not need validate id because this "id" field is read only
       id: [''],
 
+      
+      // do not need validate email because this "email" field is read only.
       // email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-
-      // do not need validate email because this "email" field is read only
       email: [''],
 
-      firstName: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(1)]],
-      lastName: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(1)]],
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9]{10}$")]],
       address: ['', [Validators.maxLength(300)]],
       role: [''],
       status: ['']
     });
 
-    // get user id from params of active route.
+    // get user id from params of active route(from address path).
     // and get user based on user id from database
-    this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+    this.activatedRoute.paramMap.subscribe(
+      
+      (params: ParamMap) => {
 
-      // get id from param of active route
-      this.id = +params.get('id');
+        // get id from param of active route.
+        // The "+"" sign: convert string to number. 
+        this.id = +params.get('id');
 
-      // get user by user id
-      this.userService.findById(this.id).subscribe(
+        // get user by user id
+        this.userService.findById(this.id).subscribe(
 
-        (data: User) => {
+          (data: User) => {
 
-          this.user = data;
+            this.user = data;
 
-          // load user information to the userForm
-          this.userForm.patchValue(data);
+            // load user information to the userForm
+            this.userForm.patchValue(data);
 
-        },
-        (errorResponse: HttpErrorResponse) => {
-          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
-        }
-      );
+          },
+          (errorResponse: HttpErrorResponse) => {
+            this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+          }
+        );
     });
 
-  }
+  } // end of ngOnInit()
 
-  // edit user
+  // edit user.
+  // when user click the "Save" button in the "Edit user"
   editUser() {
 
     // allow to show spinner(circle)
@@ -111,18 +121,26 @@ export class UserEditComponent implements OnInit {
 
     // push the subscribe to a list of subscriptions in order to easily unsubscribe them when destroy the component
     this.subscriptions.push(
+
       // edit exsting user
       this.userService.editUser(this.userForm.value).subscribe(
+
+        // update user successful
         (data: User) => {
           this.user = data;
+          // send notification to user
           this.sendNotification(NotificationType.SUCCESS, `${data.firstName} ${data.lastName} is updated successfully`);
 
           // hide spinner(circle)
           this.showLoading = false;
 
+          // after update user successful then navigate to the "user-list" page
           this.router.navigateByUrl("/user-list");
         },
+        // there are some errors when update user
         (errorResponse: HttpErrorResponse) => {
+
+          // send failure message to user
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
           // hide spinner(circle)
@@ -131,7 +149,7 @@ export class UserEditComponent implements OnInit {
       )
     );
 
-  }
+  } // end of editUser()
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
@@ -147,4 +165,4 @@ export class UserEditComponent implements OnInit {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-}
+} // end of the UserEditComponent
