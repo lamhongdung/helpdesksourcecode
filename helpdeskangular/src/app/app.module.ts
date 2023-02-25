@@ -11,9 +11,6 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { AuthenticationGuard } from './guard/authentication.guard';
 import { NotificationModule } from './notification.module';
 import { NotificationService } from './service/notification.service';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { UserComponent } from './user/user.component';
 import { HeaderComponent } from './component/header/header/header.component';
 import { UserListComponent } from './component/user/user-list/user-list.component';
 import {ReactiveFormsModule} from "@angular/forms";
@@ -30,13 +27,14 @@ import { PriorityCreateComponent } from './component/priority/priority-create/pr
 import { CategoryCreateComponent } from './component/category/category-create/category-create.component';
 import { UserEditComponent } from './component/user/user-edit/user-edit.component';
 import { UserViewComponent } from './component/user/user-view/user-view.component';
+import { LoginComponent } from './component/login/login.component';
+import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
+import { ChangePasswordComponent } from './component/change-password/change-password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent,
-    UserComponent,
     CategoryListComponent,
     HeaderComponent,
     UserListComponent,
@@ -51,7 +49,9 @@ import { UserViewComponent } from './component/user/user-view/user-view.componen
     PriorityCreateComponent,
     CategoryCreateComponent,
     UserEditComponent,
-    UserViewComponent
+    UserViewComponent,
+    ResetPasswordComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

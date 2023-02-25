@@ -2,12 +2,16 @@
     <h3>Create user</h3>
 </div>
 <!-- {{userForm.value | json}} -->
+
 <div class="container">
+
+    <!-- call createUser() when user clicks the "Save" button -->
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
         <div class="row mt-5">
             <!-- the "Left" column -->
             <div class="col-md-6">
                 <div class="container">
+
                     <!-- Email -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -18,14 +22,17 @@
                         <div class="col-8">
                             <input class="form-control" type="email" formControlName="email"
                                 placeholder="Ex: abc@gmail.com" id="email">
+                            <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.email">
-                                <div
-                                    *ngIf="userForm.get('email').hasError(e.type) && (userForm.get('email').dirty || userForm.get('email').touched)">
-                                    {{e.message}}
+                                <div *ngIf="userForm.get('email').hasError(e.type) && 
+                                    (userForm.get('email').dirty || userForm.get('email').touched)">
+
+                                    <small>{{e.message}}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <!-- First name -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -37,14 +44,16 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
                                 id="firstName">
+                            <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <div
                                     *ngIf="userForm.get('firstName').hasError(e.type) && (userForm.get('firstName').dirty || userForm.get('firstName').touched)">
-                                    {{e.message}}
+                                    <small>{{e.message}}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <!-- Last name -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -56,14 +65,16 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
                                 id="lastName">
+                            <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <div
                                     *ngIf="userForm.get('lastName').hasError(e.type) && (userForm.get('lastName').dirty || userForm.get('lastName').touched)">
-                                    {{e.message}}
+                                    <small>{{e.message}}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <!-- Phone -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -74,19 +85,22 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
                                 placeholder="ex: 0986111222(10 digits)" id="phone">
+                            <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.phone">
                                 <div
                                     *ngIf="userForm.get('phone').hasError(e.type) && (userForm.get('phone').dirty || userForm.get('phone').touched)">
-                                    {{e.message}}
+                                    <small>{{e.message}}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- the "Right" column -->
             <div class="col-md-6">
                 <div class="container">
+
                     <!-- Address -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -97,14 +111,16 @@
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
                                 placeholder="Address">
+                            <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <div
                                     *ngIf="userForm.get('address').hasError(e.type) && (userForm.get('address').dirty || userForm.get('address').touched)">
-                                    {{e.message}}
+                                    <small>{{e.message}}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <!-- Role -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -121,6 +137,7 @@
                             </select>
                         </div>
                     </div>
+
                     <!-- Status -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -141,8 +158,8 @@
                 </div>
             </div>
         </div>
+
         <!-- buttons -->
-        <!-- <div class="d-flex justify-content-end"> -->
         <div class="d-flex justify-content-center">
             <div>
                 <!-- the "Save" button -->
@@ -150,13 +167,14 @@
                 <button type="submit" [disabled]="userForm.invalid" style="width: 150px" class="btn btn-primary mr-2">
 
                     <!-- display the spinner icon when press the "Save" button -->
-                    <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>
+                    <i *ngIf="showSpinner" class="fas fa-spinner fa-spin"></i>
                     <!-- Change label button "Save" to "Saving.." -->
-                    <span *ngIf="showLoading">Saving...</span>
+                    <span *ngIf="showSpinner">Saving...</span>
                     <!-- after save the user then re-changes button name to "Save" -->
-                    <span *ngIf="!showLoading">Save</span>
+                    <span *ngIf="!showSpinner">Save</span>
 
                 </button>
+
                 <!-- the "Cancel" button -->
                 <!-- re-direct to the "user-list" page -->
                 <button class="btn btn-dark" routerLink="/user-list" style="width: 150px">Cancel</button>

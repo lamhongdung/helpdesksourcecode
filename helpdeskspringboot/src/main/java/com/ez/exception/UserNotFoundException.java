@@ -1,4 +1,4 @@
-package com.ez.entity;
+package com.ez.exception;
 
 public class UserNotFoundException extends Exception {
     public UserNotFoundException(String message) {

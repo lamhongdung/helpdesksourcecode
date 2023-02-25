@@ -8,25 +8,7 @@ export class User {
   public role: string;
   public status: string;
 
-  // public lastLoginDate: Date;
-  // public lastLoginDateDisplay: Date;
-  // public joinDate: Date;
-  // public profileImageUrl: string;
-
-  // public notLocked: boolean;
-
-  // public authorities: [];
-
   constructor() {
-    // this.userId = '';
-    // this.email = '';
-    // this.firstName = '';
-    // this.lastName = '';
-    // this.phone = '';
-    // this.address = '';
-    // this.role = '';
-    // this.status = 'Inactive';
-    
   }
 
 }

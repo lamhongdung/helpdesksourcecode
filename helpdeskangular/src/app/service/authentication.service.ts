@@ -4,14 +4,20 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../entity/User';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { LoginUser } from '../entity/LoginUser';
+import { CustomHttpRespone } from '../entity/custom-http-response';
+import { ResetPassword } from '../entity/ResetPassword';
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 // the LoginService
 export class AuthenticationService {
 
   // apiUrl = 'http://localhost:8080'
   public host = environment.apiUrl;
+
+  public urlAfterLogin = environment.urlAfterLogin;
+
   public token: string;
 
   // the logged in email
@@ -21,19 +27,17 @@ export class AuthenticationService {
   public loggedInUsername: string;
   public jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  // POST method: /user/login
+  // POST method: /login
   // when user click the "Login" button
-  public login(user: User): Observable<HttpResponse<User>> {
+  // public login(user: User): Observable<HttpResponse<User>> {
+  public login(login: LoginUser): Observable<HttpResponse<User>> {
     // { observe: 'response' }: want to receive whole response(include header,...)
     // return this.http.post<User>(`${this.host}/user/login`, user, { observe: 'response' });
-    return this.http.post<User>(`${this.host}/login`, user, { observe: 'response' });
-  }
 
-  // do not use
-  public register(user: User): Observable<User> {
-    return this.http.post<User>(`${this.host}/user/register`, user);
+    // return this.http.post<User>(`${this.host}/login`, user, { observe: 'response' });
+    return this.http.post<User>(`${this.host}/login`, login, { observe: 'response' });
   }
 
   // clear all data in the local storage and local variable
@@ -49,6 +53,19 @@ export class AuthenticationService {
     localStorage.removeItem('user');
     // localStorage.removeItem('users');
   }
+
+  // public resetPassword(email: string): Observable<CustomHttpRespone> {
+  public resetPassword(resetPassword: ResetPassword): Observable<CustomHttpRespone> {
+
+    // return this.http.get<CustomHttpRespone>(`${this.host}/reset-password/${email}`);
+    return this.http.put<CustomHttpRespone>(`${this.host}/reset-password`, resetPassword);
+
+  }
+  
+  // // edit existing user
+  // public editUser(user: User): Observable<User> {
+  //   return this.http.put<User>(`${this.host}/user-edit`, user);
+  // }
 
   // save token into the local storage and local variable
   public saveTokenToLocalStorage(token: string): void {
@@ -89,7 +106,7 @@ export class AuthenticationService {
     this.loadToken();
 
     // if token is existing in the local storage
-    if (this.token != null && this.token !== ''){
+    if (this.token != null && this.token !== '') {
 
       // get value subject in the token(it means the email id).
       // if email is not empty
@@ -115,10 +132,10 @@ export class AuthenticationService {
   // get email of the logged in user
   public getEmailFromLocalStorage(): string {
 
-    if (JSON.parse(localStorage.getItem('user')) != null){
+    if (JSON.parse(localStorage.getItem('user')) != null) {
 
       return JSON.parse(localStorage.getItem('user')).email;
-    
+
     }
 
     return "";
@@ -127,20 +144,18 @@ export class AuthenticationService {
   // get role of the logged in user
   public getRoleFromLocalStorage(): string {
 
-    if (JSON.parse(localStorage.getItem('user')) != null){
+    if (JSON.parse(localStorage.getItem('user')) != null) {
 
       return JSON.parse(localStorage.getItem('user')).role;
-    
+
     }
-    
+
   }
 
   // get token from local storage
   public getTokenFromLocalStorage(): string {
 
-
-      return localStorage.getItem("token");
-
+    return localStorage.getItem("token");
 
   }
 

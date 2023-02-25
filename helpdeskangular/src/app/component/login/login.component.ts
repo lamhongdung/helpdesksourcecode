@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { AuthenticationService } from '../service/authentication.service';
-import { NotificationService } from '../service/notification.service';
-import { User } from '../entity/User';
-import { NotificationType } from '../enum/notification-type.enum';
-import { HeaderType } from '../enum/header-type.enum';
-import { ShareService } from '../service/share.service';
+import { AuthenticationService } from 'src/app/service/authentication.service';
+import { NotificationService } from 'src/app/service/notification.service';
+import { ShareService } from 'src/app/service/share.service';
+import { User } from 'src/app/entity/User';
+import { HeaderType } from 'src/app/enum/header-type.enum';
+import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -16,45 +17,77 @@ import { ShareService } from '../service/share.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  public showLoading: boolean;
+  // allow display spinner icon or not
+  // =true: allow to display spinner in the "Login" button
+  // =false: does not allow to display spinner in the "Login" button
+  public showSpinner: boolean;
 
-  // use to unsubcribe all subcribes easily
+  // use to unsubcribe all subscribes easily, avoid leak memeory
   private subscriptions: Subscription[] = [];
 
-  constructor(private router: Router, 
-              private authenticationService: AuthenticationService,
-              private notificationService: NotificationService,
-              private shareService: ShareService) {}
+  loginForm: FormGroup;
+  user: User;
+
+  errorMessages = {
+    email: [
+      { type: 'required', message: 'Please input an email' },
+      { type: 'pattern', message: 'Email is incorrect format' }
+    ],
+    password: [
+      { type: 'required', message: 'Please input a password' }
+    ]
+  };
+
+  constructor(private router: Router,
+    private authenticationService: AuthenticationService,
+    private notificationService: NotificationService,
+    private formBuilder: FormBuilder,
+    private shareService: ShareService) { }
 
   // this method is run right after component's constuctor has just finished
   ngOnInit(): void {
 
-    // if user already logged in before then navigate to '/user/management'(absoluate path)
+    // initial form
+    this.loginForm = this.formBuilder.group({
+
+      email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      // email: ['', [Validators.required]],
+      password: ['', [Validators.required]]
+
+    });
+
+    // if user already logged in before then navigate to '/ticket-list'(absoluate path)
     if (this.authenticationService.isUserLoggedIn()) {
 
-      // this.router.navigateByUrl('/category-list');
-      this.router.navigateByUrl('/ticket-list');
+      // navigate to '/ticket-list';
+      // this.router.navigateByUrl('/ticket-list');
+      this.router.navigateByUrl(this.authenticationService.urlAfterLogin);
 
-    } else {
+    } else { // if user has not yet logged in then re-direct to '/login'
 
       // navigate to the "/login" page
       this.router.navigateByUrl('/login');
-      
+
     }
   }
 
   // when user click on the "Login" button
-  public onLogin(user: User): void {
+  // public onLogin(user: User): void {
+  public login(): void {
 
     // allow to show spinner(circle)
-    this.showLoading = true;
+    this.showSpinner = true;
 
     // push into subscriptions[] for easy manage subscriptions.
     // when this component is to be destroy then unsubscribe all these subscriptions
     this.subscriptions.push(
 
       // get data from server
-      this.authenticationService.login(user).subscribe(
+
+      // this.authenticationService.login(user).subscribe(
+
+      // this.loginForm.value = { "email": "nguoiquantri01@gmail.com", "password": "abcxyz" }
+      this.authenticationService.login(this.loginForm.value).subscribe(
 
         // login success.
         // return: User and token
@@ -68,19 +101,17 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.authenticationService.saveTokenToLocalStorage(token);
 
           // save user into Local Storage
-          // this.authenticationService.addUserToLocalCache(response.body);
           this.authenticationService.saveUserToLocalStorage(response.body);
 
-          // this.router.navigateByUrl('/category-list');
-          this.router.navigateByUrl('/ticket-list');
+          // this.router.navigateByUrl('/ticket-list');
+          this.router.navigateByUrl(this.authenticationService.urlAfterLogin);
 
           // hide spinner(circle)
-          this.showLoading = false;
+          this.showSpinner = false;
 
+          // display the email value at the top-right corner
           this.shareService.sendClickEvent();
-          // test
-          // console.log(this.authenticationService.getRoleFromLocalStorage());
-          // this.notificationService.notify(NotificationType.SUCCESS, this.authenticationService.getRoleFromLocalStorage());
+
         },
         // login failed
         (errorResponse: HttpErrorResponse) => {
@@ -89,7 +120,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.sendErrorNotification(NotificationType.ERROR, errorResponse.error.message);
 
           // hide spinner icon(circle)
-          this.showLoading = false;
+          this.showSpinner = false;
         }
       )
     );

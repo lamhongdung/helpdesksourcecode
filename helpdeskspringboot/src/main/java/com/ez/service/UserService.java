@@ -1,35 +1,32 @@
 package com.ez.service;
 
-import com.ez.entity.EmailExistException;
+import com.ez.exception.EmailExistException;
+import com.ez.exception.EmailNotFoundException;
 import com.ez.entity.User;
-import com.ez.entity.UserNotFoundException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.ez.exception.UserIsInactiveException;
+import com.ez.exception.UserNotFoundException;
 
 import javax.mail.MessagingException;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.OK;
-
 public interface UserService {
-
-//    User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException;
 
     // find user by user id
     User findById(Long id) throws UserNotFoundException;
 
     // search users by page and based on the search criteria.
     // parameters:
-    //  - page: page number
-    //  - size: page size
+    //  - pageNumber: page number
+    //  - pageSize: page size
     //  - searchTerm: ID, email, firstName, lastName, phone
     //  - role: '', 'ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN'
     //  - status: '', 'Active', 'Inactive'
-    List<User> searchUsers(int page, int size, String searchTerm, String role, String status);
+    List<User> searchUsers(int pageNumber, int pageSize, String searchTerm, String role, String status);
 
     // find user by email
     User findUserByEmail(String email);
+
+    User userIsInactive(String email) throws UserIsInactiveException;
 
     // calculate total of users based on the search criteria.
     // based on this total of users we can calculate total pages
@@ -41,6 +38,7 @@ public interface UserService {
     // update existing user
     User updateUser(User user) throws MessagingException, EmailExistException, UserNotFoundException;
 
-//    void resetPassword(String email) throws MessagingException, EmailNotFoundException;
+    // reset password in case user forgot his/her password
+    void resetPassword(String email) throws MessagingException, EmailNotFoundException;
 
 }

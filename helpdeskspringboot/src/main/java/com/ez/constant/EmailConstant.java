@@ -5,11 +5,12 @@ public class EmailConstant {
     public static final String SIMPLE_MAIL_TRANSFER_PROTOCOL = "smtps";
     public static final String USERNAME = "dunglh13@gmail.com";
 
-    // password of 2 layer password
+    // password of 2 layers password
     public static final String PASSWORD = "lcwnawybrmwtslgv";
     public static final String FROM_EMAIL = "dunglh13@gmail.com";
     public static final String CC_EMAIL = "";
-    public static final String EMAIL_SUBJECT_CREATE_NEW_USER = "Help Desk System - Your Password";
+    public static final String EMAIL_SUBJECT_CREATE_NEW_USER = "Help Desk System - New account";
+    public static final String EMAIL_SUBJECT_RESET_PASSWORD = "Help Desk System - Reset password";
     public static final String GMAIL_SMTP_SERVER = "smtp.gmail.com";
     public static final String SMTP_HOST = "mail.smtp.host";
     public static final String SMTP_AUTH = "mail.smtp.auth";

@@ -1,10 +1,12 @@
 package com.ez.service.impl;
 
 import com.ez.entity.*;
-import com.ez.enumeration.Role;
+import com.ez.exception.EmailExistException;
+import com.ez.exception.EmailNotFoundException;
+import com.ez.exception.UserIsInactiveException;
+import com.ez.exception.UserNotFoundException;
 import com.ez.repository.UserRepository;
 import com.ez.service.EmailService;
-//import com.ez.service.LoginAttemptService;
 import com.ez.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -13,17 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 
-import static com.ez.constant.FileConstant.*;
+import static com.ez.constant.EmailConstant.*;
 import static com.ez.constant.UserImplConstant.*;
 
 @Service
@@ -33,23 +32,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // getClass() = UserServiceImpl.class
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
-    private UserRepository userRepository;
-    private BCryptPasswordEncoder passwordEncoder;
-//    private LoginAttemptService loginAttemptService;
-    private EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-//        this.loginAttemptService = loginAttemptService;
-        this.emailService = emailService;
-    }
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
+
+//    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
+//        this.userRepository = userRepository;
+//        this.passwordEncoder = passwordEncoder;
+//        this.emailService = emailService;
+//    }
 
     // get user info by email
     @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     public UserDetails loadUserByUsername(String email) {
 
         // get user by email
@@ -58,16 +58,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // not found user by email
         if (user == null) {
             LOGGER.error(NO_USER_FOUND_BY_EMAIL + email);
-//            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
             try {
                 throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
             } catch (EmailNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else { // found user by email
-
-            // update value of lastLoginDate and lastLoginDateDisplay
-//            userRepository.save(user);
 
             UserPrincipal userPrincipal = new UserPrincipal(user);
 
@@ -76,6 +72,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
+    // find user by id
     @Override
     public User findById(Long id) throws UserNotFoundException {
 
@@ -83,67 +80,85 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + id));
     }
 
-//    @Override
-//    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
-//        validateNewEmail(EMPTY, username, email);
-//        User user = new User();
-////        user.setUserId(generateUserId());
-//        String password = generatePassword();
-//        user.setFirstName(firstName);
-//        user.setLastName(lastName);
-////        user.setUsername(username);
-//        user.setEmail(email);
-//        user.setJoinDate(new Date());
-//        user.setPassword(encodePassword(password));
-//        user.setActive(true);
-////        user.setNotLocked(true);
-//        user.setRole(ROLE_CUSTOMER.name());
-////        user.setAuthorities(ROLE_USER.getAuthorities());
-////        user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
-//        userRepository.save(user);
-//        LOGGER.info("New user password: " + password);
-//        emailService.sendNewPasswordEmail(firstName, password, email);
-//        return user;
-//    }
+    // reset password in case user forgot his/her password
+    @Override
+    public void resetPassword(String email) throws MessagingException, EmailNotFoundException {
 
-//    @Override
-//    public void resetPassword(String email) throws MessagingException, EmailNotFoundException {
-//        User user = userRepository.findUserByEmail(email);
-//        if (user == null) {
-//            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
-//        }
-//        String password = generatePassword();
-//        user.setPassword(encodePassword(password));
-//        userRepository.save(user);
-//        LOGGER.info("New user password: " + password);
-//        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
-//    }
+        LOGGER.info("Reset password.");
 
-//    @Override
-//    public List<User> findAll() {
-//        return user;
-//    }
+        // use StringBuilder instead of String to save memory
+        StringBuilder emailBody = new StringBuilder();
 
-//    @Override
-//    public List<User> getUsersByPage(int page, int numOfLinesPerPage) {
-//        return userRepository.getUsersByPage(page, numOfLinesPerPage);
-//    }
+        // find user by email
+        LOGGER.info("find user by email.");
+        User user = userRepository.findUserByEmail(email);
+
+        // if email has not found in the database
+        if (user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+        }
+
+        //
+        // found user by email in the database
+        //
+
+        // generate new random password
+        String password = generatePassword();
+
+        // set new random password to user
+        user.setPassword(encodePassword(password));
+
+        // save new password into the database
+        userRepository.save(user);
+
+        LOGGER.info("Send email to inform reseting password.");
+
+        // email body
+        emailBody.append("Hello " + user.getLastName() + " " + user.getFirstName() + ",\n\n");
+        emailBody.append("Your password was reset." + "\n\n");
+        emailBody.append("Use the following information to access the Help Desk system:\n\n");
+        emailBody.append("- Email: " + user.getEmail() + "\n");
+        emailBody.append("- New password: " + password + "\n\n");
+        emailBody.append("The Help Desk Team");
+
+        LOGGER.info("Reset password. New password is: " + password);
+
+        // send new password to user via his/her email
+        emailService.sendEmail(EMAIL_SUBJECT_RESET_PASSWORD, emailBody.toString(), user.getEmail());
+    }
 
     // search users by page and based on the search criteria
     @Override
-    public List<User> searchUsers(int page, int pageSize, String searchTerm, String role, String status) {
-        return userRepository.searchUsers(page, pageSize, searchTerm, role, status);
+    public List<User> searchUsers(int pageNumber, int pageSize, String searchTerm, String role, String status) {
+
+        return userRepository.searchUsers(pageNumber, pageSize, searchTerm, role, status);
+
     }
 
     // find user by email
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+
+        User user = userRepository.findUserByEmail(email);
+
+        return user;
+    }
+
+    @Override
+    public User userIsInactive(String email){
+
+        User user = userRepository.userIsInactive(email);
+
+//        if (user != null) {
+//                throw new UserIsInactiveException(USER_IS_INACTIVE);
+//        }
+
+        return user;
     }
 
     // calculate total of users based on the search criteria
     @Override
-    public long getTotalOfUsers(String searchTerm, String role, String status){
+    public long getTotalOfUsers(String searchTerm, String role, String status) {
         return userRepository.getTotalOfUsers(searchTerm, role, status);
     }
 
@@ -153,13 +168,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         LOGGER.info("create new user");
 
+        // use StringBuilder instead of String to save memory
+        StringBuilder emailBody = new StringBuilder();
+        ;
+
         // random password
         String password;
 
         // new user
         User newUser = new User();
 
-        // check whether email is existing or not
+        // if email already existed then inform to user "Email already exists. Please choose another email."
         if (existEmail(user.getEmail()))
             throw new EmailExistException(EMAIL_ALREADY_EXISTS);
 
@@ -181,9 +200,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(newUser);
         LOGGER.info("New user password: " + password);
 
-        LOGGER.info("Send random password to user via email");
-        // send an email to user has just created
-        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
+
+        LOGGER.info("Send email to inform user that new account ");
+
+        // email body
+        emailBody.append("Hello " + user.getLastName() + " " + user.getFirstName() + ",\n\n");
+        emailBody.append("Your new account has just created." + "\n\n");
+        emailBody.append("Use the following information to access the Help Desk system:\n\n");
+        emailBody.append("- Email: " + user.getEmail() + "\n");
+        emailBody.append("- Password: " + password + "\n\n");
+        emailBody.append("The Help Desk Team");
+
+        // send email to inform user has just created
+        LOGGER.info("send email to inform user has just created");
+        emailService.sendEmail(EMAIL_SUBJECT_CREATE_NEW_USER, emailBody.toString(), user.getEmail());
 
         return newUser;
     }
@@ -192,8 +222,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User updateUser(User user) throws MessagingException, UserNotFoundException {
 
-        // get current user(persistent)
-        User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
+        LOGGER.info("Update user");
+
+        // get existing user(persistent)
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
 
         // set new values to existing user
         existingUser.setFirstName(user.getFirstName());
@@ -203,9 +236,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         existingUser.setRole(user.getRole());
         existingUser.setStatus(user.getStatus());
 
+        // update existing user(persistent)
         userRepository.save(existingUser);
-
-        LOGGER.info("Updated user with user id: " + existingUser.getId());
 
         return existingUser;
     }
@@ -215,19 +247,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     //  - false: email has not existed
     private boolean existEmail(String email) {
 
-        User userByEmail = findUserByEmail(email);
+        User user = findUserByEmail(email);
 
-        return userByEmail != null;
+        return user != null;
     }
 
-//    private Role getRoleEnumName(String role) {
-//        return Role.valueOf(role.toUpperCase());
-//    }
-
+    // encode password
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
 
+    // generate random password
     private String generatePassword() {
         return RandomStringUtils.randomAlphanumeric(10);
     }

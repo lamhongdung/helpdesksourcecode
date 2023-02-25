@@ -54,7 +54,7 @@
               <li><a class="dropdown-item" routerLink="/priority-create">Create priority</a></li>
               <li><a class="dropdown-item" routerLink="/priority-list">All priorities</a></li>
             </ul>
-          </li>  
+          </li>
           <!-- Categories menu -->
           <li class="nav-item dropdown active" *ngIf="['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
             <a class="nav-link dropdown-toggle" href="#" id="navbarCategory" role="button" data-toggle="dropdown"
@@ -65,7 +65,7 @@
               <li><a class="dropdown-item" routerLink="/category-create">Create category</a></li>
               <li><a class="dropdown-item" routerLink="/category-list">All categories</a></li>
             </ul>
-          </li>               
+          </li>
           <!-- Tickets menu -->
           <li class="nav-item dropdown active" *ngIf="loggedInEmail !== ''">
             <a class="nav-link dropdown-toggle" href="#" id="navbarTicket" role="button" data-toggle="dropdown"
@@ -76,7 +76,7 @@
               <li><a class="dropdown-item" routerLink="/ticket-create">Create ticket</a></li>
               <li><a class="dropdown-item" routerLink="/ticket-list">All tickets</a></li>
             </ul>
-          </li>      
+          </li>
           <!-- Reports menu -->
           <li class="nav-item dropdown active" *ngIf="loggedInEmail !== ''">
             <a class="nav-link dropdown-toggle" href="#" id="navbarReport" role="button" data-toggle="dropdown"
@@ -87,7 +87,7 @@
               <li><a class="dropdown-item" routerLink="/report-ticket-summary">Tickets summary</a></li>
               <li><a class="dropdown-item" routerLink="/report-sla">SLA report</a></li>
             </ul>
-          </li>                          
+          </li>
         </ul>
         <!-- profile -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -98,15 +98,15 @@
               </b>
               <b class="nav-link" *ngIf="['ROLE_SUPPORTER'].indexOf(loggedInRole)!==-1">
                 Supporter: <span style="color: rgb(0, 112, 192)">{{loggedInEmail}}</span>
-              </b>                            
+              </b>
               <b class="nav-link" *ngIf="['ROLE_ADMIN'].indexOf(loggedInRole)!==-1">
                 Admin: <span style="color: rgb(0, 112, 192)">{{loggedInEmail}}</span>
               </b>
-          </li>            
+            </li>
             <li class="nav-item">
               <div class="dropdown user dropleft">
                 <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarProfile" role="button"
-                   data-toggle="dropdown" aria-expanded="false">
+                  data-toggle="dropdown" aria-expanded="false">
                   <i class="fa fa-user"></i>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarProfile">
@@ -118,24 +118,10 @@
                   </li>
                   <li>
                     <a href="" class="dropdown-item" (click)="logOut()">Logout</a>
-                  </li>               
+                  </li>
                 </ul>
               </div>
 
-              <!-- <div class="dropdown user dropleft" [hidden]="isLoggedIn">
-                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarUser" role="button"
-                   data-toggle="dropdown" aria-expanded="false">
-                  <i class="fa fa-user"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarUser">
-                  <li>
-                    <a class="dropdown-item" routerLink="register">Đăng ký</a>
-                  </li>
-                  <li>
-                    <a href="" class="dropdown-item" routerLink="login">Đăng nhập</a>
-                  </li>
-                </ul>
-              </div> -->
             </li>
           </ul>
         </div>

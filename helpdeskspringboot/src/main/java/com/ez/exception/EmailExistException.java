@@ -1,4 +1,4 @@
-package com.ez.entity;
+package com.ez.exception;
 
 // exception for email already existed(function of create user)
 public class EmailExistException extends Exception {

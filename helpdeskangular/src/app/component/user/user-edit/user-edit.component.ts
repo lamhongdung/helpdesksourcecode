@@ -18,7 +18,7 @@ export class UserEditComponent implements OnInit {
   // allow display spinner icon or not
   // =true: allow to display spinner in the "Save" button
   // =false: do not allow to display spinner in the "Save" button
-  showLoading: boolean;
+  showSpinner: boolean;
 
   // use to unsubcribe all subscribe easily, avoid leak memeory
   subscriptions: Subscription[] = [];
@@ -117,7 +117,7 @@ export class UserEditComponent implements OnInit {
   editUser() {
 
     // allow to show spinner(circle)
-    this.showLoading = true;
+    this.showSpinner = true;
 
     // push the subscribe to a list of subscriptions in order to easily unsubscribe them when destroy the component
     this.subscriptions.push(
@@ -129,10 +129,10 @@ export class UserEditComponent implements OnInit {
         (data: User) => {
           this.user = data;
           // send notification to user
-          this.sendNotification(NotificationType.SUCCESS, `${data.firstName} ${data.lastName} is updated successfully`);
+          this.sendNotification(NotificationType.SUCCESS, `${data.lastName} ${data.firstName} is updated successfully`);
 
           // hide spinner(circle)
-          this.showLoading = false;
+          this.showSpinner = false;
 
           // after update user successful then navigate to the "user-list" page
           this.router.navigateByUrl("/user-list");
@@ -144,7 +144,7 @@ export class UserEditComponent implements OnInit {
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
 
           // hide spinner(circle)
-          this.showLoading = false;
+          this.showSpinner = false;
         }
       )
     );

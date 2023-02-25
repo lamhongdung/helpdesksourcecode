@@ -4,17 +4,6 @@
 @import "~angular-notifier/styles";
 
 
-
-/* 
-a:hover {
-  color: #0f0f0f;
-  text-decoration: none;
-  cursor: pointer;
-} */
-
-/* td {
-  cursor: pointer;
-} */
 .move-right {
     position: absolute;
     right: 0;

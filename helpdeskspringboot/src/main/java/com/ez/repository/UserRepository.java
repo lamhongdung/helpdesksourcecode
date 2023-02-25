@@ -12,11 +12,15 @@ import java.util.List;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // find user by user id
-//    User findById(long id);
-
     // get user by email
     User findUserByEmail(String email);
+
+    @Query(value =  "" +
+            " select a.* " +
+            " from user a " +
+            " where a.email =?1 and a.status = 'Inactive' "
+            ,nativeQuery = true)
+    User userIsInactive(String email);
 
     // search users by searchTerm, role and status.
     @Query(value =  "" +

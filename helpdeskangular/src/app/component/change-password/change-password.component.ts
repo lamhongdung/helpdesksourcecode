@@ -3,48 +3,40 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ChangePassword } from 'src/app/entity/ChangePassword';
 import { User } from 'src/app/entity/User';
 import { NotificationType } from 'src/app/enum/notification-type.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
+import { passwordValidator } from 'src/app/validator/validator';
 
 @Component({
-  selector: 'app-user-create',
-  templateUrl: './user-create.component.html',
-  styleUrls: ['./user-create.component.css']
+  selector: 'app-change-password',
+  templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.css']
 })
-export class UserCreateComponent implements OnInit {
+export class ChangePasswordComponent implements OnInit {
 
   // allow display spinner icon or not
   // =true: allow to display spinner in the "Save" button
-  // =false: do not allow to display spinner in the "Save" button
+  // =false: does not allow to display spinner in the "Save" button
   showSpinner: boolean;
 
   // use to unsubcribe all subscribes easily, avoid leak memeory
   subscriptions: Subscription[] = [];
 
-  userForm: FormGroup;
+  changePasswordForm: FormGroup;
   user: User;
 
   errorMessages = {
-    email: [
-      { type: 'required', message: 'Please input an email' },
-      { type: 'pattern', message: 'Email is incorrect format' }
+    oldPassword: [
+      { type: 'required', message: 'Please input old password' }
     ],
-    firstName: [
-      { type: 'required', message: 'Please input the first name' },
-      { type: 'maxlength', message: 'First name cannot be longer than 50 characters' },
+    newPassword: [
+      { type: 'required', message: 'Please input new password' }
     ],
-    lastName: [
-      { type: 'required', message: 'Please input the last name' },
-      { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
-    ],
-    phone: [
-      { type: 'required', message: 'Please input phone number' },
-      { type: 'pattern', message: 'Phone number must be 10 digits length' }
-    ],
-    address: [
-      { type: 'maxlength', message: 'Address cannot be longer than 300 characters' }
+    confirmNewPassword: [
+      { type: 'required', message: 'Please input Confirm new password' }
     ]
   };
 
@@ -57,35 +49,23 @@ export class UserCreateComponent implements OnInit {
   ngOnInit(): void {
 
     // initial form
-    this.userForm = this.formBuilder.group({
+    this.changePasswordForm = this.formBuilder.group(
+      {
+        oldPassword: ['', [Validators.required]],
+        newPassword: ['', [Validators.required]],
+        confirmNewPassword: ['', [Validators.required]]
+      },
+      {
+        // validate field "newPassword" and "confirmNewPassword"
+        validators: [passwordValidator]
+      }
+    );
 
-      // required and must be in correct format 
-      email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-      
-      // required and max length = 50 characters
-      firstName: ['', [Validators.required, Validators.maxLength(50)]],
-
-      // required and max length = 50 characters
-      lastName: ['', [Validators.required, Validators.maxLength(50)]],
-
-      // required and length must be 10 digits
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]{10}$")]],
-
-      // max length = 300 characters
-      address: ['', [Validators.maxLength(300)]],
-
-      // initial value = 'ROLE_CUSTOMER'
-      role: ['ROLE_CUSTOMER'],
-
-      // initial value = 'Active'
-      status: ['Active']
-    });
-
-  } // end of ngOnInit()
+  }
 
   // create user.
   // when user click the "Save" button in the "Create user"
-  createUser() {
+  changePassword(): void {
 
     // allow to show spinner(circle)
     this.showSpinner = true;
@@ -94,15 +74,14 @@ export class UserCreateComponent implements OnInit {
     this.subscriptions.push(
 
       // create user
-      this.userService.createUser(this.userForm.value).subscribe(
+      this.userService.createUser(this.changePasswordForm.value).subscribe(
 
         // create user successful
         (data: User) => {
 
           this.user = data;
-
           // show successful message to user 
-          this.sendNotification(NotificationType.SUCCESS, `${data.lastName} ${data.firstName} is created successfully`);
+          this.sendNotification(NotificationType.SUCCESS, `${data.firstName} ${data.lastName} is created successfully`);
 
           // hide spinner(circle)
           this.showSpinner = false;
@@ -110,8 +89,7 @@ export class UserCreateComponent implements OnInit {
           // navigate to the "user-list" page
           this.router.navigateByUrl("/user-list");
         },
-        
-        // create user failure(ex: email already existed,...)
+        // create user failure
         (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
