@@ -1,9 +1,9 @@
 package com.ez.service.impl;
 
+import com.ez.dto.ChangePassword;
 import com.ez.entity.*;
 import com.ez.exception.EmailExistException;
 import com.ez.exception.EmailNotFoundException;
-import com.ez.exception.UserIsInactiveException;
 import com.ez.exception.UserNotFoundException;
 import com.ez.repository.UserRepository;
 import com.ez.service.EmailService;
@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ez.constant.EmailConstant.*;
@@ -41,12 +44,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private EmailService emailService;
-
-//    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
-//        this.userRepository = userRepository;
-//        this.passwordEncoder = passwordEncoder;
-//        this.emailService = emailService;
-//    }
 
     // get user info by email
     @Override
@@ -86,6 +83,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         LOGGER.info("Reset password.");
 
+        // list of receiver emails
+        List<String> recipients = new ArrayList<>();
+
         // use StringBuilder instead of String to save memory
         StringBuilder emailBody = new StringBuilder();
 
@@ -123,8 +123,58 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         LOGGER.info("Reset password. New password is: " + password);
 
+
+        recipients.add(email);
+//        recipients.add("khachhang192101@gmail.com");
+
+        emailService.sendEmail(EMAIL_SUBJECT_RESET_PASSWORD, emailBody.toString(), recipients);
+
         // send new password to user via his/her email
-        emailService.sendEmail(EMAIL_SUBJECT_RESET_PASSWORD, emailBody.toString(), user.getEmail());
+//        emailService.sendEmail(EMAIL_SUBJECT_RESET_PASSWORD, emailBody.toString(), user.getEmail());
+
+    }
+
+    @Override
+    public void changePassword(ChangePassword changePassword) throws MessagingException, EmailNotFoundException {
+
+        LOGGER.info("Change password.");
+
+        // find user by email
+        LOGGER.info("find user by email.");
+        User user = userRepository.findUserByEmail(changePassword.getEmail());
+
+        // if email has not found in the database
+        if (user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + changePassword.getEmail());
+        }
+
+        //
+        // found user by email in the database
+        //
+//
+//        // generate new random password
+//        String password = generatePassword();
+//
+//        // set new random password to user
+//        user.setPassword(encodePassword(password));
+//
+//        // save new password into the database
+//        userRepository.save(user);
+//
+//        LOGGER.info("Send email to inform reseting password.");
+//
+//        // email body
+//        emailBody.append("Hello " + user.getLastName() + " " + user.getFirstName() + ",\n\n");
+//        emailBody.append("Your password was reset." + "\n\n");
+//        emailBody.append("Use the following information to access the Help Desk system:\n\n");
+//        emailBody.append("- Email: " + user.getEmail() + "\n");
+//        emailBody.append("- New password: " + password + "\n\n");
+//        emailBody.append("The Help Desk Team");
+//
+//        LOGGER.info("Reset password. New password is: " + password);
+//
+//        // send new password to user via his/her email
+//        emailService.sendEmail(EMAIL_SUBJECT_RESET_PASSWORD, emailBody.toString(), user.getEmail());
     }
 
     // search users by page and based on the search criteria
@@ -145,13 +195,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User userIsInactive(String email){
+    public User isInactiveUser(String email){
 
         User user = userRepository.userIsInactive(email);
-
-//        if (user != null) {
-//                throw new UserIsInactiveException(USER_IS_INACTIVE);
-//        }
 
         return user;
     }
@@ -168,9 +214,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         LOGGER.info("create new user");
 
+        // list of receiver emails
+        List<String> recipients = new ArrayList<>();
+
         // use StringBuilder instead of String to save memory
         StringBuilder emailBody = new StringBuilder();
-        ;
 
         // random password
         String password;
@@ -201,7 +249,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         LOGGER.info("New user password: " + password);
 
 
-        LOGGER.info("Send email to inform user that new account ");
+        // send email to inform to new user
+        LOGGER.info("send email to inform to new user");
 
         // email body
         emailBody.append("Hello " + user.getLastName() + " " + user.getFirstName() + ",\n\n");
@@ -211,9 +260,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         emailBody.append("- Password: " + password + "\n\n");
         emailBody.append("The Help Desk Team");
 
-        // send email to inform user has just created
-        LOGGER.info("send email to inform user has just created");
-        emailService.sendEmail(EMAIL_SUBJECT_CREATE_NEW_USER, emailBody.toString(), user.getEmail());
+        // receiver email
+        recipients.add(user.getEmail());
+
+        // send email to inform to new user
+        emailService.sendEmail(EMAIL_SUBJECT_CREATE_NEW_USER, emailBody.toString(), recipients);
 
         return newUser;
     }

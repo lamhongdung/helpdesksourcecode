@@ -65,8 +65,8 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(UserIsInactiveException.class)
-    public ResponseEntity<HttpResponse> userIsInactiveException(UserIsInactiveException exception) {
+    @ExceptionHandler(InactiveUserException.class)
+    public ResponseEntity<HttpResponse> userIsInactiveException(InactiveUserException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 

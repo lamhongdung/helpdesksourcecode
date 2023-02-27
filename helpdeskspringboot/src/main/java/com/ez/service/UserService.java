@@ -1,9 +1,10 @@
 package com.ez.service;
 
+import com.ez.dto.ChangePassword;
 import com.ez.exception.EmailExistException;
 import com.ez.exception.EmailNotFoundException;
 import com.ez.entity.User;
-import com.ez.exception.UserIsInactiveException;
+import com.ez.exception.InactiveUserException;
 import com.ez.exception.UserNotFoundException;
 
 import javax.mail.MessagingException;
@@ -26,7 +27,7 @@ public interface UserService {
     // find user by email
     User findUserByEmail(String email);
 
-    User userIsInactive(String email) throws UserIsInactiveException;
+    User isInactiveUser(String email) throws InactiveUserException;
 
     // calculate total of users based on the search criteria.
     // based on this total of users we can calculate total pages
@@ -40,5 +41,6 @@ public interface UserService {
 
     // reset password in case user forgot his/her password
     void resetPassword(String email) throws MessagingException, EmailNotFoundException;
+    void changePassword(ChangePassword changePassword) throws MessagingException, EmailNotFoundException;
 
 }

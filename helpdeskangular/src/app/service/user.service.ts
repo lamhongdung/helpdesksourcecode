@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../entity/User';
 import { CustomHttpRespone } from '../entity/custom-http-response';
+import { ChangePassword } from '../entity/ChangePassword';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -42,6 +43,11 @@ export class UserService {
   // edit existing user
   public editUser(user: User): Observable<User> {
     return this.http.put<User>(`${this.host}/user-edit`, user);
+  }
+
+  // change password
+  public changePassword(changePassword: ChangePassword): Observable<User> {
+    return this.http.put<User>(`${this.host}/change-password`, changePassword);
   }
 
   // find user by user id

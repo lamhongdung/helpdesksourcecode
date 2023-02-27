@@ -1,5 +1,8 @@
 package com.ez.controller;
 
+import com.ez.dto.ChangePassword;
+import com.ez.dto.LoginUser;
+import com.ez.dto.ResetPassword;
 import com.ez.entity.*;
 import com.ez.exception.*;
 import com.ez.service.UserService;
@@ -22,7 +25,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.ez.constant.SecurityConstant.JWT_TOKEN_HEADER;
-import static com.ez.constant.UserImplConstant.EMAIL_ALREADY_EXISTS;
 import static com.ez.constant.UserImplConstant.USER_IS_INACTIVE;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -46,7 +48,7 @@ public class UserController extends ExceptionHandling {
 
     // login to the Help Desk system
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser, BindingResult bindingResult) throws BindException, UserIsInactiveException {
+    public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser, BindingResult bindingResult) throws BindException, InactiveUserException {
 
         // if loginUser data is invalid then throw exception
         if (bindingResult.hasErrors()) {
@@ -54,8 +56,9 @@ public class UserController extends ExceptionHandling {
             throw new BindException(bindingResult);
         }
 
-        if (userService.userIsInactive(loginUser.getEmail()) != null)
-            throw new UserIsInactiveException(USER_IS_INACTIVE);
+        // if user is inactive then show error to user
+        if (userService.isInactiveUser(loginUser.getEmail()) != null)
+            throw new InactiveUserException(USER_IS_INACTIVE);
 
         // if username or password is invalid then throw an exception
         authenticate(loginUser.getEmail(), loginUser.getPassword());
@@ -176,6 +179,27 @@ public class UserController extends ExceptionHandling {
         userService.resetPassword(resetPassword.getEmail());
 
         return response(OK, RESET_PASSWORD_MESSAGE + resetPassword.getEmail());
+    }
+
+    @PutMapping("/change-password")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePassword changePassword, BindingResult bindingResult)
+            throws MessagingException, EmailNotFoundException, BindException {
+
+        LOGGER.info(changePassword.toString());
+
+        // if changePassword object(email, oldPassword, newPassword and confirmNewPassword) is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            throw new BindException(bindingResult);
+        }
+
+        // change password
+        userService.changePassword(changePassword);
+//
+//        return response(OK, RESET_PASSWORD_MESSAGE + resetPassword.getEmail());
+
+        return null;
     }
 
     //
