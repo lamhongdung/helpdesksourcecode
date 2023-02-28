@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CustomHttpRespone } from 'src/app/entity/CustomHttpResponse';
 import { User } from 'src/app/entity/User';
 import { NotificationType } from 'src/app/enum/notification-type.enum';
 import { AuthenticationService } from 'src/app/service/authentication.service';
@@ -31,9 +32,10 @@ export class ChangePasswordComponent implements OnInit {
   //  - New password
   //  - Confirm new password
   changePasswordForm: FormGroup;
-  user: User;
 
-  // email of logged in user
+  response: CustomHttpRespone;
+
+  // email of the logged in user
   loggedInEmail: string;
 
   // error messages
@@ -64,7 +66,9 @@ export class ChangePasswordComponent implements OnInit {
     // initial form
     this.changePasswordForm = this.formBuilder.group(
       {
+        // initial value for email
         email: [this.loggedInEmail],
+
         oldPassword: ['', [Validators.required]],
         newPassword: ['', [Validators.required]],
         confirmNewPassword: ['', [Validators.required]]
@@ -82,31 +86,30 @@ export class ChangePasswordComponent implements OnInit {
   // when user clicks the "Save" button in the "Change password" screen
   changePassword(): void {
 
-    // allow display spinner icon or not
-    // =true: allow to display spinner in the "Save" button
-    // =false: do not allow to display spinner in the "Save" button
+    // allow display spinner icon
     this.showSpinner = true;
 
-    // push into the subscriptions list in order to unsubscribes all easily
+    // push into the subscriptions list in order to unsubscribes all easily, avoid leak memory
     this.subscriptions.push(
 
       // change password
       this.userService.changePassword(this.changePasswordForm.value).subscribe(
 
-        // create user successful
-        (data: User) => {
+        // change password successful
+        (response: CustomHttpRespone) => {
 
-          this.user = data;
+          this.response = response;
+
           // show successful message to user 
-          this.sendNotification(NotificationType.SUCCESS, `${data.firstName} ${data.lastName} is created successfully`);
+          this.sendNotification(NotificationType.SUCCESS, response.message);
 
           // hide spinner(circle)
           this.showSpinner = false;
 
-          // navigate to the "user-list" page
-          this.router.navigateByUrl("/user-list");
+          // navigate to the "ticket-list" page
+          this.router.navigateByUrl("/ticket-list");
         },
-        // create user failure
+        // change password failure
         (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
@@ -134,4 +137,4 @@ export class ChangePasswordComponent implements OnInit {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-} // end of the UserCreateComponent class
+} // end of the ChangePasswordComponent class

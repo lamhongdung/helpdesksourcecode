@@ -19,28 +19,5 @@ export function passwordValidator(control: AbstractControl): { [key: string]: bo
     }
 
     return (newPassword && confirmNewPassword && newPassword.value === confirmNewPassword.value) ? null : { 'misMatch': true };
+    // return null;
 }
-
-// export function passwordAndConfirmPassword(): ValidatorFn {
-
-//     return (form: FormGroup): ValidationErrors | null => {
-
-//         const newPassword: string = form.get("newPassword").value;
-
-//         const confirmNewPassword: string = form.get("confirmNewPassword").value;
-
-
-//         return (newPassword === confirmNewPassword) ? null : { passwordAndConfirmPassword: true };
-//     }
-// }
-
-// export function DateValidator(control: AbstractControl): { [key: string]: boolean } | null {
-//     let date = control.value;
-//     let current = new Date();
-//     if (new Date(date) < current) {
-//         return {
-//             dateValid: true
-//         };
-//     }
-//     return null;
-// }

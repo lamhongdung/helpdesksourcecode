@@ -70,6 +70,16 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
+    @ExceptionHandler(OldPasswordIsNotMatchException.class)
+    public ResponseEntity<HttpResponse> oldPasswordIsNotMatchException(OldPasswordIsNotMatchException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(NewPasswordIsNotMatchException.class)
+    public ResponseEntity<HttpResponse> newPasswordIsNotMatchException(NewPasswordIsNotMatchException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
     @ExceptionHandler(EmailNotFoundException.class)
     public ResponseEntity<HttpResponse> emailNotFoundException(EmailNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());

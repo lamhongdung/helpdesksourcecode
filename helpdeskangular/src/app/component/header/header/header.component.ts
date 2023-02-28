@@ -12,6 +12,7 @@ import { ShareService } from 'src/app/service/share.service';
 })
 export class HeaderComponent implements OnInit {
 
+  userId: number;
   loggedInEmail: string;
   loggedInRole: string;
 
@@ -27,6 +28,7 @@ export class HeaderComponent implements OnInit {
   }
 
   loadHeader() {
+    this.userId = +this.authenticationService.getIdFromLocalStorage();
     this.loggedInEmail = this.authenticationService.getEmailFromLocalStorage();
     this.loggedInRole = this.authenticationService.getRoleFromLocalStorage();
     // console.log(this.loggedInEmail);

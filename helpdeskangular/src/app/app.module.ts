@@ -30,6 +30,7 @@ import { UserViewComponent } from './component/user/user-view/user-view.componen
 import { LoginComponent } from './component/login/login.component';
 import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 import { ChangePasswordComponent } from './component/change-password/change-password.component';
+import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ChangePasswordComponent } from './component/change-password/change-pass
     UserEditComponent,
     UserViewComponent,
     ResetPasswordComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,

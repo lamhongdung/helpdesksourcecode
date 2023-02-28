@@ -1,14 +1,14 @@
 package com.ez.service.impl;
 
 import com.ez.dto.ChangePassword;
+import com.ez.dto.EditProfile;
 import com.ez.entity.*;
-import com.ez.exception.EmailExistException;
-import com.ez.exception.EmailNotFoundException;
-import com.ez.exception.UserNotFoundException;
+import com.ez.exception.*;
 import com.ez.repository.UserRepository;
 import com.ez.service.EmailService;
 import com.ez.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,10 +134,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     }
 
+    // change password
     @Override
-    public void changePassword(ChangePassword changePassword) throws MessagingException, EmailNotFoundException {
+    public void changePassword(ChangePassword changePassword) throws MessagingException, EmailNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException {
 
-        LOGGER.info("Change password.");
+        LOGGER.info("Validate data");
 
         // find user by email
         LOGGER.info("find user by email.");
@@ -148,33 +149,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + changePassword.getEmail());
         }
 
-        //
-        // found user by email in the database
-        //
-//
-//        // generate new random password
-//        String password = generatePassword();
-//
-//        // set new random password to user
-//        user.setPassword(encodePassword(password));
-//
-//        // save new password into the database
-//        userRepository.save(user);
-//
-//        LOGGER.info("Send email to inform reseting password.");
-//
-//        // email body
-//        emailBody.append("Hello " + user.getLastName() + " " + user.getFirstName() + ",\n\n");
-//        emailBody.append("Your password was reset." + "\n\n");
-//        emailBody.append("Use the following information to access the Help Desk system:\n\n");
-//        emailBody.append("- Email: " + user.getEmail() + "\n");
-//        emailBody.append("- New password: " + password + "\n\n");
-//        emailBody.append("The Help Desk Team");
-//
-//        LOGGER.info("Reset password. New password is: " + password);
-//
-//        // send new password to user via his/her email
-//        emailService.sendEmail(EMAIL_SUBJECT_RESET_PASSWORD, emailBody.toString(), user.getEmail());
+        // if old password is not match then throw an exception
+        if (!passwordEncoder.matches(changePassword.getOldPassword(), user.getPassword())) {
+            throw new OldPasswordIsNotMatchException("Old password for email " + changePassword.getEmail() + " is not match. Please try again.");
+        }
+
+        // if "new password" is not match with "confirm new password" then throw an exception
+        if (!StringUtils.equals(changePassword.getNewPassword(),changePassword.getConfirmNewPassword())) {
+
+            throw new NewPasswordIsNotMatchException(NEW_PASSWORD_IS_NOT_MATCH);
+        }
+
+        LOGGER.info("Change password");
+
+        user.setPassword(encodePassword(changePassword.getNewPassword()));
+
+        userRepository.save(user);
+
     }
 
     // search users by page and based on the search criteria
@@ -195,7 +186,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User isInactiveUser(String email){
+    public User isInactiveUser(String email) {
 
         User user = userRepository.userIsInactive(email);
 
@@ -286,6 +277,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         existingUser.setAddress(user.getAddress());
         existingUser.setRole(user.getRole());
         existingUser.setStatus(user.getStatus());
+
+        // update existing user(persistent)
+        userRepository.save(existingUser);
+
+        return existingUser;
+    }
+
+    // update user profile
+    @Override
+    public User updateProfile(EditProfile editProfile) throws UserNotFoundException {
+
+        LOGGER.info("Update profile");
+
+        // get existing user(persistent)
+        User existingUser = userRepository.findById(editProfile.getId())
+                .orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + editProfile.getId()));
+
+        // set new values to existing user
+        existingUser.setFirstName(editProfile.getFirstName());
+        existingUser.setLastName(editProfile.getLastName());
+        existingUser.setPhone(editProfile.getPhone());
+        existingUser.setAddress(editProfile.getAddress());
 
         // update existing user(persistent)
         userRepository.save(existingUser);

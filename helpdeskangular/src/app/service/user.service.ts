@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../entity/User';
-import { CustomHttpRespone } from '../entity/custom-http-response';
+import { CustomHttpRespone } from '../entity/CustomHttpResponse';
 import { ChangePassword } from '../entity/ChangePassword';
+import { ResetPassword } from '../entity/ResetPassword';
+import { EditProfile } from '../entity/EditProfile';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -45,14 +47,31 @@ export class UserService {
     return this.http.put<User>(`${this.host}/user-edit`, user);
   }
 
+  // reset password
+  public resetPassword(resetPassword: ResetPassword): Observable<CustomHttpRespone> {
+
+    return this.http.put<CustomHttpRespone>(`${this.host}/reset-password`, resetPassword);
+
+  }
+
+  // update profile
+  public updateProfile(editProfile: EditProfile): Observable<User> {
+    return this.http.put<User>(`${this.host}/edit-profile`, editProfile);
+  }
+
   // change password
-  public changePassword(changePassword: ChangePassword): Observable<User> {
-    return this.http.put<User>(`${this.host}/change-password`, changePassword);
+  public changePassword(changePassword: ChangePassword): Observable<CustomHttpRespone> {
+    return this.http.put<CustomHttpRespone>(`${this.host}/change-password`, changePassword);
   }
 
   // find user by user id
   findById(id: number): Observable<User> {
     return this.http.get<User>(`${this.host}/user-list/${id}`);
   }
+
+  // // find user by email
+  // findUserByEmail(email: string): Observable<User> {
+  //   return this.http.get<User>(`${this.host}/user-list/${email}`);
+  // }
 
 }

@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CustomHttpRespone } from 'src/app/entity/custom-http-response';
+import { CustomHttpRespone } from 'src/app/entity/CustomHttpResponse';
 import { User } from 'src/app/entity/User';
 import { NotificationType } from 'src/app/enum/notification-type.enum';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { NotificationService } from 'src/app/service/notification.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -38,7 +39,7 @@ export class ResetPasswordComponent implements OnInit {
   };
 
   constructor(private router: Router,
-    private authenticationService: AuthenticationService,
+    private userService: UserService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
   ) { }
@@ -68,7 +69,8 @@ export class ResetPasswordComponent implements OnInit {
 
       // this.resetPasswordForm.value = { "email": "nguoiquantri01@gmail.com" }
       // this.authenticationService.resetPassword(this.resetPasswordForm.value.email).subscribe(
-      this.authenticationService.resetPassword(this.resetPasswordForm.value).subscribe(
+      // this.authenticationService.resetPassword(this.resetPasswordForm.value).subscribe(
+      this.userService.resetPassword(this.resetPasswordForm.value).subscribe(
 
         // reset password success
         (response: CustomHttpRespone) => {

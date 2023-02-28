@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../entity/User';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoginUser } from '../entity/LoginUser';
-import { CustomHttpRespone } from '../entity/custom-http-response';
-import { ResetPassword } from '../entity/ResetPassword';
 
 
 @Injectable({ providedIn: 'root' })
@@ -53,19 +51,6 @@ export class AuthenticationService {
     localStorage.removeItem('user');
     // localStorage.removeItem('users');
   }
-
-  // public resetPassword(email: string): Observable<CustomHttpRespone> {
-  public resetPassword(resetPassword: ResetPassword): Observable<CustomHttpRespone> {
-
-    // return this.http.get<CustomHttpRespone>(`${this.host}/reset-password/${email}`);
-    return this.http.put<CustomHttpRespone>(`${this.host}/reset-password`, resetPassword);
-
-  }
-  
-  // // edit existing user
-  // public editUser(user: User): Observable<User> {
-  //   return this.http.put<User>(`${this.host}/user-edit`, user);
-  // }
 
   // save token into the local storage and local variable
   public saveTokenToLocalStorage(token: string): void {
@@ -127,6 +112,18 @@ export class AuthenticationService {
       this.logOut();
       return false;
     }
+  }
+
+  // get id of the logged in user
+  public getIdFromLocalStorage(): string {
+
+    if (JSON.parse(localStorage.getItem('user')) != null) {
+
+      return JSON.parse(localStorage.getItem('user')).id;
+
+    }
+
+    return "";
   }
 
   // get email of the logged in user

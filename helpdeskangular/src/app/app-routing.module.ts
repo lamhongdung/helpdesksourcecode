@@ -18,6 +18,7 @@ import { UserViewComponent } from './component/user/user-view/user-view.componen
 import { LoginComponent } from './component/login/login.component';
 import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 import { ChangePasswordComponent } from './component/change-password/change-password.component';
+import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,12 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   // reset password
   { path: 'reset-password', component: ResetPasswordComponent },
+  // edit profile
+  { path: 'edit-profile/:id', component: EditProfileComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
+    }
+  },  
   // change password
   { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthenticationGuard],
     data: {

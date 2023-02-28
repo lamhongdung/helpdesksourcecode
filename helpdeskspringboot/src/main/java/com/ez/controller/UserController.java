@@ -1,6 +1,7 @@
 package com.ez.controller;
 
 import com.ez.dto.ChangePassword;
+import com.ez.dto.EditProfile;
 import com.ez.dto.LoginUser;
 import com.ez.dto.ResetPassword;
 import com.ez.entity.*;
@@ -129,10 +130,10 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(newUser, OK);
     }
 
-    // find user by id
+    // find user by id.
+    // is used for Edit User, Edit Profile
     @GetMapping("/user-list/{id}")
-    // only the ROLE_ADMIN can access this address
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<User> findById(@PathVariable Long id) throws UserNotFoundException {
 
         LOGGER.info("find user by id: " + id);
@@ -162,6 +163,23 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(currentUser, OK);
     }
 
+    // update profile
+    @PutMapping("/edit-profile")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
+    public ResponseEntity<User> updateProfile(@RequestBody @Valid EditProfile editProfile, BindingResult bindingResult)
+            throws MessagingException, UserNotFoundException, BindException {
+
+        // if user data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            throw new BindException(bindingResult);
+        }
+
+        User currentUser = userService.updateProfile(editProfile);
+
+        return new ResponseEntity<>(currentUser, OK);
+    }
+
     // reset password in case user forgot his/her password
     @PutMapping("/reset-password")
     public ResponseEntity<HttpResponse> resetPassword(@RequestBody @Valid ResetPassword resetPassword, BindingResult bindingResult)
@@ -184,7 +202,7 @@ public class UserController extends ExceptionHandling {
     @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePassword changePassword, BindingResult bindingResult)
-            throws MessagingException, EmailNotFoundException, BindException {
+            throws MessagingException, EmailNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException, BindException {
 
         LOGGER.info(changePassword.toString());
 
@@ -196,10 +214,9 @@ public class UserController extends ExceptionHandling {
 
         // change password
         userService.changePassword(changePassword);
-//
-//        return response(OK, RESET_PASSWORD_MESSAGE + resetPassword.getEmail());
 
-        return null;
+        return response(OK, "Changed password for email " + changePassword.getEmail() + " successful.");
+
     }
 
     //

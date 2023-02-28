@@ -1,11 +1,9 @@
 package com.ez.service;
 
 import com.ez.dto.ChangePassword;
-import com.ez.exception.EmailExistException;
-import com.ez.exception.EmailNotFoundException;
+import com.ez.dto.EditProfile;
+import com.ez.exception.*;
 import com.ez.entity.User;
-import com.ez.exception.InactiveUserException;
-import com.ez.exception.UserNotFoundException;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -39,8 +37,11 @@ public interface UserService {
     // update existing user
     User updateUser(User user) throws MessagingException, EmailExistException, UserNotFoundException;
 
+    // update user profile
+    User updateProfile(EditProfile editProfile) throws MessagingException, UserNotFoundException;
+
     // reset password in case user forgot his/her password
     void resetPassword(String email) throws MessagingException, EmailNotFoundException;
-    void changePassword(ChangePassword changePassword) throws MessagingException, EmailNotFoundException;
+    void changePassword(ChangePassword changePassword) throws MessagingException, EmailNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException;
 
 }

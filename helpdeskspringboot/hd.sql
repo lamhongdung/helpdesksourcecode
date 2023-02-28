@@ -45,8 +45,12 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `user`(email, password, firstName, lastName, phone, address, role, status) VALUES
-('nguoiquantri01@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Quản Trị', 'Người', '1111111111', '123 Trần Hưng Đạo', 'ROLE_ADMIN', 'Active'),
-('khachhang192101@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Khách', 'Hàng', '2222222222', '456 Nguyễn Trãi', 'ROLE_CUSTOMER', 'Active');
+('dunglh@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hong Dung', 'Lam', '0986814665', '100 Nhat Chi Mai', 'ROLE_ADMIN', 'Active'),
+('nguoiquantri@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Quan Tri', 'Nguoi', '1111111111', '79 Huyen Tran Cong Chua', 'ROLE_ADMIN', 'Active'),
+('nguoiquantri_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Quan Tri', 'Nguoi', '9999999999', '123 Tran Hung Dao', 'ROLE_ADMIN', 'Active'),
+('nguoihotro@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Ho Tro', 'Nguoi', '8888888888', '22 Nguyen Thi Minh Khai', 'ROLE_SUPPORTER', 'Active'),
+('nguoihotro_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Ho Tro', 'Nguoi', '2222222222', '456 Nguyen Du', 'ROLE_SUPPORTER', 'Active'),
+('khachhang_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hang', 'Khach', '3333333333', '789 Pham The Hien', 'ROLE_CUSTOMER', 'Active');
 
 
 
