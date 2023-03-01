@@ -75,26 +75,26 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(user, jwtHeader, OK);
     }
 
-    // search users by page based on the search criteria
+    // search users by pageNumber based on the search criteria
     // parameters:
-    //  - page: page number
-    //  - size: page size(default = 5)
+    //  - pageNumber: page number
+    //  - pageSize: page size(default = 5)
     //  - searchTerm: word to search(ID, email, firstName, lastName, phone). '' is for search all
     //  - role: user role. '' is for all roles
     //  - status: user status. '' is for all status
     @GetMapping("/user-search")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<List<User>> searchUsers(@RequestParam int page,
-                                                  @RequestParam int size,
+    public ResponseEntity<List<User>> searchUsers(@RequestParam int pageNumber,
+                                                  @RequestParam int pageSize,
                                                   @RequestParam(defaultValue = "") String searchTerm,
                                                   @RequestParam(defaultValue = "") String role,
                                                   @RequestParam(defaultValue = "") String status) {
 
         // get all users of 1 page
-        List<User> users = userService.searchUsers(page, size, searchTerm, role, status);
+        List<User> users = userService.searchUsers(pageNumber, pageSize, searchTerm, role, status);
 
-        return new ResponseEntity<>(users, OK);
+        return new ResponseEntity<List<User>>(users, OK);
     }
 
     // calculate total of users based on the search criteria.
@@ -127,7 +127,7 @@ public class UserController extends ExceptionHandling {
 
         User newUser = userService.createUser(user);
 
-        return new ResponseEntity<>(newUser, OK);
+        return new ResponseEntity<User>(newUser, OK);
     }
 
     // find user by id.
@@ -140,7 +140,7 @@ public class UserController extends ExceptionHandling {
 
         User user = userService.findById(id);
 
-        return new ResponseEntity<>(user, OK);
+        return new ResponseEntity<User>(user, OK);
     }
 
     // edit existing user
@@ -160,7 +160,7 @@ public class UserController extends ExceptionHandling {
 
         User currentUser = userService.updateUser(user);
 
-        return new ResponseEntity<>(currentUser, OK);
+        return new ResponseEntity<User>(currentUser, OK);
     }
 
     // update profile
@@ -177,7 +177,7 @@ public class UserController extends ExceptionHandling {
 
         User currentUser = userService.updateProfile(editProfile);
 
-        return new ResponseEntity<>(currentUser, OK);
+        return new ResponseEntity<User>(currentUser, OK);
     }
 
     // reset password in case user forgot his/her password

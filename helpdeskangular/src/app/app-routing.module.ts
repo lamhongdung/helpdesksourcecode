@@ -28,13 +28,15 @@ const routes: Routes = [
   // reset password
   { path: 'reset-password', component: ResetPasswordComponent },
   // edit profile
-  { path: 'edit-profile/:id', component: EditProfileComponent, canActivate: [AuthenticationGuard],
+  {
+    path: 'edit-profile/:id', component: EditProfileComponent, canActivate: [AuthenticationGuard],
     data: {
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
-  },  
+  },
   // change password
-  { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthenticationGuard],
+  {
+    path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthenticationGuard],
     data: {
       roles: ['ROLE_CUSTOMER', 'ROLE_SUPPORTER', 'ROLE_ADMIN']
     }
@@ -60,6 +62,19 @@ const routes: Routes = [
   },
   {
     path: 'user-view/:id', component: UserViewComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  // Category menu
+  {
+    path: 'category-list', component: CategoryListComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'category-create', component: CategoryCreateComponent, canActivate: [AuthenticationGuard],
     data: {
       roles: ['ROLE_ADMIN']
     }
@@ -99,19 +114,6 @@ const routes: Routes = [
   },
   {
     path: 'priority-create', component: PriorityCreateComponent, canActivate: [AuthenticationGuard],
-    data: {
-      roles: ['ROLE_ADMIN']
-    }
-  },
-  // Category menu
-  {
-    path: 'category-list', component: CategoryListComponent, canActivate: [AuthenticationGuard],
-    data: {
-      roles: ['ROLE_ADMIN']
-    }
-  },
-  {
-    path: 'category-create', component: CategoryCreateComponent, canActivate: [AuthenticationGuard],
     data: {
       roles: ['ROLE_ADMIN']
     }

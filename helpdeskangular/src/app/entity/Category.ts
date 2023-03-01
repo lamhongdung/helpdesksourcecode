@@ -1,12 +1,9 @@
 export class Category {
-    public categoryId: number;
+    public id: number;
     public name: string;
-    public active: boolean;
+    public status: string;
   
     constructor() {
-      this.categoryId = 0;
-      this.name = '';
-      this.active = false;
     }
   
   }

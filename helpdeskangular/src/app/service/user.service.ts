@@ -20,10 +20,10 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   // get users by page and based on the search criteria
-  searchUsers(page: number, searchTerm: string, role: string, status: string): Observable<User[]> {
+  searchUsers(pageNumber: number, searchTerm: string, role: string, status: string): Observable<User[]> {
 
     return this.http.get<User[]>(
-      `${this.host}/user-search?page=${page}&size=${this.pageSize}&searchTerm=${searchTerm}&role=${role}&status=${status}`
+      `${this.host}/user-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&role=${role}&status=${status}`
     )
   }
 
@@ -68,10 +68,5 @@ export class UserService {
   findById(id: number): Observable<User> {
     return this.http.get<User>(`${this.host}/user-list/${id}`);
   }
-
-  // // find user by email
-  // findUserByEmail(email: string): Observable<User> {
-  //   return this.http.get<User>(`${this.host}/user-list/${email}`);
-  // }
 
 }

@@ -8,24 +8,6 @@ create database hd;
 use hd;
 
 -- -----------------------------------------------------
--- Table `category`
--- -----------------------------------------------------
-
-drop table if exists `category`;
-
-CREATE TABLE `category` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) not NULL,
-  `status` VARCHAR(255) not NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `category`(name, status) VALUES 
-('Phần cứng máy tính', 1),
-('Phần mềm máy tính', 1);
-
-
--- -----------------------------------------------------
 -- Table `user`
 -- -----------------------------------------------------
 
@@ -41,17 +23,46 @@ CREATE TABLE `user` (
   `address` VARCHAR(255) NULL,
   `role` VARCHAR(255) not NULL,  
   `status` VARCHAR(255) not NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `user`(email, password, firstName, lastName, phone, address, role, status) VALUES
-('dunglh@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hong Dung', 'Lam', '0986814665', '100 Nhat Chi Mai', 'ROLE_ADMIN', 'Active'),
-('nguoiquantri@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Quan Tri', 'Nguoi', '1111111111', '79 Huyen Tran Cong Chua', 'ROLE_ADMIN', 'Active'),
-('nguoiquantri_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Quan Tri', 'Nguoi', '9999999999', '123 Tran Hung Dao', 'ROLE_ADMIN', 'Active'),
-('nguoihotro@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Ho Tro', 'Nguoi', '8888888888', '22 Nguyen Thi Minh Khai', 'ROLE_SUPPORTER', 'Active'),
-('nguoihotro_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Ho Tro', 'Nguoi', '2222222222', '456 Nguyen Du', 'ROLE_SUPPORTER', 'Active'),
-('khachhang_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hang', 'Khach', '3333333333', '789 Pham The Hien', 'ROLE_CUSTOMER', 'Active');
+('dunglh@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hồng Dũng', 'Lâm', '0986814665', '90/12/1/6 Bong Sao', 'ROLE_ADMIN', 'Active'),
 
+('dunglh+admin@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Quản Trị', 'Người', '1111111111', '123 Pham Hung', 'ROLE_ADMIN', 'Active'),
+('dunglh+supporter@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ', 'Người', '2222222222', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Active'),
+('dunglh+customer@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng', 'Khách', '3333333333', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+
+('nguoiquantri@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Tuấn Nam', 'Trần', '4444444444', '79 Huyen Tran Cong Chua', 'ROLE_ADMIN', 'Active'),
+('nguoiquantri_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Trường Vinh', 'Lê', '5555555555', '123 Tran Hung Dao', 'ROLE_ADMIN', 'Active'),
+('nguoihotro@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Anh Trung', 'Nguyễn', '6666666666', '22 Nguyen Thi Minh Khai', 'ROLE_SUPPORTER', 'Active'),
+('nguoihotro_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Trọng Tấn', 'Trương', '7777777777', '456 Nguyen Du', 'ROLE_SUPPORTER', 'Active'),
+('khachhang_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Thị Quyên', 'Bùi', '8888888888', '789 Pham The Hien', 'ROLE_CUSTOMER', 'Active');
+
+
+-- -----------------------------------------------------
+-- Table `category`
+-- -----------------------------------------------------
+
+drop table if exists `category`;
+
+CREATE TABLE `category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) not NULL,
+  `status` VARCHAR(255) not NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `category`(name, status) VALUES 
+('Laptop', 'Active'),
+('PC', 'Active'),
+('Printer', 'Active'),
+('Networking', 'Active'),
+('Office365', 'Active'),
+('Access card', 'Active'),
+('Seat', 'Active'),
+('Other', 'Active');
 
 
 -- --

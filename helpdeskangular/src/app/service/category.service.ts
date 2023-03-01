@@ -9,12 +9,46 @@ import { Category } from '../entity/Category';
 })
 export class CategoryService {
 
-  private host = environment.apiUrl;
+  // 'http://localhost:8080'
+  host = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  // number of categories per a page(default = 5)
+  pageSize = environment.pageSize;
 
-  public getAllCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.host}/categories`);
+  constructor(private http: HttpClient) { }
+
+  // get categories by page and based on the search criteria
+  searchCategories(pageNumber: number, searchTerm: string, status: string): Observable<Category[]> {
+
+    // ex: url = http://localhost:8080/category-search?pageNumber=0&pageSize=5&searchTerm=""&status=""
+    return this.http.get<Category[]>(
+      `${this.host}/category-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&status=${status}`
+    )
+  }
+
+  // calculate total of categories for count total of pages
+  getTotalOfCategories(searchTerm: string, status: string): Observable<number> {
+
+    // ex: http://localhost:8080/total-of-categories?searchTerm=""&status=""
+    return this.http.get<number>(
+      `${this.host}/total-of-categories?searchTerm=${searchTerm}&status=${status}`
+    );
+
+  }
+
+  //  // create new user
+  //  public createUser(user: User): Observable<User> {
+  //    return this.http.post<User>(`${this.host}/user-create`, user);
+  //  }
+
+  //  // edit existing user
+  //  public editUser(user: User): Observable<User> {
+  //    return this.http.put<User>(`${this.host}/user-edit`, user);
+  //  }
+
+  // find category by id
+  findById(id: number): Observable<Category> {
+    return this.http.get<Category>(`${this.host}/category-list/${id}`);
   }
 
 }
