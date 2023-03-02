@@ -10,24 +10,31 @@
     <!-- Search Form -->
     <form [formGroup]="searchCategory" (ngSubmit)="ngOnInit()">
 
-      <!-- row 1: the "search" function -->
+      <!--  -->
       <div class="search row d-flex justify-content-md-end mb-4 text-right float-right">
-        <!-- textbox: SearchTerm -->
+
+        <!-- SearchTerm -->
         <!-- search for: ID, name -->
         <div class="col-xl-4 col-md-4 form-group" style="text-align: center">
+          <!-- label -->
           <label for="searchTerm">Search term</label>
+          <!-- textbox -->
           <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
             placeholder="Search term">
         </div>
-        <!-- dropdown: Status -->
+
+        <!-- Status -->
         <div class="col-xl-4 col-md-4 form-group" style="text-align: center">
+          <!-- label -->
           <label for="status">Status</label>
+          <!-- dropdown -->
           <select id="status" class="form-control" formControlName="status">
             <option value="">Select status</option>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
           </select>
         </div>
+
         <!-- the "Search" button -->
         <div class="col-xl-4 col-lg-4">
           <!-- break a line(insert a line break(carriage-return)) -->
@@ -46,8 +53,8 @@
   <!-- when user click on the "Create category" button -->
   <div class="container mt-0">
     <br><br><br>
-    <button class="btn btn-primary mt-2 mb-md-3" routerLink="/category-create"><i class="fa fa-plus"></i> Create
-      category
+    <button class="btn btn-primary mt-2 mb-md-3" routerLink="/category-create"><i class="fa fa-plus"></i>
+      Create category
     </button>
   </div>
 
@@ -62,12 +69,14 @@
     <div style="float: right;" *ngIf="totalOfCategories == 1">There is {{totalOfCategories}} category</div>
     <!-- there is no category -->
     <div style="float: right;" *ngIf="totalOfCategories == 0">There is no category</div>
+
+    <!-- table -->
     <table class="table table-hover table-striped table-bordered">
       <thead>
         <!-- table header -->
         <tr class="bg-table-header">
 
-          
+
           <!-- Order -->
           <!-- scope="col": specifies that the cell is a header for a column -->
           <th scope="col" style="width: 10%">Ord</th>
@@ -130,8 +139,7 @@
             <!-- textbox to input the Page number -->
             <!-- rounded-0: have no round at corners -->
             <input type="number" min="1" [max]="totalPages" class="form-control text-right rounded-0"
-              aria-describedby="basic-addon1" [value]="currentPage"
-              (change)="changePageNumber($event.target.value)">
+              aria-describedby="basic-addon1" [value]="currentPage" (change)="changePageNumber($event.target.value)">
             <!-- total pages -->
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon1">/{{totalPages}}</span>

@@ -13,54 +13,58 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // get user by email
-    User findUserByEmail(String email);
+    public User findUserByEmail(String email);
 
+    // check whether an user is inactive or not?
+    // return:
+    //  - not null: inactive user
+    //  - null: not inactive user
     @Query(value =  "" +
             " select a.* " +
             " from user a " +
             " where a.email =?1 and a.status = 'Inactive' "
             ,nativeQuery = true)
-    User userIsInactive(String email);
+    public User isInactiveUser(String email);
 
     // search users by searchTerm, role and status.
     @Query(value =  "" +
             " select a.* " +
             " from user a " +
-            " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %?3% and " +
+            " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %?3% and " + // searchTerm
             "       ( " +
-            "         case ?4   " +
-            "           when '' then role like '%%'   " +
-            "           else role = ?4   " +
-            "         end   " +
+            "         case ?4 " + // role
+            "           when '' then role like '%%' " +
+            "           else role = ?4 " +
+            "         end " +
             "       ) and " +
             "       ( " +
-            "         case ?5   " +
-            "           when '' then status like '%%'   " +
-            "           else status = ?5   " +
-            "         end   " +
+            "         case ?5 " + // status
+            "           when '' then status like '%%' " +
+            "           else status = ?5 " +
+            "         end " +
             "       ) " +
-            " limit ?1,?2 "
+            " limit ?1,?2 " // pageNumber and pageSize
             ,nativeQuery = true)
-    List<User> searchUsers(int page, int pageSize, String searchTerm, String role, String status);
+    public List<User> searchUsers(int pageNumber, int pageSize, String searchTerm, String role, String status);
 
     // calculate total of users for pagination
     @Query(value =  "" +
                     " select count(a.id) as totalOfUsers " +
                     " from user a " +
-                    " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %?1% and " +
+                    " where concat(a.id,' ', a.email,' ', a.firstName,' ', a.lastName,' ', a.phone) like %?1% and " + // searchTerm
                     "       ( " +
-                    "         case ?2   " +
-                    "           when '' then role like '%%'   " +
-                    "           else role = ?2   " +
-                    "         end   " +
+                    "         case ?2 " + // role
+                    "           when '' then role like '%%' " +
+                    "           else role = ?2 " +
+                    "         end " +
                     "       ) and " +
                     "       ( " +
-                    "         case ?3   " +
-                    "           when '' then status like '%%'   " +
-                    "           else status = ?3   " +
-                    "         end   " +
+                    "         case ?3 " + // status
+                    "           when '' then status like '%%' " +
+                    "           else status = ?3 " +
+                    "         end " +
                     "       ) "
             ,nativeQuery = true)
-    long getTotalOfUsers(String searchTerm, String role, String status);
+    public long getTotalOfUsers(String searchTerm, String role, String status);
 
 }

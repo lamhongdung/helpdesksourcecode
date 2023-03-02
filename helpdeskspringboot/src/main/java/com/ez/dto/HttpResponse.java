@@ -1,4 +1,4 @@
-package com.ez.entity;
+package com.ez.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

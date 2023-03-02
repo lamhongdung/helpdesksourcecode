@@ -45,7 +45,7 @@ export class AuthenticationGuard implements CanActivate {
     // let role = this.authenticationService.getRoleFromLocalStorage();
 
     // if user logged in then return true(means allow to access the page)
-    if (this.authenticationService.isUserLoggedIn()) {
+    if (this.authenticationService.isLoggedInUser()) {
       return true;
     }
 

@@ -1,9 +1,6 @@
 package com.ez.controller;
 
-import com.ez.dto.ChangePassword;
-import com.ez.dto.EditProfile;
-import com.ez.dto.LoginUser;
-import com.ez.dto.ResetPassword;
+import com.ez.dto.*;
 import com.ez.entity.*;
 import com.ez.exception.*;
 import com.ez.service.UserService;
@@ -25,8 +22,8 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.ez.constant.SecurityConstant.JWT_TOKEN_HEADER;
-import static com.ez.constant.UserImplConstant.USER_IS_INACTIVE;
+import static com.ez.constant.Constant.JWT_TOKEN_HEADER;
+import static com.ez.constant.Constant.*;
 import static org.springframework.http.HttpStatus.OK;
 
 
@@ -51,15 +48,23 @@ public class UserController extends ExceptionHandling {
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody @Valid LoginUser loginUser, BindingResult bindingResult) throws BindException, InactiveUserException {
 
+        LOGGER.info("validate data");
+
         // if loginUser data is invalid then throw exception
         if (bindingResult.hasErrors()) {
+
+            LOGGER.error("LoginUser data is invalid");
 
             throw new BindException(bindingResult);
         }
 
         // if user is inactive then show error to user
-        if (userService.isInactiveUser(loginUser.getEmail()) != null)
+        if (userService.isInactiveUser(loginUser.getEmail()) != null) {
+
+            LOGGER.error("User is inactive");
+
             throw new InactiveUserException(USER_IS_INACTIVE);
+        }
 
         // if username or password is invalid then throw an exception
         authenticate(loginUser.getEmail(), loginUser.getPassword());
@@ -71,7 +76,7 @@ public class UserController extends ExceptionHandling {
         UserPrincipal userPrincipal = new UserPrincipal(user);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
 
-        // return user and jwt token
+        // return user(body), jwt token(header) and status
         return new ResponseEntity<>(user, jwtHeader, OK);
     }
 
@@ -80,8 +85,8 @@ public class UserController extends ExceptionHandling {
     //  - pageNumber: page number
     //  - pageSize: page size(default = 5)
     //  - searchTerm: word to search(ID, email, firstName, lastName, phone). '' is for search all
-    //  - role: user role. '' is for all roles
-    //  - status: user status. '' is for all status
+    //  - role: ''(all), ROLE_CUSTOMER, ROLE_SUPPORTER, ROLE_ADMIN
+    //  - status: ''(all), 'Active', 'Inactive'
     @GetMapping("/user-search")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -94,7 +99,7 @@ public class UserController extends ExceptionHandling {
         // get all users of 1 page
         List<User> users = userService.searchUsers(pageNumber, pageSize, searchTerm, role, status);
 
-        return new ResponseEntity<List<User>>(users, OK);
+        return new ResponseEntity<>(users, OK);
     }
 
     // calculate total of users based on the search criteria.
@@ -109,7 +114,7 @@ public class UserController extends ExceptionHandling {
         // calculate total of users based on the search criteria
         long totalOfUsers = userService.getTotalOfUsers(searchTerm, role, status);
 
-        return new ResponseEntity<Long>(totalOfUsers, HttpStatus.OK);
+        return new ResponseEntity<>(totalOfUsers, HttpStatus.OK);
     }
 
     // create new user
@@ -119,19 +124,23 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<User> createUser(@RequestBody @Valid User user, BindingResult bindingResult)
             throws EmailExistException, MessagingException, BindException {
 
+        LOGGER.info("validate data");
+
         // if user data is invalid then throw exception
         if (bindingResult.hasErrors()) {
+
+            LOGGER.error("User data is invalid");
 
             throw new BindException(bindingResult);
         }
 
         User newUser = userService.createUser(user);
 
-        return new ResponseEntity<User>(newUser, OK);
+        return new ResponseEntity<>(newUser, OK);
     }
 
     // find user by id.
-    // is used for Edit User, Edit Profile
+    // this method is used for Edit User, Edit Profile
     @GetMapping("/user-list/{id}")
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_SUPPORTER','ROLE_ADMIN')")
     public ResponseEntity<User> findById(@PathVariable Long id) throws UserNotFoundException {
@@ -140,7 +149,7 @@ public class UserController extends ExceptionHandling {
 
         User user = userService.findById(id);
 
-        return new ResponseEntity<User>(user, OK);
+        return new ResponseEntity<>(user, OK);
     }
 
     // edit existing user
@@ -150,17 +159,19 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<User> editUser(@RequestBody @Valid User user, BindingResult bindingResult)
             throws EmailExistException, MessagingException, UserNotFoundException, BindException {
 
-        LOGGER.info(user.toString());
+        LOGGER.info("validate data");
 
         // if user data is invalid then throw exception
         if (bindingResult.hasErrors()) {
+
+            LOGGER.info("User data is invalid");
 
             throw new BindException(bindingResult);
         }
 
         User currentUser = userService.updateUser(user);
 
-        return new ResponseEntity<User>(currentUser, OK);
+        return new ResponseEntity<>(currentUser, OK);
     }
 
     // update profile
@@ -169,15 +180,19 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<User> updateProfile(@RequestBody @Valid EditProfile editProfile, BindingResult bindingResult)
             throws MessagingException, UserNotFoundException, BindException {
 
+        LOGGER.info("validate data");
+
         // if user data is invalid then throw exception
         if (bindingResult.hasErrors()) {
+
+            LOGGER.info("User data is invalid");
 
             throw new BindException(bindingResult);
         }
 
         User currentUser = userService.updateProfile(editProfile);
 
-        return new ResponseEntity<User>(currentUser, OK);
+        return new ResponseEntity<>(currentUser, OK);
     }
 
     // reset password in case user forgot his/her password
@@ -185,10 +200,12 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<HttpResponse> resetPassword(@RequestBody @Valid ResetPassword resetPassword, BindingResult bindingResult)
             throws MessagingException, EmailNotFoundException, BindException {
 
-        LOGGER.info(resetPassword.toString());
+        LOGGER.info("validate data");
 
         // if email is invalid then throw exception
         if (bindingResult.hasErrors()) {
+
+            LOGGER.error("ResetPassword data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -204,10 +221,12 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePassword changePassword, BindingResult bindingResult)
             throws MessagingException, EmailNotFoundException, OldPasswordIsNotMatchException, NewPasswordIsNotMatchException, BindException {
 
-        LOGGER.info(changePassword.toString());
+        LOGGER.info("validate data");
 
         // if changePassword object(email, oldPassword, newPassword and confirmNewPassword) is invalid then throw exception
         if (bindingResult.hasErrors()) {
+
+            LOGGER.error("ChangePassword data is invalid");
 
             throw new BindException(bindingResult);
         }
@@ -219,12 +238,14 @@ public class UserController extends ExceptionHandling {
 
     }
 
-    //
+    // create new instance HttpResponse
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
 
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), message), httpStatus);
     }
 
+    // get header with JWT token.
+    // use this header to send back client
     private HttpHeaders getJwtHeader(UserPrincipal user) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -233,6 +254,7 @@ public class UserController extends ExceptionHandling {
         return headers;
     }
 
+    // authenticate email and password sent from client is valid or not
     private void authenticate(String email, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
     }

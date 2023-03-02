@@ -26,7 +26,7 @@ export class CategoryService {
     )
   }
 
-  // calculate total of categories for count total of pages
+  // calculate total of categories for count total pages
   getTotalOfCategories(searchTerm: string, status: string): Observable<number> {
 
     // ex: http://localhost:8080/total-of-categories?searchTerm=""&status=""
@@ -36,15 +36,15 @@ export class CategoryService {
 
   }
 
-  //  // create new user
-  //  public createUser(user: User): Observable<User> {
-  //    return this.http.post<User>(`${this.host}/user-create`, user);
-  //  }
+   // create category
+   public createCategory(category: Category): Observable<Category> {
+     return this.http.post<Category>(`${this.host}/category-create`, category);
+   }
 
-  //  // edit existing user
-  //  public editUser(user: User): Observable<User> {
-  //    return this.http.put<User>(`${this.host}/user-edit`, user);
-  //  }
+   // edit existing category
+   public editCategory(category: Category): Observable<Category> {
+     return this.http.put<Category>(`${this.host}/category-edit`, category);
+   }
 
   // find category by id
   findById(id: number): Observable<Category> {

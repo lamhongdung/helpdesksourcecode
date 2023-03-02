@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     // if user already logged in before then navigate to '/ticket-list'(absoluate path)
-    if (this.authenticationService.isUserLoggedIn()) {
+    if (this.authenticationService.isLoggedInUser()) {
 
       // navigate to '/ticket-list';
       // this.router.navigateByUrl('/ticket-list');

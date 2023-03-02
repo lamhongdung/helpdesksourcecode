@@ -19,7 +19,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  // get users by page and based on the search criteria
+  // get users by pageNumber and based on the search criteria
   searchUsers(pageNumber: number, searchTerm: string, role: string, status: string): Observable<User[]> {
 
     return this.http.get<User[]>(
@@ -27,7 +27,7 @@ export class UserService {
     )
   }
 
-  // calculate total of users for count total of pages
+  // calculate total of users for count total pages
   getTotalOfUsers(searchTerm: string, role: string, status: string): Observable<number> {
 
     // ex: http://localhost:8080/total-of-users?searchTerm=""&role=""&status=""

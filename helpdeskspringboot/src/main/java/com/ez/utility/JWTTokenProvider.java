@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static com.ez.constant.SecurityConstant.*;
+import static com.ez.constant.Constant.*;
 import static java.util.Arrays.*;
 
 @Component

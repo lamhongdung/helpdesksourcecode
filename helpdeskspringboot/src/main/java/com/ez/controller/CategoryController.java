@@ -2,21 +2,30 @@ package com.ez.controller;
 
 import com.ez.entity.Category;
 import com.ez.entity.User;
+import com.ez.exception.CategoryNotFoundException;
+import com.ez.exception.EmailExistException;
+import com.ez.exception.UserNotFoundException;
 import com.ez.service.CategoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 public class CategoryController {
+
+    private Logger LOGGER=LoggerFactory.getLogger(getClass());
 
     @Autowired
     CategoryService categoryService;
@@ -29,7 +38,7 @@ public class CategoryController {
     //  - pageNumber: page number
     //  - pageSize: page size(default = 5)
     //  - searchTerm: word to search(ID, name). '' is for search all
-    //  - status: category status. '' is for all status
+    //  - status: ''(all), 'Active', 'Inactive'
     @GetMapping("/category-search")
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -41,7 +50,7 @@ public class CategoryController {
         // get all categories of 1 page
         List<Category> categories = categoryService.searchCategories(pageNumber, pageSize, searchTerm, status);
 
-        return new ResponseEntity<List<Category>>(categories, OK);
+        return new ResponseEntity<>(categories, OK);
     }
 
     //
@@ -58,7 +67,63 @@ public class CategoryController {
         // calculate total of categories based on the search criteria
         long totalOfCategories = categoryService.getTotalOfCategories(searchTerm, status);
 
-        return new ResponseEntity<Long>(totalOfCategories, HttpStatus.OK);
+        return new ResponseEntity<>(totalOfCategories, HttpStatus.OK);
+    }
+
+    @PostMapping("/category-create")
+    // only the ROLE_ADMIN can access this address
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category, BindingResult bindingResult)
+            throws BindException {
+
+        LOGGER.info("validate data");
+
+        // if category data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.error("Category data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        Category newCategory = categoryService.createCategory(category);
+
+        return new ResponseEntity<>(newCategory, OK);
+    }
+
+    // find category by id.
+    // this method is used for Edit Category
+    @GetMapping("/category-list/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Category> findById(@PathVariable Long id) throws CategoryNotFoundException {
+
+        LOGGER.info("find category by id: " + id);
+
+        Category category = categoryService.findById(id);
+
+        return new ResponseEntity<>(category, OK);
+    }
+
+    // edit existing category
+    @PutMapping("/category-edit")
+    // only the ROLE_ADMIN can access this address
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Category> editCategory(@RequestBody @Valid Category category, BindingResult bindingResult)
+            throws CategoryNotFoundException, BindException {
+
+        LOGGER.info("validate data");
+
+        // if category data is invalid then throw exception
+        if (bindingResult.hasErrors()) {
+
+            LOGGER.error("Category data is invalid");
+
+            throw new BindException(bindingResult);
+        }
+
+        Category currentCategory = categoryService.updateCategory(category);
+
+        return new ResponseEntity<>(currentCategory, OK);
     }
 
 }

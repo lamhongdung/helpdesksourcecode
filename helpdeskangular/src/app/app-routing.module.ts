@@ -19,6 +19,8 @@ import { LoginComponent } from './component/login/login.component';
 import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 import { ChangePasswordComponent } from './component/change-password/change-password.component';
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
+import { CategoryEditComponent } from './component/category/category-edit/category-edit.component';
+import { CategoryViewComponent } from './component/category/category-view/category-view.component';
 
 
 const routes: Routes = [
@@ -75,6 +77,18 @@ const routes: Routes = [
   },
   {
     path: 'category-create', component: CategoryCreateComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'category-edit/:id', component: CategoryEditComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'category-view/:id', component: CategoryViewComponent, canActivate: [AuthenticationGuard],
     data: {
       roles: ['ROLE_ADMIN']
     }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.ez.constant.SecurityConstant.*;
+import static com.ez.constant.Constant.*;
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {

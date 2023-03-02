@@ -29,8 +29,8 @@ export class AuthenticationService {
 
   // POST method: /login
   // when user click the "Login" button
-  // public login(user: User): Observable<HttpResponse<User>> {
   public login(login: LoginUser): Observable<HttpResponse<User>> {
+
     // { observe: 'response' }: want to receive whole response(include header,...)
     // return this.http.post<User>(`${this.host}/user/login`, user, { observe: 'response' });
 
@@ -43,13 +43,12 @@ export class AuthenticationService {
 
     // clear all local variables contain the logged in information
     this.token = null;
-    // this.loggedInUsername = null;
+
     this.loggedInEmail = null;
 
     // clear all saved data in localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // localStorage.removeItem('users');
   }
 
   // save token into the local storage and local variable
@@ -59,16 +58,18 @@ export class AuthenticationService {
   }
 
   // add the logged in user into the local strorage
-  // public addUserToLocalCache(user: User): void {
   public saveUserToLocalStorage(user: User): void {
+
     // save user object with json string format
     localStorage.setItem('user', JSON.stringify(user));
+
   }
 
   // get user from local storage
-  // public getUserFromLocalCache(): User {
   public getUserFromLocalStorage(): User {
+
     return JSON.parse(localStorage.getItem('user'));
+
   }
 
   // assign token from local storage to attribute
@@ -85,7 +86,7 @@ export class AuthenticationService {
   // return:
   //    - true: user already logged in
   //    - false: user has not yet logged in
-  public isUserLoggedIn(): boolean {
+  public isLoggedInUser(): boolean {
 
     // load token from localStorage to attribute(token)
     this.loadToken();
@@ -95,13 +96,12 @@ export class AuthenticationService {
 
       // get value subject in the token(it means the email id).
       // if email is not empty
-      if (this.jwtHelper.decodeToken(this.token).sub != null || '') {
+      // if (this.jwtHelper.decodeToken(this.token).sub != null || '') {
+      if (this.jwtHelper.decodeToken(this.token).sub != null) {
 
         // if token has not yet expired
         if (!this.jwtHelper.isTokenExpired(this.token)) {
 
-          // set loggedInUsername = email id
-          // this.loggedInUsername = this.jwtHelper.decodeToken(this.token).sub;
           this.loggedInEmail = this.jwtHelper.decodeToken(this.token).sub;
 
           return true;
@@ -117,6 +117,7 @@ export class AuthenticationService {
   // get id of the logged in user
   public getIdFromLocalStorage(): string {
 
+    // if user is existing in the local storage
     if (JSON.parse(localStorage.getItem('user')) != null) {
 
       return JSON.parse(localStorage.getItem('user')).id;
@@ -129,6 +130,7 @@ export class AuthenticationService {
   // get email of the logged in user
   public getEmailFromLocalStorage(): string {
 
+    // if user is existing in the local storage
     if (JSON.parse(localStorage.getItem('user')) != null) {
 
       return JSON.parse(localStorage.getItem('user')).email;
@@ -141,6 +143,7 @@ export class AuthenticationService {
   // get role of the logged in user
   public getRoleFromLocalStorage(): string {
 
+    // if user is existing in the local storage
     if (JSON.parse(localStorage.getItem('user')) != null) {
 
       return JSON.parse(localStorage.getItem('user')).role;

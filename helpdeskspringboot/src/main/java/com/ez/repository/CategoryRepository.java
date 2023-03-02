@@ -17,14 +17,14 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             " from category a " +
             " where concat(a.id,' ', a.name) like %?3% and " + // searchTerm
             "       ( " +
-            "         case ?4   " + // status
-            "           when '' then status like '%%'   " +
-            "           else status = ?4   " +
-            "         end   " +
+            "         case ?4 " + // status
+            "           when '' then status like '%%' " +
+            "           else status = ?4 " +
+            "         end " +
             "       ) " +
             " limit ?1,?2 " // pageNumber and pageSize
             , nativeQuery = true)
-    List<Category> searchCategories(int pageNumber, int pageSize, String searchTerm, String status);
+    public List<Category> searchCategories(int pageNumber, int pageSize, String searchTerm, String status);
 
     // calculate total of categories for pagination
     @Query(value = "" +
@@ -32,12 +32,12 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             " from category a " +
             " where concat(a.id,' ', a.name) like %?1% and " + // searchTerm
             "       ( " +
-            "         case ?2   " + // status
-            "           when '' then status like '%%'   " +
-            "           else status = ?2   " +
-            "         end   " +
+            "         case ?2 " + // status
+            "           when '' then status like '%%' " +
+            "           else status = ?2 " +
+            "         end " +
             "       ) "
             , nativeQuery = true)
-    long getTotalOfCategories(String searchTerm, String status);
+    public long getTotalOfCategories(String searchTerm, String status);
 
 }

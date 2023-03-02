@@ -39,7 +39,6 @@ export class CategoryListComponent implements OnInit {
 
 
   constructor(private categoryService: CategoryService,
-    private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
@@ -92,11 +91,8 @@ export class CategoryListComponent implements OnInit {
   // calculate total pages for pagination
   calculateTotalPages(totalOfCategories: number, pageSize: number): number {
 
-    // let totalPages: number = 0;
-
     if ((totalOfCategories % pageSize) != 0) {
       //  Math.floor: rounds down and returns the largest integer less than or equal to a given number
-      // totalPages = (Math.floor(totalOfCategories / pageSize)) + 1;
       return (Math.floor(totalOfCategories / pageSize)) + 1;
     }
 
@@ -207,7 +203,7 @@ export class CategoryListComponent implements OnInit {
     this.router.navigate(['/category-view', id]);
   }
 
-  // unsubscribe all subscriptions from this component "UserComponent"
+  // unsubscribe all subscriptions from this component "CategoryListComponent"
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }

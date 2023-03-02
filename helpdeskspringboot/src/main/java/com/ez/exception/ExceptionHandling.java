@@ -1,7 +1,7 @@
 package com.ez.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.ez.entity.*;
+import com.ez.dto.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -87,6 +87,11 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<HttpResponse> categoryNotFoundException(CategoryNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
