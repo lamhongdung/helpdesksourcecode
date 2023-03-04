@@ -1,1 +1,208 @@
-<p>priority-list works!</p>
+<!-- the "Priority list" screen -->
+<div class="container">
+
+    <!-- {{searchPriority.value | json}} -->
+
+    <!-- title -->
+    <div>
+        <h2 style="text-align: center">Priority list</h2>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Search Form -->
+        <form [formGroup]="searchPriority" (ngSubmit)="ngOnInit()">
+
+            <!--  -->
+            <div class="search row d-flex justify-content-md-end mb-4 text-right float-right">
+
+                <!-- SearchTerm -->
+                <!-- search for: ID, name -->
+                <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+                    <!-- label -->
+                    <label for="searchTerm">Search term</label>
+                    <!-- textbox -->
+                    <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
+                        placeholder="Search term">
+                </div>
+
+                <!-- ReachIn -->
+                <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+                    <!-- label -->
+                    <label for="reachIn">Reach In(hours)</label>
+
+                    <div class="input-group-prepend">
+                        <!-- dropdown: ReachInOpt(Reach In Operator) -->
+                        <select class="custom-select rounded-0" formControlName="reachInOpt">
+                            <!-- >=(greater than or equal to) -->
+                            <option value="gt">&gt;=</option>
+                            <!-- =(equal) -->
+                            <option value="eq">=</option>
+                            <!-- <=(less than or equal to) -->
+                            <option value="lt">&lt;=</option>
+                        </select>
+                        <!-- textbox: ReachIn -->
+                        <input type="number" min="0" class="form-control rounded-0" formControlName="reachIn"
+                            id="reachIn">
+                    </div>
+                    <!-- error messages -->
+                    <div class="text-danger" *ngFor="let e of errorMessages.reachIn">
+                        <!-- errors on the "reachIn" field -->
+                        <div *ngIf="searchPriority.get('reachIn').hasError(e.type) && 
+                                    (searchPriority.get('reachIn').dirty || searchPriority.get('reachIn').touched)">
+                            <small>{{e.message}}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+                    <!-- label -->
+                    <label for="status">Status</label>
+                    <!-- dropdown -->
+                    <select id="status" class="form-control" formControlName="status">
+                        <option value="">Select status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <!-- the "Search" button -->
+                <div class="col-xl-3 col-lg-3">
+                    <!-- break a line(insert a line break(carriage-return)) -->
+                    <br>
+                    <!-- "Search button" -->
+                    <button id="searchButton" class="btn btn-primary mt-xl-2" style="float: right; width: 100%"
+                        [disabled]="searchPriority.invalid">
+                        <i class="fa fa-search"></i>
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- the "Create priority" button. -->
+    <!-- when user click on the "Create priority" button -->
+    <div class="container mt-0">
+        <br><br><br>
+        <button class="btn btn-primary mt-2 mb-md-3" routerLink="/priority-create"><i class="fa fa-plus"></i>
+            Create priority
+        </button>
+    </div>
+
+    <!-- table -->
+    <div class="container tab">
+
+        <!-- display the number of priorities found. -->
+
+        <!-- if (number of priorities) > 1 -->
+        <div style="float: right;" *ngIf="totalOfPriorities > 1">There are {{totalOfPriorities}} priorities</div>
+        <!-- if (number of priorities) == 1 -->
+        <div style="float: right;" *ngIf="totalOfPriorities == 1">There is {{totalOfPriorities}} priority</div>
+        <!-- there is no priority -->
+        <div style="float: right;" *ngIf="totalOfPriorities == 0">There is no priority</div>
+
+        <!-- table -->
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <!-- table header -->
+                <tr class="bg-table-header">
+
+                    <!-- Order -->
+                    <!-- scope="col": specifies that the cell is a header for a column -->
+                    <th scope="col" style="width: 10%">Ord</th>
+
+                    <th scope="col" style="width: 10%">ID</th>
+                    <th scope="col" style="width: 40%">Name</th>
+                    <th scope="col" style="width: 20%">Reach In(hours)</th>
+                    <th scope="col" style="width: 10%">Status</th>
+                    <th scope="col" style="width: 10%">Action</th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 16px;text-align: center">
+
+                <tr *ngFor="let priority of priorities, index as i">
+
+                    <!-- column: order(line number) -->
+                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <td style="text-align: right" class="pointer-link" (click)="viewPriority(priority.id)">
+                        {{indexBasedPage(currentPage, i)}}</td>
+
+                    <!-- column: ID -->
+                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <td style="text-align: right" class="pointer-link" (click)="viewPriority(priority.id)">
+                        {{priority.id}}</td>
+
+                    <!-- column: Name -->
+                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.name}}</td>
+
+                    <!-- column: ReachIn -->
+                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.reachIn}}</td>
+
+                    <!-- column: Status -->
+                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.status}}</td>
+
+                    <!-- the "Edit" button -->
+                    <td class="text-center" width="11%">
+                        <a class="btn btn-primary mr-1" [routerLink]="['/priority-edit', priority.id]"><i
+                                class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- pagination -->
+
+    <!-- only display the pagination when totalPages > 0 -->
+    <div class="mt-3" *ngIf="totalPages > 0">
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination d-flex justify-content-md-end justify-content-center">
+
+                <!-- move to the "first page" -->
+                <li class="page-item"><button class="page-link" (click)="moveFirst()"
+                        [disabled]="currentPage==1">First</button>
+                </li>
+
+                <!-- move to the "previous page" -->
+                <li class="page-item"><button class="page-link" (click)="movePrevious()"
+                        [disabled]="currentPage==1">Previous</button></li>
+
+                <!--  -->
+                <li class="page-item col-md-1 col-2 px-0">
+                    <div class="input-group">
+                        <!-- textbox to input the Page number -->
+                        <!-- rounded-0: have no round at corners -->
+                        <input type="number" min="1" [max]="totalPages" class="form-control text-right rounded-0"
+                            aria-describedby="basic-addon1" [value]="currentPage"
+                            (change)="changePageNumber($event.target.value)">
+                        <!-- total pages -->
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">/{{totalPages}}</span>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- the "Go" button -->
+                <!-- rounded-0: have no round at corners -->
+                <li class="page-item">
+                    <button class="btn btn-primary rounded-0" (click)="goPage()"
+                        onmouseover="this.style.cursor='pointer'">Go</button>
+                </li>
+
+                <!-- the "Next" button -->
+                <li class="page-item"><button class="page-link" (click)="moveNext()"
+                        [disabled]="currentPage==totalPages">Next</button></li>
+
+                <!-- the "Last" button -->
+                <li class="page-item"><button class="page-link" (click)="moveLast()"
+                        [disabled]="currentPage==totalPages">Last</button></li>
+
+            </ul>
+        </nav>
+    </div>
+</div>

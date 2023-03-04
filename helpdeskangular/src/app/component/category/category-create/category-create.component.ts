@@ -15,7 +15,7 @@ import { NotificationService } from 'src/app/service/notification.service';
 })
 export class CategoryCreateComponent implements OnInit {
 
-   // allow display spinner icon or not
+  // allow display spinner icon or not
   // =true: allow to display spinner in the "Save" button
   // =false: do not allow to display spinner in the "Save" button
   showSpinner: boolean;
@@ -81,7 +81,7 @@ export class CategoryCreateComponent implements OnInit {
           // navigate to the "category-list" page
           this.router.navigateByUrl("/category-list");
         },
-        
+
         // create category failure
         (errorResponse: HttpErrorResponse) => {
 

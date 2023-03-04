@@ -33,6 +33,8 @@ import { ChangePasswordComponent } from './component/change-password/change-pass
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 import { CategoryEditComponent } from './component/category/category-edit/category-edit.component';
 import { CategoryViewComponent } from './component/category/category-view/category-view.component';
+import { PriorityEditComponent } from './component/priority/priority-edit/priority-edit.component';
+import { PriorityViewComponent } from './component/priority/priority-view/priority-view.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import { CategoryViewComponent } from './component/category/category-view/catego
     ChangePasswordComponent,
     EditProfileComponent,
     CategoryEditComponent,
-    CategoryViewComponent
+    CategoryViewComponent,
+    PriorityEditComponent,
+    PriorityViewComponent
   ],
   imports: [
     BrowserModule,

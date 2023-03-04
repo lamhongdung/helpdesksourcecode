@@ -64,6 +64,24 @@ INSERT INTO `category`(name, status) VALUES
 ('Seat', 'Active'),
 ('Other', 'Active');
 
+-- -----------------------------------------------------
+-- Table `priority`
+-- -----------------------------------------------------
+
+drop table if exists `priority`;
+
+CREATE TABLE `priority` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) not NULL,
+  `reachIn` int not NULL,
+  `status` VARCHAR(255) not NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `priority`(name, reachIn, status) VALUES 
+('High', 12, 'Active'),
+('Normal', 24, 'Active'),
+('Low', 36, 'Active');
 
 -- --
 -- -- -- ezbank

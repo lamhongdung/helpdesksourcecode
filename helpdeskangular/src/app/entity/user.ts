@@ -8,7 +8,4 @@ export class User {
   public role: string;
   public status: string;
 
-  constructor() {
-  }
-
 }

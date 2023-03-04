@@ -21,6 +21,8 @@ import { ChangePasswordComponent } from './component/change-password/change-pass
 import { EditProfileComponent } from './component/edit-profile/edit-profile.component';
 import { CategoryEditComponent } from './component/category/category-edit/category-edit.component';
 import { CategoryViewComponent } from './component/category/category-view/category-view.component';
+import { PriorityEditComponent } from './component/priority/priority-edit/priority-edit.component';
+import { PriorityViewComponent } from './component/priority/priority-view/priority-view.component';
 
 
 const routes: Routes = [
@@ -89,6 +91,31 @@ const routes: Routes = [
   },
   {
     path: 'category-view/:id', component: CategoryViewComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  // priority menu
+  {
+    path: 'priority-list', component: PriorityListComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'priority-create', component: PriorityCreateComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'priority-edit/:id', component: PriorityEditComponent, canActivate: [AuthenticationGuard],
+    data: {
+      roles: ['ROLE_ADMIN']
+    }
+  },
+  {
+    path: 'priority-view/:id', component: PriorityViewComponent, canActivate: [AuthenticationGuard],
     data: {
       roles: ['ROLE_ADMIN']
     }
