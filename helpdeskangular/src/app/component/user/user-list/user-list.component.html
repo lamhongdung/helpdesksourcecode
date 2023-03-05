@@ -4,21 +4,31 @@
   <div>
     <h2 style="text-align: center">User list</h2>
   </div>
-  <div class="container-fluid">
-    <!-- formGroup -->
+  <hr width="11%">
+
+  <!-- Search -->
+  <div class="container">
+    <!-- Search form -->
     <form [formGroup]="searchUser" (ngSubmit)="ngOnInit()">
-      <!-- row 1: the "search" function -->
-      <div class="search row d-flex justify-content-md-end mb-4 text-right float-right">
-        <!-- textbox: SearchTerm -->
+
+      <!--  -->
+      <div class="search row d-flex justify-content-md-end mb-4">
+
+        <!-- SearchTerm -->
         <!-- search for: ID, email, firstName, lastName and phone -->
-        <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+          <!-- label -->
           <label for="searchTerm">Search term</label>
+          <!-- textbox -->
           <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
             placeholder="Search term">
         </div>
-        <!-- dropdown: Role -->
+
+        <!-- Role -->
         <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+          <!-- label -->
           <label for="role">Role</label>
+          <!-- dropdown -->
           <select id="role" class="form-control" formControlName="role" placeholder="Role">
             <!-- if user does not choose the role then value of role will be blank -->
             <option value="">Select role</option>
@@ -28,21 +38,25 @@
             <option value="ROLE_ADMIN">ROLE_ADMIN</option>
           </select>
         </div>
-        <!-- dropdown: Status -->
-        <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+
+        <!-- Status -->
+        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+          <!-- label -->
           <label for="status">Status</label>
+          <!-- dropdown -->
           <select id="status" class="form-control" formControlName="status">
             <option value="">Select status</option>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
           </select>
         </div>
+
         <!-- the "Search" button -->
-        <div class="col-xl-3 col-lg-3">
+        <div class="col-lg-3 col-md-3">
           <!-- break a line(insert a line break(carriage-return)) -->
           <br>
           <!-- "Search button" -->
-          <button id="searchButton" class="btn btn-primary mt-xl-2" style="float: right; width: 100%">
+          <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%">
             <i class="fa fa-search"></i>
             Search
           </button>
@@ -51,27 +65,42 @@
     </form>
   </div>
 
-  <!-- the "Create user" button. -->
-  <!-- when user click on the "Create user" button -->
-  <div class="container mt-0">
-    <br><br><br>
-    <button class="btn btn-primary mt-2 mb-md-3" routerLink="/user-create"><i class="fa fa-plus"></i> Create user
-    </button>
+  <!-- the "Create user" button and "There are x users" message -->
+  <div class="container">
+
+    <div class="d-flex">
+
+      <!-- mr-auto: push the "There are x users" to the right-end -->
+      <div class="mr-auto">
+
+        <!-- the "Create user" button. -->
+        <!-- when user click on the "Create user" button -->
+        <button class="btn btn-primary" routerLink="/user-create"><i class="fa fa-plus"></i>
+          Create user
+        </button>
+
+      </div>
+
+      <!-- display the number of users found -->
+
+      <!-- if (number of users) > 1 -->
+      <div *ngIf="totalOfUsers > 1">There are {{totalOfUsers}} users</div>
+      <!-- if (number of users) == 1 -->
+      <div *ngIf="totalOfUsers == 1">There is {{totalOfUsers}} users</div>
+      <!-- there is no user -->
+      <div *ngIf="totalOfUsers == 0">There is no user</div>
+
+    </div>
+
   </div>
 
   <!-- table -->
-  <div class="container tab">
-    <!-- display the number of users found. -->
-    <!-- number of users > 1 -->
-    <div style="float: right;" *ngIf="totalOfUsers > 1">There are {{totalOfUsers}} users</div>
-    <!-- number of users == 1 -->
-    <div style="float: right;" *ngIf="totalOfUsers == 1">There is {{totalOfUsers}} user</div>
-    <!-- there is no user -->
-    <div style="float: right;" *ngIf="totalOfUsers == 0">There is no user</div>
+  <div class="container">
+
     <!-- <table class="table table-hover table-bordered"> -->
-    <table class="table table-hover table-striped table-bordered">
+    <table class="table table-striped table-bordered">
+      <!-- table header -->
       <thead>
-        <!-- table header -->
         <tr class="bg-table-header">
 
           <!-- Order -->
@@ -88,34 +117,42 @@
           <th scope="col" style="width: 10%">Action</th>
         </tr>
       </thead>
+
+      <!-- table body -->
       <tbody style="font-size: 16px;text-align: center">
+
         <tr *ngFor="let user of users,index as i">
+
           <!-- column: order(line number) -->
           <!-- if user clicks on the table(except the Action) then  -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{indexBasedPage(currentPage,
             i)}}</td>
+
           <!-- column: ID -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{user.id}}</td>
 
-          <!-- <td><a [routerLink]="['/user-view', user.id]">{{user.email}}</a></td> -->
-
           <!-- column: Email -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.email}}</td>
+
           <!-- column: First name -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.firstName}}</td>
+
           <!-- column: Last name -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.lastName}}</td>
+
           <!-- column: Phone -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.phone}}</td>
+
           <!-- column: Role -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.role}}</td>
+
           <!-- column: Status -->
           <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.status}}</td>
@@ -124,6 +161,7 @@
           <td class="text-center" width="11%">
             <a class="btn btn-primary mr-1" [routerLink]="['/user-edit', user.id]"><i class="fa fa-edit"></i></a>
           </td>
+
         </tr>
       </tbody>
     </table>
@@ -131,35 +169,43 @@
 
   <!-- pagination -->
   <!-- only display the pagination when totalPages > 0 -->
-  <div class="mt-3" *ngIf="totalPages > 0">
+  <div class="container mt-3" *ngIf="totalPages > 0">
+
     <nav aria-label="Page navigation">
       <ul class="pagination d-flex justify-content-md-end justify-content-center">
+
         <!-- move to the "first page" -->
         <li class="page-item"><button class="page-link" (click)="moveFirst()" [disabled]="currentPage==1">First</button>
         </li>
+
         <!-- move to the "previous page" -->
         <li class="page-item"><button class="page-link" (click)="movePrevious()"
             [disabled]="currentPage==1">Previous</button></li>
+
         <!--  -->
         <li class="page-item col-md-1 col-2 px-0">
           <div class="input-group">
+
             <!-- textbox to input the Page number -->
             <!-- rounded-0: have no round at corners -->
-            <input type="number" min="1" [max]="totalPages" class="form-control text-right rounded-0"
+            <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
               aria-describedby="basic-addon1" [value]="currentPage"
               (change)="indexPaginationChange($event.target.value)">
+
             <!-- total pages -->
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon1">/{{totalPages}}</span>
             </div>
           </div>
         </li>
+
         <!-- the "Go" button -->
         <!-- rounded-0: have no round at corners -->
         <li class="page-item">
           <button class="btn btn-primary rounded-0" (click)="goPage()"
             onmouseover="this.style.cursor='pointer'">Go</button>
         </li>
+
         <!-- the "Next" button -->
         <li class="page-item"><button class="page-link" (click)="moveNext()"
             [disabled]="currentPage==totalPages">Next</button></li>

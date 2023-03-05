@@ -1,21 +1,7 @@
-/* div .tab{
-  overflow-x: scroll;
-} */
-
-.table {
-  width: 1095px;
-  height: 100px;
-}
-
 .bg-table-header {
   text-align: center;
   background-color: rgb(158, 207, 251) !important;
 }
-
-/* remove default setting for <a> tag */
-/* a {
-  text-decoration: none;
-} */
 
 /* display the pointer hand when hover mouse in the table */
 .pointer-link {

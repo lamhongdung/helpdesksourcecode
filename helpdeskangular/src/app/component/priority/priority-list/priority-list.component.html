@@ -7,17 +7,18 @@
     <div>
         <h2 style="text-align: center">Priority list</h2>
     </div>
-
-    <div class="container-fluid">
+    <hr width="14%">
+    <!-- Search -->
+    <div class="container">
         <!-- Search Form -->
         <form [formGroup]="searchPriority" (ngSubmit)="ngOnInit()">
 
             <!--  -->
-            <div class="search row d-flex justify-content-md-end mb-4 text-right float-right">
+            <div class="search row d-flex justify-content-md-end mb-4">
 
                 <!-- SearchTerm -->
                 <!-- search for: ID, name -->
-                <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+                <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
                     <!-- label -->
                     <label for="searchTerm">Search term</label>
                     <!-- textbox -->
@@ -26,10 +27,11 @@
                 </div>
 
                 <!-- ReachIn -->
-                <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+                <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
                     <!-- label -->
                     <label for="reachIn">Reach In(hours)</label>
 
+                    <!-- input group -->
                     <div class="input-group-prepend">
                         <!-- dropdown: ReachInOpt(Reach In Operator) -->
                         <select class="custom-select rounded-0" formControlName="reachInOpt">
@@ -55,7 +57,7 @@
                 </div>
 
                 <!-- Status -->
-                <div class="col-xl-3 col-md-3 form-group" style="text-align: center">
+                <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
                     <!-- label -->
                     <label for="status">Status</label>
                     <!-- dropdown -->
@@ -67,11 +69,11 @@
                 </div>
 
                 <!-- the "Search" button -->
-                <div class="col-xl-3 col-lg-3">
+                <div class="col-lg-3 col-md-3">
                     <!-- break a line(insert a line break(carriage-return)) -->
                     <br>
                     <!-- "Search button" -->
-                    <button id="searchButton" class="btn btn-primary mt-xl-2" style="float: right; width: 100%"
+                    <button id="searchButton" class="btn btn-primary mt-xl-2" style="width: 100%"
                         [disabled]="searchPriority.invalid">
                         <i class="fa fa-search"></i>
                         Search
@@ -81,31 +83,43 @@
         </form>
     </div>
 
-    <!-- the "Create priority" button. -->
-    <!-- when user click on the "Create priority" button -->
-    <div class="container mt-0">
-        <br><br><br>
-        <button class="btn btn-primary mt-2 mb-md-3" routerLink="/priority-create"><i class="fa fa-plus"></i>
-            Create priority
-        </button>
+    <!-- the "Create priority" button and "There are x priorities" message -->
+    <div class="container">
+
+        <div class="d-flex">
+
+            <!-- mr-auto: push the "There are x priorities" to the right-end -->
+            <div class="mr-auto">
+
+                <!-- the "Create priority" button. -->
+                <!-- when user click on the "Create priority" button -->
+                <button class="btn btn-primary" routerLink="/priority-create"><i class="fa fa-plus"></i>
+                    Create priority
+                </button>
+
+            </div>
+
+            <!-- display the number of priorities found -->
+
+            <!-- if (number of priorities) > 1 -->
+            <div *ngIf="totalOfPriorities > 1">There are {{totalOfPriorities}}
+                priorities</div>
+            <!-- if (number of priorities) == 1 -->
+            <div *ngIf="totalOfPriorities == 1">There is {{totalOfPriorities}} priority
+            </div>
+            <!-- there is no priority -->
+            <div *ngIf="totalOfPriorities == 0">There is no priority</div>
+        </div>
+
     </div>
 
     <!-- table -->
-    <div class="container tab">
-
-        <!-- display the number of priorities found. -->
-
-        <!-- if (number of priorities) > 1 -->
-        <div style="float: right;" *ngIf="totalOfPriorities > 1">There are {{totalOfPriorities}} priorities</div>
-        <!-- if (number of priorities) == 1 -->
-        <div style="float: right;" *ngIf="totalOfPriorities == 1">There is {{totalOfPriorities}} priority</div>
-        <!-- there is no priority -->
-        <div style="float: right;" *ngIf="totalOfPriorities == 0">There is no priority</div>
+    <div class="container">
 
         <!-- table -->
-        <table class="table table-hover table-striped table-bordered">
+        <table class="table table-striped table-bordered">
+            <!-- table header -->
             <thead>
-                <!-- table header -->
                 <tr class="bg-table-header">
 
                     <!-- Order -->
@@ -114,11 +128,14 @@
 
                     <th scope="col" style="width: 10%">ID</th>
                     <th scope="col" style="width: 40%">Name</th>
+
                     <th scope="col" style="width: 20%">Reach In(hours)</th>
                     <th scope="col" style="width: 10%">Status</th>
                     <th scope="col" style="width: 10%">Action</th>
                 </tr>
             </thead>
+
+            <!-- table body -->
             <tbody style="font-size: 16px;text-align: center">
 
                 <tr *ngFor="let priority of priorities, index as i">
@@ -158,7 +175,7 @@
     <!-- pagination -->
 
     <!-- only display the pagination when totalPages > 0 -->
-    <div class="mt-3" *ngIf="totalPages > 0">
+    <div class="container mt-3" *ngIf="totalPages > 0">
 
         <nav aria-label="Page navigation">
             <ul class="pagination d-flex justify-content-md-end justify-content-center">
@@ -177,7 +194,7 @@
                     <div class="input-group">
                         <!-- textbox to input the Page number -->
                         <!-- rounded-0: have no round at corners -->
-                        <input type="number" min="1" [max]="totalPages" class="form-control text-right rounded-0"
+                        <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
                             aria-describedby="basic-addon1" [value]="currentPage"
                             (change)="changePageNumber($event.target.value)">
                         <!-- total pages -->

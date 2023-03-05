@@ -1,8 +1,4 @@
-.table {
-  width: 1095px;
-  height: 100px;
-}
-
+/* backgroup of table header */
 .bg-table-header {
   text-align: center;
   background-color: rgb(158, 207, 251) !important;
