@@ -1,9 +1,0 @@
-.bg-table-header {
-  text-align: center;
-  background-color: rgb(158, 207, 251) !important;
-}
-
-/* display the pointer hand when hover mouse in the table */
-.pointer-link {
-  cursor: pointer;
-}

@@ -1,9 +1,8 @@
 <div class="text-center">
     <!-- title -->
     <h3>Edit profile</h3>
+    <hr width="40%">
 </div>
-
-<hr width="11%">
 
 <!-- {{editProfileForm.value | json}} -->
 
@@ -25,7 +24,8 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
-                            <input class="form-control" type="email" formControlName="email" id="email" readonly>
+                            <input class="form-control" type="email" formControlName="email" id="email" title="Email"
+                                readonly>
                         </div>
                     </div>
 
@@ -39,7 +39,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
-                                id="firstName">
+                                id="firstName" title="First name">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <!-- errors on the "firstName" field -->
@@ -62,7 +62,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
-                                id="lastName">
+                                id="lastName" title="Last name">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <!-- errors on the "lastName" field -->
@@ -85,7 +85,7 @@
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="phone" placeholder="Phone"
-                                id="phone">
+                                id="phone" title="Phone number(10 digits)">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.phone">
                                 <!-- errors on the "phone" field -->
@@ -103,13 +103,12 @@
                     <div class="row mb-3">
                         <!-- label -->
                         <div class="col-3">
-                            <label class="col-form-label" for="address">Address<small
-                                    class="text-danger">*</small></label>
+                            <label class="col-form-label" for="address">Address</label>
                         </div>
                         <!-- textbox -->
                         <div class="col-9">
                             <input class="form-control" type="text" formControlName="address" placeholder="Address"
-                                id="address">
+                                id="address" title="Address">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <!-- errors on the "address" field -->

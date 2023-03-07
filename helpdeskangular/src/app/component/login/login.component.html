@@ -18,10 +18,8 @@
                             <!-- label -->
                             <label for="email">Email</label>
                             <!-- textbox -->
-                            <!-- <input autofocus formControlName="email" type="email" id="email" class="form-control"
-                                placeholder="Email"> -->
                             <input formControlName="email" type="email" id="email" class="form-control"
-                                placeholder="Email">
+                                placeholder="Email" title="Email">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.email">
                                 <div *ngIf="loginForm.get('email').hasError(e.type) && 
@@ -37,7 +35,7 @@
                             <label for="password">Password</label>
                             <!-- textbox -->
                             <input formControlName="password" type="password" id="password" class="form-control"
-                                placeholder="Password" required>
+                                placeholder="Password" title="Password" required>
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.password">
                                 <div

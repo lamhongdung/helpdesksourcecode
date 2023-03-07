@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/entity/Category';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { CategoryService } from 'src/app/service/category.service';
 import { NotificationService } from 'src/app/service/notification.service';
 
@@ -59,7 +59,7 @@ export class CategoryEditComponent implements OnInit {
     });
 
     // get category id from params of the active route(from address path).
-    // and get category based on category id from database
+    // and then get category based on category id from database
     this.activatedRoute.paramMap.subscribe(
 
       (params: ParamMap) => {
@@ -105,7 +105,9 @@ export class CategoryEditComponent implements OnInit {
 
         // update category successful
         (data: Category) => {
+
           this.category = data;
+
           // send notification to user
           this.sendNotification(NotificationType.SUCCESS, `Category '${data.name}' is updated successfully`);
 
@@ -115,6 +117,7 @@ export class CategoryEditComponent implements OnInit {
           // after update category successful then navigate to the "category-list" page
           this.router.navigateByUrl("/category-list");
         },
+        
         // there are some errors when update category
         (errorResponse: HttpErrorResponse) => {
 

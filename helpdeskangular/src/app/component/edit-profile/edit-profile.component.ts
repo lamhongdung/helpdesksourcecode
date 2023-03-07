@@ -1,12 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CustomHttpRespone } from 'src/app/entity/CustomHttpResponse';
+import { EditProfile } from 'src/app/entity/EditProfile';
 import { User } from 'src/app/entity/User';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
-import { AuthenticationService } from 'src/app/service/authentication.service';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -33,6 +34,8 @@ export class EditProfileComponent implements OnInit {
   //  - Phone
   //  - Address
   editProfileForm: FormGroup;
+
+  editProfile: EditProfile;
 
   response: CustomHttpRespone;
 
@@ -67,7 +70,7 @@ export class EditProfileComponent implements OnInit {
   constructor(private router: Router,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
     private notificationService: NotificationService) { }
 
   // this method ngOnInit() is run after the component "EditProfileComponent" is contructed
@@ -76,7 +79,8 @@ export class EditProfileComponent implements OnInit {
     // get email of the logged in user
     this.loggedInEmail = this.authenticationService.getEmailFromLocalStorage();
 
-    // get user id of the logged in user
+    // get user id of the logged in user.
+    // the "+" sign: use to convert string to number
     this.userId = +this.authenticationService.getIdFromLocalStorage();
 
     // get user role
@@ -103,17 +107,16 @@ export class EditProfileComponent implements OnInit {
 
       (data: User) => {
 
-        // this.editProfile.email = data.email;
-        // this.editProfile.firstName = data.firstName;
-        // this.editProfile.lastName = data.lastName;
-        // this.editProfile.phone = data.phone;
-        // this.editProfile.address = data.address;
+        // create new editProfile
+        this.editProfile = new EditProfile(+data.id, data.email, data.firstName, data.lastName, data.phone, data.address);
 
         // load user information to the editProfileForm
-        // this.editProfileForm.patchValue(this.editProfile);
-        this.editProfileForm.patchValue(data);
+        this.editProfileForm.patchValue(this.editProfile);
+        // this.editProfileForm.patchValue(data);
 
       },
+
+
       (errorResponse: HttpErrorResponse) => {
         this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
       }
@@ -131,7 +134,7 @@ export class EditProfileComponent implements OnInit {
     // push into the subscriptions list in order to unsubscribes all easily, avoid leak memory
     this.subscriptions.push(
 
-      // change password
+      // update profile
       this.userService.updateProfile(this.editProfileForm.value).subscribe(
 
         // update profile successful
@@ -143,7 +146,8 @@ export class EditProfileComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
 
-          // if user role is "Admin" then re-direct to "/user-list"
+          // if user role is "Admin" then re-direct to "/user-list".
+          // note: ===: do not auto convert type before compare
           if (this.userRole === "ROLE_ADMIN") {
             this.router.navigateByUrl("/user-list");
           } else { // if user role is "Customer" or "Supporter"
@@ -152,7 +156,8 @@ export class EditProfileComponent implements OnInit {
           }
 
         },
-        // change password failure
+
+        // update profile failure
         (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
@@ -175,7 +180,7 @@ export class EditProfileComponent implements OnInit {
     }
   }
 
-  // unsubscribe all subscriptions from this component "UserComponent"
+  // unsubscribe all subscriptions from this component "EditProfileComponent"
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }

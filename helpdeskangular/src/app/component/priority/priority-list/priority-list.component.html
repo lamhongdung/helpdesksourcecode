@@ -6,10 +6,12 @@
     <!-- title -->
     <div>
         <h2 style="text-align: center">Priority list</h2>
+        <hr width="97%">
     </div>
-    <hr width="14%">
+
     <!-- Search -->
     <div class="container">
+
         <!-- Search Form -->
         <form [formGroup]="searchPriority" (ngSubmit)="ngOnInit()">
 
@@ -23,18 +25,18 @@
                     <label for="searchTerm">Search term</label>
                     <!-- textbox -->
                     <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
-                        placeholder="Search term">
+                        placeholder="Search term(id, name)" title="Search term(id, name). Blank is search all IDs and names">
                 </div>
 
-                <!-- ReachIn -->
+                <!-- ResolveIn -->
                 <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
                     <!-- label -->
-                    <label for="reachIn">Reach In(hours)</label>
+                    <label for="resolveIn">Resolve In(hours)</label>
 
                     <!-- input group -->
                     <div class="input-group-prepend">
-                        <!-- dropdown: ReachInOpt(Reach In Operator) -->
-                        <select class="custom-select rounded-0" formControlName="reachInOpt">
+                        <!-- dropdown: ResolveInOpt(Resolve In Operator) -->
+                        <select class="custom-select rounded-0" formControlName="resolveInOpt" title="Operator">
                             <!-- >=(greater than or equal to) -->
                             <option value="gt">&gt;=</option>
                             <!-- =(equal) -->
@@ -42,15 +44,16 @@
                             <!-- <=(less than or equal to) -->
                             <option value="lt">&lt;=</option>
                         </select>
-                        <!-- textbox: ReachIn -->
-                        <input type="number" min="0" class="form-control rounded-0" formControlName="reachIn"
-                            id="reachIn">
+                        <!-- textbox: ResolveIn -->
+                        <input type="number" min="0" class="form-control rounded-0" formControlName="resolveIn"
+                            id="resolveIn" title="Number of hours to resolve a ticket">
                     </div>
                     <!-- error messages -->
-                    <div class="text-danger" *ngFor="let e of errorMessages.reachIn">
-                        <!-- errors on the "reachIn" field -->
-                        <div *ngIf="searchPriority.get('reachIn').hasError(e.type) && 
-                                    (searchPriority.get('reachIn').dirty || searchPriority.get('reachIn').touched)">
+                    <div class="text-danger" *ngFor="let e of errorMessages.resolveIn">
+                        <!-- errors on the "resolveIn" field -->
+                        <div
+                            *ngIf="searchPriority.get('resolveIn').hasError(e.type) && 
+                                    (searchPriority.get('resolveIn').dirty || searchPriority.get('resolveIn').touched)">
                             <small>{{e.message}}</small>
                         </div>
                     </div>
@@ -61,8 +64,9 @@
                     <!-- label -->
                     <label for="status">Status</label>
                     <!-- dropdown -->
-                    <select id="status" class="form-control" formControlName="status">
-                        <option value="">Select status</option>
+                    <select id="status" class="form-control" formControlName="status"
+                        title="Priority status">
+                        <option value="">All</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
                     </select>
@@ -102,8 +106,7 @@
             <!-- display the number of priorities found -->
 
             <!-- if (number of priorities) > 1 -->
-            <div *ngIf="totalOfPriorities > 1">There are {{totalOfPriorities}}
-                priorities</div>
+            <div *ngIf="totalOfPriorities > 1">There are {{totalOfPriorities}} priorities</div>
             <!-- if (number of priorities) == 1 -->
             <div *ngIf="totalOfPriorities == 1">There is {{totalOfPriorities}} priority
             </div>
@@ -117,7 +120,7 @@
     <div class="container">
 
         <!-- table -->
-        <table class="table table-striped table-bordered">
+        <table class="table table-hover table-striped table-bordered">
             <!-- table header -->
             <thead>
                 <tr class="bg-table-header">
@@ -129,14 +132,14 @@
                     <th scope="col" style="width: 10%">ID</th>
                     <th scope="col" style="width: 40%">Name</th>
 
-                    <th scope="col" style="width: 20%">Reach In(hours)</th>
+                    <th scope="col" style="width: 20%">Resolve In(hours)</th>
                     <th scope="col" style="width: 10%">Status</th>
                     <th scope="col" style="width: 10%">Action</th>
                 </tr>
             </thead>
 
             <!-- table body -->
-            <tbody style="font-size: 16px;text-align: center">
+            <tbody style="text-align: center">
 
                 <tr *ngFor="let priority of priorities, index as i">
 
@@ -154,16 +157,16 @@
                     <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
                     <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.name}}</td>
 
-                    <!-- column: ReachIn -->
+                    <!-- column: ResolveIn(hours) -->
                     <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
-                    <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.reachIn}}</td>
+                    <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.resolveIn}}</td>
 
                     <!-- column: Status -->
                     <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
                     <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.status}}</td>
 
                     <!-- the "Edit" button -->
-                    <td class="text-center" width="11%">
+                    <td class="text-center">
                         <a class="btn btn-primary mr-1" [routerLink]="['/priority-edit', priority.id]"><i
                                 class="fa fa-edit"></i></a>
                     </td>
@@ -196,10 +199,10 @@
                         <!-- rounded-0: have no round at corners -->
                         <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
                             aria-describedby="basic-addon1" [value]="currentPage"
-                            (change)="changePageNumber($event.target.value)">
+                            (change)="changePageNumber($event.target.value)" title="current page">
                         <!-- total pages -->
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">/{{totalPages}}</span>
+                            <span class="input-group-text" id="basic-addon1" title="Total pages">/{{totalPages}}</span>
                         </div>
                     </div>
                 </li>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
-import { AuthenticationService } from 'src/app/service/authentication.service';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { ShareService } from 'src/app/service/share.service';
 
@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   loggedInEmail: string;
   loggedInRole: string;
 
-  constructor(private router: Router, private authenticationService: AuthenticationService,
+  constructor(private router: Router, private authenticationService: AuthService,
               private shareService : ShareService,
               private notificationService: NotificationService) { 
 
@@ -41,7 +41,6 @@ export class HeaderComponent implements OnInit {
   logOut(){
     this.authenticationService.logOut();
     this.router.navigate(['/login']);
-    // this.sendNotification(NotificationType.SUCCESS, `You've been successfully logged out`);
   }
 
   // send notification to user

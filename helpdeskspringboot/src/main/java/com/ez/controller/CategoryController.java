@@ -1,10 +1,7 @@
 package com.ez.controller;
 
 import com.ez.entity.Category;
-import com.ez.entity.User;
-import com.ez.exception.CategoryNotFoundException;
-import com.ez.exception.EmailExistException;
-import com.ez.exception.UserNotFoundException;
+import com.ez.exception.IDNotFoundException;
 import com.ez.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +13,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -95,7 +91,7 @@ public class CategoryController {
     // this method is used for Edit Category
     @GetMapping("/category-list/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<Category> findById(@PathVariable Long id) throws CategoryNotFoundException {
+    public ResponseEntity<Category> findById(@PathVariable Long id) throws IDNotFoundException {
 
         LOGGER.info("find category by id: " + id);
 
@@ -109,7 +105,7 @@ public class CategoryController {
     // only the ROLE_ADMIN can access this address
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Category> editCategory(@RequestBody @Valid Category category, BindingResult bindingResult)
-            throws CategoryNotFoundException, BindException {
+            throws IDNotFoundException, BindException {
 
         LOGGER.info("validate data");
 

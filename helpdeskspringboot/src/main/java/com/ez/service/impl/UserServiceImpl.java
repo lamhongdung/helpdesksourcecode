@@ -69,12 +69,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // find user by id
     @Override
-    public User findById(Long id) throws UserNotFoundException {
+    public User findById(Long id) throws IDNotFoundException {
 
         LOGGER.info("find user by id");
 
         // find user by user id
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + id));
+        return userRepository.findById(id).orElseThrow(() -> new IDNotFoundException(NO_USER_FOUND_BY_ID + id));
     }
 
     // reset password in case user forgot his/her password
@@ -277,13 +277,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // update existing user
     @Override
-    public User updateUser(User user) throws UserNotFoundException {
+    public User updateUser(User user) throws IDNotFoundException {
 
         LOGGER.info("Update user");
 
         // get existing user(persistent)
         User existingUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
+                .orElseThrow(() -> new IDNotFoundException(NO_USER_FOUND_BY_ID + user.getId()));
 
         // set new values to existing user
         existingUser.setFirstName(user.getFirstName());
@@ -301,13 +301,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // update user profile
     @Override
-    public User updateProfile(EditProfile editProfile) throws UserNotFoundException {
+    public User updateProfile(EditProfile editProfile) throws IDNotFoundException {
 
         LOGGER.info("Update profile");
 
         // get existing user(persistent)
         User existingUser = userRepository.findById(editProfile.getId())
-                .orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_BY_ID + editProfile.getId()));
+                .orElseThrow(() -> new IDNotFoundException(NO_USER_FOUND_BY_ID + editProfile.getId()));
 
         // set new values to existing user
         existingUser.setFirstName(editProfile.getFirstName());

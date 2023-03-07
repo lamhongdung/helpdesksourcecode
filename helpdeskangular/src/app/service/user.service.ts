@@ -14,7 +14,7 @@ export class UserService {
   // 'http://localhost:8080'
   host = environment.apiUrl;
 
-  // number of users per a page(default = 5)
+  // number of users per page(default = 5)
   pageSize = environment.pageSize;
 
   constructor(private http: HttpClient) { }

@@ -9,7 +9,7 @@ import { LoginUser } from '../entity/LoginUser';
 
 @Injectable({ providedIn: 'root' })
 // the LoginService
-export class AuthenticationService {
+export class AuthService {
 
   // apiUrl = 'http://localhost:8080'
   public host = environment.apiUrl;
@@ -28,14 +28,11 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
   // POST method: /login
-  // when user click the "Login" button
-  public login(login: LoginUser): Observable<HttpResponse<User>> {
+  // when user clicks on the "Login" button
+  public login(loginUser: LoginUser): Observable<HttpResponse<User>> {
 
-    // { observe: 'response' }: want to receive whole response(include header,...)
-    // return this.http.post<User>(`${this.host}/user/login`, user, { observe: 'response' });
+    return this.http.post<User>(`${this.host}/login`, loginUser, { observe: 'response' });
 
-    // return this.http.post<User>(`${this.host}/login`, user, { observe: 'response' });
-    return this.http.post<User>(`${this.host}/login`, login, { observe: 'response' });
   }
 
   // clear all data in the local storage and local variable
@@ -49,12 +46,16 @@ export class AuthenticationService {
     // clear all saved data in localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+
   }
 
   // save token into the local storage and local variable
   public saveTokenToLocalStorage(token: string): void {
+
     this.token = token;
+
     localStorage.setItem('token', token);
+
   }
 
   // add the logged in user into the local strorage
@@ -74,12 +75,16 @@ export class AuthenticationService {
 
   // assign token from local storage to attribute
   public loadToken(): void {
+
     this.token = localStorage.getItem('token');
+
   }
 
   // get token from attribute
   public getToken(): string {
+
     return this.token;
+
   }
 
   // check whether user logged in or not?
@@ -149,6 +154,8 @@ export class AuthenticationService {
       return JSON.parse(localStorage.getItem('user')).role;
 
     }
+
+    return "";
 
   }
 

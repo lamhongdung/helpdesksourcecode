@@ -12,7 +12,7 @@ export class PriorityService {
   // 'http://localhost:8080'
   host = environment.apiUrl;
 
-  // number of priorities per a page(default = 5)
+  // number of priorities per page(default = 5)
   pageSize = environment.pageSize;
 
   constructor(private http: HttpClient) { }
@@ -21,47 +21,48 @@ export class PriorityService {
   // parameters:
   //  - pageNumber: page number
   //  - searchTerm: search term(ID, name)
-  //  - reachInOpt: gt(>=), eq(=), lt(<=)
-  //  - reachIn: number of hours to complete a ticket
+  //  - resolveInOpt: gt(>=), eq(=), lt(<=)
+  //  - resolveIn: number of hours to complete a ticket
   //  - status: '', 'Active', 'Inactive'  
-  searchPriorities(pageNumber: number, searchTerm: string, reachInOpt: string, reachIn: number, status: string): Observable<Priority[]> {
+  searchPriorities(pageNumber: number, searchTerm: string,
+    resolveInOpt: string, resolveIn: number, status: string): Observable<Priority[]> {
 
-    console.log(`${this.host}/priority-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&reachInOpt=${reachInOpt}&reachIn=${reachIn}&status=${status}`);
+    // console.log(`${this.host}/priority-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&resolveInOpt=${resolveInOpt}&resolveIn=${resolveIn}&status=${status}`);
 
-    // ex: url = http://localhost:8080/priority-search?pageNumber=0&pageSize=5&searchTerm=""&reachInOpt="gt"&reachIn=0&status=""
+    // ex: url = http://localhost:8080/priority-search?pageNumber=0&pageSize=5&searchTerm=""&resolveInOpt="gt"&resolveIn=0&status=""
     return this.http.get<Priority[]>(
-      `${this.host}/priority-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&reachInOpt=${reachInOpt}&reachIn=${reachIn}&status=${status}`
+      `${this.host}/priority-search?pageNumber=${pageNumber}&pageSize=${this.pageSize}&searchTerm=${searchTerm}&resolveInOpt=${resolveInOpt}&resolveIn=${resolveIn}&status=${status}`
     )
   }
 
   // calculate total of priorities for count total pages
   // parameters:
   //  - searchTerm: search term(ID, name)
-  //  - reachInOpt: gt(>=), eq(=), lt(<=)
-  //  - reachIn: number of hours to complete a ticket
+  //  - resolveInOpt: gt(>=), eq(=), lt(<=)
+  //  - resolveIn: number of hours to complete a ticket
   //  - status: '', 'Active', 'Inactive'
-  getTotalOfPriorities(searchTerm: string, reachInOpt: string, reachIn: number, status: string): Observable<number> {
+  getTotalOfPriorities(searchTerm: string, resolveInOpt: string, resolveIn: number, status: string): Observable<number> {
 
-    // ex: http://localhost:8080/total-of-priorities?searchTerm=""&reachInOpt="gt"&reachIn=0&status=""
+    // ex: http://localhost:8080/total-of-priorities?searchTerm=""&resolveInOpt="gt"&resolveIn=0&status=""
     return this.http.get<number>(
-      `${this.host}/total-of-priorities?searchTerm=${searchTerm}&reachInOpt=${reachInOpt}&reachIn=${reachIn}&status=${status}`
+      `${this.host}/total-of-priorities?searchTerm=${searchTerm}&resolveInOpt=${resolveInOpt}&resolveIn=${resolveIn}&status=${status}`
     );
 
-  }
+  } // end of getTotalOfPriorities()
 
-  // create priority
+  // create new priority
   public createPriority(priority: Priority): Observable<Priority> {
     return this.http.post<Priority>(`${this.host}/priority-create`, priority);
   }
 
-  // // edit existing category
-  // public editCategory(category: Category): Observable<Category> {
-  //   return this.http.put<Category>(`${this.host}/category-edit`, category);
-  // }
+  // edit existing priority
+  public editPriority(priority: Priority): Observable<Priority> {
+    return this.http.put<Priority>(`${this.host}/priority-edit`, priority);
+  }
 
-  //  // find category by id
-  //  findById(id: number): Observable<Category> {
-  //    return this.http.get<Category>(`${this.host}/category-list/${id}`);
-  //  }
+  // find priority by id
+  findById(id: number): Observable<Priority> {
+    return this.http.get<Priority>(`${this.host}/priority-list/${id}`);
+  }
 
 }

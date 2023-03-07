@@ -1,6 +1,7 @@
 package com.ez.service;
 
 import com.ez.entity.Priority;
+import com.ez.exception.IDNotFoundException;
 import com.ez.repository.PriorityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.ez.constant.Constant.*;
 
 @Service
 public class PriorityService {
@@ -22,63 +25,67 @@ public class PriorityService {
     //  - pageNumber: page number
     //  - pageSize: page size
     //  - searchTerm: ID, name
-    //  - reachInOpt: >=(gt), =(eq), <=(lt)
-    //  - reachIn: number of hours to complete a ticket
+    //  - resolveInOpt: >=(gt), =(eq), <=(lt)
+    //  - resolveIn: number of hours to complete a ticket
     //  - status: '', 'Active', 'Inactive'
-    public List<Priority> searchPriorities(int pageNumber, int pageSize, String searchTerm, String reachInOpt, long reachIn, String status) {
+    public List<Priority> searchPriorities(int pageNumber, int pageSize,
+                                           String searchTerm, String resolveInOpt, long resolveIn, String status) {
 
-        LOGGER.info("search categories");
+        LOGGER.info("search priorities");
 
-        return priorityRepository.searchPriorities(pageNumber, pageSize, searchTerm, reachInOpt, reachIn, status);
+        return priorityRepository.searchPriorities(pageNumber, pageSize, searchTerm, resolveInOpt, resolveIn, status);
     }
 
     // calculate total of priorities based on the search criteria
-    public long getTotalOfPriorities(String searchTerm, String reachInOpt, long reachIn, String status) {
+    public long getTotalOfPriorities(String searchTerm, String resolveInOpt, long resolveIn, String status) {
         LOGGER.info("get total of priorities");
 
-        return priorityRepository.getTotalOfPriorities(searchTerm, reachInOpt, reachIn, status);
+        return priorityRepository.getTotalOfPriorities(searchTerm, resolveInOpt, resolveIn, status);
     }
 
-//    // create new category
-//    public Category createCategory(Category category) {
-//
-//        LOGGER.info("create new category");
-//
-//        // new user
-//        Category newCategory = new Category(category.getName(), category.getStatus());
-//
-//        // save new category into database
-//        categoryRepository.save(newCategory);
-//
-//        return newCategory;
-//    }
-//
-//    // find category by category id
-//    public Category findById(Long id) throws CategoryNotFoundException {
-//
-//        LOGGER.info("find category by id");
-//
-//        // find category by category id
-//        return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(NO_CATEGORY_FOUND_BY_ID + id));
-//    }
-//
-//    // update existing category
-//    public Category updateCategory(Category category) throws CategoryNotFoundException {
-//
-//        LOGGER.info("Update category");
-//
-//        // get existing category(persistent)
-//        Category existingCategory = categoryRepository.findById(category.getId())
-//                .orElseThrow(() -> new CategoryNotFoundException(NO_CATEGORY_FOUND_BY_ID + category.getId()));
-//
-//        // set new values to existing category
-//        existingCategory.setName(category.getName());
-//        existingCategory.setStatus(category.getStatus());
-//
-//        // update existing category(persistent)
-//        categoryRepository.save(existingCategory);
-//
-//        return existingCategory;
-//    }
+    // create new priority
+    public Priority createPriority(Priority priority) {
+
+        LOGGER.info("create new priority");
+
+        // new priority
+        Priority newPriority = new Priority(priority.getName(), priority.getResolveIn(), priority.getStatus());
+
+        // save new priority into database
+        priorityRepository.save(newPriority);
+
+        return newPriority;
+    }
+
+    // find priority by priority id.
+    // if has not found the id in database then throws an exception and display notification to user
+    public Priority findById(Long id) throws IDNotFoundException {
+
+        LOGGER.info("find priority by id");
+
+        // find priority by priority id
+        return priorityRepository.findById(id).orElseThrow(() -> new IDNotFoundException(NO_PRIORITY_FOUND_BY_ID + id));
+    }
+
+    // update existing priority.
+    // if has not found the id in database then throws an exception and display notification to user
+    public Priority updatePriority(Priority priority) throws IDNotFoundException {
+
+        LOGGER.info("Update priority");
+
+        // get existing priority(persistent)
+        Priority existingPriority = priorityRepository.findById(priority.getId())
+                .orElseThrow(() -> new IDNotFoundException(NO_PRIORITY_FOUND_BY_ID + priority.getId()));
+
+        // set new values to existing priority
+        existingPriority.setName(priority.getName());
+        existingPriority.setResolveIn(priority.getResolveIn());
+        existingPriority.setStatus(priority.getStatus());
+
+        // update existing priority(persistent) into database
+        priorityRepository.save(existingPriority);
+
+        return existingPriority;
+    }
 
 }

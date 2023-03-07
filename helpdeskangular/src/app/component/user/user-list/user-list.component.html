@@ -3,11 +3,12 @@
   <!-- title -->
   <div>
     <h2 style="text-align: center">User list</h2>
+    <hr width="97%">
   </div>
-  <hr width="11%">
 
   <!-- Search -->
   <div class="container">
+
     <!-- Search form -->
     <form [formGroup]="searchUser" (ngSubmit)="ngOnInit()">
 
@@ -16,12 +17,13 @@
 
         <!-- SearchTerm -->
         <!-- search for: ID, email, firstName, lastName and phone -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-lg-5 col-md-5 form-group" style="text-align: center">
           <!-- label -->
           <label for="searchTerm">Search term</label>
           <!-- textbox -->
           <input id="searchTerm" class="form-control" type="search" formControlName="searchTerm"
-            placeholder="Search term">
+            placeholder="Search term(id, email, first name, last name, phone)"
+            title="Search term(id, email, first name, last name, phone)">
         </div>
 
         <!-- Role -->
@@ -29,10 +31,8 @@
           <!-- label -->
           <label for="role">Role</label>
           <!-- dropdown -->
-          <select id="role" class="form-control" formControlName="role" placeholder="Role">
-            <!-- if user does not choose the role then value of role will be blank -->
-            <option value="">Select role</option>
-
+          <select id="role" class="form-control" formControlName="role" placeholder="Role" title="User role">
+            <option value="">All</option>
             <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
             <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
             <option value="ROLE_ADMIN">ROLE_ADMIN</option>
@@ -40,19 +40,19 @@
         </div>
 
         <!-- Status -->
-        <div class="col-lg-3 col-md-3 form-group" style="text-align: center">
+        <div class="col-lg-2 col-md-2 form-group" style="text-align: center">
           <!-- label -->
           <label for="status">Status</label>
           <!-- dropdown -->
-          <select id="status" class="form-control" formControlName="status">
-            <option value="">Select status</option>
+          <select id="status" class="form-control" formControlName="status" title="User status">
+            <option value="">All</option>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
           </select>
         </div>
 
         <!-- the "Search" button -->
-        <div class="col-lg-3 col-md-3">
+        <div class="col-lg-2 col-md-2">
           <!-- break a line(insert a line break(carriage-return)) -->
           <br>
           <!-- "Search button" -->
@@ -74,7 +74,7 @@
       <div class="mr-auto">
 
         <!-- the "Create user" button. -->
-        <!-- when user click on the "Create user" button -->
+        <!-- when user clicks on the "Create user" button -->
         <button class="btn btn-primary" routerLink="/user-create"><i class="fa fa-plus"></i>
           Create user
         </button>
@@ -86,7 +86,7 @@
       <!-- if (number of users) > 1 -->
       <div *ngIf="totalOfUsers > 1">There are {{totalOfUsers}} users</div>
       <!-- if (number of users) == 1 -->
-      <div *ngIf="totalOfUsers == 1">There is {{totalOfUsers}} users</div>
+      <div *ngIf="totalOfUsers == 1">There is {{totalOfUsers}} user</div>
       <!-- there is no user -->
       <div *ngIf="totalOfUsers == 0">There is no user</div>
 
@@ -98,7 +98,7 @@
   <div class="container">
 
     <!-- <table class="table table-hover table-bordered"> -->
-    <table class="table table-striped table-bordered">
+    <table class="table table-hover table-striped table-bordered">
       <!-- table header -->
       <thead>
         <tr class="bg-table-header">
@@ -110,55 +110,55 @@
           <th scope="col" style="width: 20%">Email</th>
           <th scope="col" style="width: 20%">First name</th>
 
-          <th scope="col" style="width: 10%">Last name</th>
+          <th scope="col" style="width: 13%">Last name</th>
           <th scope="col" style="width: 10%">Phone</th>
           <th scope="col" style="width: 10%">Role</th>
-          <th scope="col" style="width: 10%">Status</th>
+          <th scope="col" style="width: 7%">Status</th>
           <th scope="col" style="width: 10%">Action</th>
         </tr>
       </thead>
 
       <!-- table body -->
-      <tbody style="font-size: 16px;text-align: center">
+      <tbody style="text-align: center">
 
         <tr *ngFor="let user of users,index as i">
 
           <!-- column: order(line number) -->
           <!-- if user clicks on the table(except the Action) then  -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{indexBasedPage(currentPage,
             i)}}</td>
 
           <!-- column: ID -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td style="text-align: right" class="pointer-link" (click)="viewUser(user.id)">{{user.id}}</td>
 
           <!-- column: Email -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.email}}</td>
 
           <!-- column: First name -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.firstName}}</td>
 
           <!-- column: Last name -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.lastName}}</td>
 
           <!-- column: Phone -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.phone}}</td>
 
           <!-- column: Role -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.role}}</td>
 
           <!-- column: Status -->
-          <!-- navigate to the "/user-view/{id}" when user click on the table(except the column "Action") -->
+          <!-- navigate to the "/user-view/{id}" when user clicks on the table(except the column "Action") -->
           <td class="pointer-link" (click)="viewUser(user.id)">{{user.status}}</td>
 
           <!-- the "Edit" button -->
-          <td class="text-center" width="11%">
+          <td class="text-center">
             <a class="btn btn-primary mr-1" [routerLink]="['/user-edit', user.id]"><i class="fa fa-edit"></i></a>
           </td>
 
@@ -190,11 +190,11 @@
             <!-- rounded-0: have no round at corners -->
             <input type="number" min="1" [max]="totalPages" class="form-control rounded-0"
               aria-describedby="basic-addon1" [value]="currentPage"
-              (change)="indexPaginationChange($event.target.value)">
+              (change)="indexPaginationChange($event.target.value)" title="Current page">
 
             <!-- total pages -->
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">/{{totalPages}}</span>
+              <span class="input-group-text" id="basic-addon1" title="Total pages">/{{totalPages}}</span>
             </div>
           </div>
         </li>

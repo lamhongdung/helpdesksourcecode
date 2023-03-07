@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { AuthenticationService } from 'src/app/service/authentication.service';
+import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { ShareService } from 'src/app/service/share.service';
 import { User } from 'src/app/entity/User';
-import { HeaderType } from 'src/app/enum/header-type.enum';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { HeaderType } from 'src/app/enum/HeaderType.enum';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   };
 
   constructor(private router: Router,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private shareService: ShareService) { }
@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       // email: ['', [Validators.required]],
+
       password: ['', [Validators.required]]
 
     });
@@ -69,10 +70,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/login');
 
     }
-  }
+  } // end of ngOnInit()
 
-  // when user click on the "Login" button
-  // public onLogin(user: User): void {
+  // when user clicks on the "Login" button
   public login(): void {
 
     // allow to show spinner(circle)
@@ -83,8 +83,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
 
       // get data from server
-
-      // this.authenticationService.login(user).subscribe(
 
       // this.loginForm.value = { "email": "nguoiquantri01@gmail.com", "password": "abcxyz" }
       this.authenticationService.login(this.loginForm.value).subscribe(
@@ -97,12 +95,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           const token = response.headers.get(HeaderType.JWT_TOKEN);
 
           // save token value into Local Storage
-          // this.authenticationService.saveToken(token);
           this.authenticationService.saveTokenToLocalStorage(token);
 
           // save user into Local Storage
           this.authenticationService.saveUserToLocalStorage(response.body);
 
+          // navigate to url '/ticket-list'
           // this.router.navigateByUrl('/ticket-list');
           this.router.navigateByUrl(this.authenticationService.urlAfterLogin);
 

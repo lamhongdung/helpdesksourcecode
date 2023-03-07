@@ -1,14 +1,17 @@
 <div class="text-center">
     <h3>Create user</h3>
+    <hr width="85%">
 </div>
-<hr width="11%">
+
 <!-- {{userForm.value | json}} -->
 
 <div class="container">
 
     <!-- call createUser() when user clicks the "Save" button -->
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
+
         <div class="row mt-5">
+
             <!-- the "Left" column -->
             <div class="col-md-6">
                 <div class="container">
@@ -22,7 +25,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="email" formControlName="email"
-                                placeholder="Ex: abc@gmail.com" id="email">
+                                placeholder="Ex: abc@gmail.com" id="email" title="Email">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.email">
                                 <div *ngIf="userForm.get('email').hasError(e.type) && 
@@ -44,7 +47,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
-                                id="firstName">
+                                id="firstName" title="First name">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.firstName">
                                 <div
@@ -65,7 +68,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
-                                id="lastName">
+                                id="lastName" title="Last name">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.lastName">
                                 <div
@@ -85,7 +88,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
-                                placeholder="ex: 0986111222(10 digits)" id="phone">
+                                placeholder="ex: 0986111222(10 digits)" id="phone" title="Phone number(10 digits)">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.phone">
                                 <div
@@ -111,7 +114,7 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
-                                placeholder="Address">
+                                placeholder="Address" title="Address">
                             <!-- error messages -->
                             <div class="text-danger" *ngFor="let e of errorMessages.address">
                                 <div
@@ -131,7 +134,8 @@
                         <!-- dropdown -->
                         <div class="col-8">
                             <!-- default value = "ROLE_CUSTOMER"(is set in the typecript code) -->
-                            <select id="role" class="form-control" formControlName="role" placeholder="Role">
+                            <select id="role" class="form-control" formControlName="role" placeholder="Role"
+                                title="User role">
                                 <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
                                 <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
@@ -149,8 +153,8 @@
                         <!-- dropdown -->
                         <div class="col-8">
                             <!-- default value = "Active"(is set in the typescript code) -->
-                            <select id="status" class="form-control" formControlName="status" placeholder="Status">
-                                <!-- <option value="Active" [defaultSelected]=true>Active</option> -->
+                            <select id="status" class="form-control" formControlName="status" placeholder="Status"
+                                title="User status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/entity/User';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 

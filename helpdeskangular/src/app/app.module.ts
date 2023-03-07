@@ -5,10 +5,10 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthenticationService } from './service/authentication.service';
+import { AuthService } from './service/auth.service';
 import { UserService } from './service/user.service';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
-import { AuthenticationGuard } from './guard/authentication.guard';
+import { AuthGuard } from './guard/auth.guard';
 import { NotificationModule } from './notification.module';
 import { NotificationService } from './service/notification.service';
 import { HeaderComponent } from './component/header/header/header.component';
@@ -35,6 +35,8 @@ import { CategoryEditComponent } from './component/category/category-edit/catego
 import { CategoryViewComponent } from './component/category/category-view/category-view.component';
 import { PriorityEditComponent } from './component/priority/priority-edit/priority-edit.component';
 import { PriorityViewComponent } from './component/priority/priority-view/priority-view.component';
+import { TeamEditComponent } from './component/team/team-edit/team-edit.component';
+import { TeamViewComponent } from './component/team/team-view/team-view.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,9 @@ import { PriorityViewComponent } from './component/priority/priority-view/priori
     CategoryEditComponent,
     CategoryViewComponent,
     PriorityEditComponent,
-    PriorityViewComponent
+    PriorityViewComponent,
+    TeamEditComponent,
+    TeamViewComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +75,7 @@ import { PriorityViewComponent } from './component/priority/priority-view/priori
     NotificationModule,
     ReactiveFormsModule
   ],
-  providers: [NotificationService, AuthenticationGuard, AuthenticationService, UserService,
+  providers: [NotificationService, AuthGuard, AuthService, UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } ],
   bootstrap: [AppComponent]
 })

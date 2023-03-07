@@ -4,9 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CustomHttpRespone } from 'src/app/entity/CustomHttpResponse';
-import { User } from 'src/app/entity/User';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
-import { AuthenticationService } from 'src/app/service/authentication.service';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
+import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 import { passwordValidator } from 'src/app/validator/validator';
@@ -54,10 +53,10 @@ export class ChangePasswordComponent implements OnInit {
   constructor(private router: Router,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthService,
     private notificationService: NotificationService) { }
 
-  // this method ngOnInit() is run after the component "UserCreateComponent" is contructed
+  // this method ngOnInit() is run after the component "ChangePasswordComponent" is contructed
   ngOnInit(): void {
 
     // get email of logged in user
@@ -74,13 +73,13 @@ export class ChangePasswordComponent implements OnInit {
         confirmNewPassword: ['', [Validators.required]]
       },
       {
-        // validate field "newPassword" and "confirmNewPassword".
+        // validate 2 fields "newPassword" and "confirmNewPassword".
         // value of "new password" must be equal to "confirm new password"
         validators: [passwordValidator]
       }
     );
 
-  }
+  } // end of ngOnInit()
 
   // change password.
   // when user clicks the "Save" button in the "Change password" screen
@@ -109,6 +108,7 @@ export class ChangePasswordComponent implements OnInit {
           // navigate to the "ticket-list" page
           this.router.navigateByUrl("/ticket-list");
         },
+
         // change password failure
         (errorResponse: HttpErrorResponse) => {
 
@@ -121,7 +121,7 @@ export class ChangePasswordComponent implements OnInit {
       )
     );
 
-  } // end of createUser()
+  } // end of changePassword()
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
@@ -132,7 +132,7 @@ export class ChangePasswordComponent implements OnInit {
     }
   }
 
-  // unsubscribe all subscriptions from this component "UserComponent"
+  // unsubscribe all subscriptions from this component "ChangePasswordComponent"
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }

@@ -1,7 +1,7 @@
 export class Category {
-    public id: number;
-    public name: string;
-    public status: string;
   
-  }
-  
+  public id: number;
+  public name: string;
+  public status: string;
+
+}

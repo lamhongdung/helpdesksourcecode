@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/entity/Category';
 import { CategoryService } from 'src/app/service/category.service';
-import { NotificationService } from 'src/app/service/notification.service';
 
 @Component({
   selector: 'app-category-list',
@@ -24,7 +23,7 @@ export class CategoryListComponent implements OnInit {
   totalOfCategories: number;
   // category list(the grid of the category table)
   categories: Category[] = [];
-  // number of categories per a page(default = 5)
+  // number of categories per page(default = 5)
   pageSize: number;
 
   // form of "Search Category"
@@ -58,13 +57,14 @@ export class CategoryListComponent implements OnInit {
   } // end of ngOnInit()
 
   // get categories, total of categories and total pages
-  searchCategories(page: number, searchTerm: string, status: string) {
+  searchCategories(pageNumber: number, searchTerm: string, status: string) {
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the CategoryListComponent
     this.subscriptions.push(
 
       // get categories
-      this.categoryService.searchCategories(page, this.searchCategory.value.searchTerm, this.searchCategory.value.status)
+      this.categoryService.searchCategories(pageNumber, searchTerm, status)
+
         .subscribe(
           (data: Category[]) => {
             return this.categories = data
@@ -76,7 +76,8 @@ export class CategoryListComponent implements OnInit {
     this.subscriptions.push(
 
       // get total of categories and total pages
-      this.categoryService.getTotalOfCategories(this.searchCategory.value.searchTerm, this.searchCategory.value.status)
+      this.categoryService.getTotalOfCategories(searchTerm, status)
+
         .subscribe(
           (data: number) => {
             // total of categories
@@ -97,6 +98,7 @@ export class CategoryListComponent implements OnInit {
     }
 
     return totalOfCategories / pageSize;
+
   } // end of calculateTotalPages()
 
   // count index for current page
@@ -117,11 +119,11 @@ export class CategoryListComponent implements OnInit {
     // if (1 <= currentPage <= totalPages) then go to specific page
     if (this.currentPage >= 1 && this.currentPage <= this.totalPages) {
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "nth element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get categories, total of categories and total of pages
-      this.searchCategories(th_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
+      this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
     }
 
   }
@@ -139,11 +141,11 @@ export class CategoryListComponent implements OnInit {
 
       this.currentPage = 1;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "nth element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get categories, total of categories and total pages
-      this.searchCategories(th_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
+      this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
     }
 
   }
@@ -156,11 +158,11 @@ export class CategoryListComponent implements OnInit {
 
       this.currentPage = this.currentPage + 1;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "nth element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
-      // get users, total of users and total pages
-      this.searchCategories(th_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
+      // get categories, total of categories and total pages
+      this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
     }
 
   }
@@ -173,11 +175,11 @@ export class CategoryListComponent implements OnInit {
 
       this.currentPage = this.currentPage - 1;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "nth element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get categories, total of categories and total pages
-      this.searchCategories(th_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
+      this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
     }
 
   }
@@ -190,11 +192,11 @@ export class CategoryListComponent implements OnInit {
 
       this.currentPage = this.totalPages;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "nth element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get categories, total of categories and total pages
-      this.searchCategories(th_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
+      this.searchCategories(nth_element, this.searchCategory.value.searchTerm, this.searchCategory.value.status);
     }
   }
 

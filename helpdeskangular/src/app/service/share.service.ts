@@ -10,6 +10,7 @@ export class ShareService {
 
   private subject = new Subject<any>();
 
+  // subject fires a next value
   sendClickEvent() {
     this.subject.next();
   }

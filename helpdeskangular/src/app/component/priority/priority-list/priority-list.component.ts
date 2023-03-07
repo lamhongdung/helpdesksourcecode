@@ -27,9 +27,8 @@ export class PriorityListComponent implements OnInit {
   pageSize: number;
 
   errorMessages = {
-    reachIn: [
-      // { type: 'required', message: 'Reach In must have value' },
-      { type: 'pattern', message: 'Value of the Reach In must be >=0' }
+    resolveIn: [
+      { type: 'pattern', message: 'Value of the Resolve In must be greater than or equal to zero' }
     ]
   };
 
@@ -39,13 +38,11 @@ export class PriorityListComponent implements OnInit {
     // search term
     searchTerm: [''],
 
-    // reachIn operator: >=(gt), =(eq), <=(lt)
-    reachInOpt: ['gt'],
+    // resolveIn operator: >=(gt), =(eq), <=(lt)
+    resolveInOpt: ['gt'],
 
-    // reachIn
-    // reachIn: [0,[Validators.min(0)]],
-    // reachIn: [0, [Validators.required, Validators.pattern("^[0-9]+$")]],
-    reachIn: [0, [Validators.pattern("^[0-9]+$")]],
+    // resolve in(hours)
+    resolveIn: [0, [Validators.pattern("^[0-9]+$")]],
 
     // status
     status: [''],
@@ -69,8 +66,8 @@ export class PriorityListComponent implements OnInit {
     // assign priorities from database to the this.priorities variable, and get totalPages.
     // the first parameter(page) = 0: in MySQL 0 means the first page.
     this.searchPriorities(0, this.searchPriority.value.searchTerm,
-      this.searchPriority.value.reachInOpt,
-      this.searchPriority.value.reachIn,
+      this.searchPriority.value.resolveInOpt,
+      this.searchPriority.value.resolveIn,
       this.searchPriority.value.status);
 
   } // end of ngOnInit()
@@ -79,32 +76,29 @@ export class PriorityListComponent implements OnInit {
   // parameters:
   //  - pageNumber: page number
   //  - searchTerm: search term(ID, name)
-  //  - reachInOpt: gt(>=), eq(=), lt(<=)
-  //  - reachIn: number of hours to complete a ticket
+  //  - resolveInOpt: gt(>=), eq(=), lt(<=)
+  //  - resolveIn: number of hours to complete a ticket
   //  - status: '', 'Active', 'Inactive'  
-  searchPriorities(page: number, searchTerm: string, reachInOpt: string, reachIn: number, status: string) {
+  searchPriorities(pageNumber: number, searchTerm: string, resolveInOpt: string, resolveIn: number, status: string) {
 
-    // reachIn value in number
-    let reachInValue: number = 0;
+    // // resolveIn value in number
+    // let resolveInValue: number = 0;
 
-    // if the ReachIn textbox is blank then set its value to zero
-    if (reachIn == null) {
-      reachInValue = 0;
+    // if the ResolveIn textbox is blank then set its value to zero
+    if (resolveIn == null) {
 
-      // update the zero value to the ReachIn textbox
-      this.searchPriority.get("reachIn").setValue(0);
-    } else {
-      reachInValue = reachIn;
+      resolveIn = 0;
+
+      // update the zero value to the ResolveIn textbox
+      this.searchPriority.get("resolveIn").setValue(0);
+
     }
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the PriorityListComponent
     this.subscriptions.push(
 
       // get priorities
-      this.priorityService.searchPriorities(page, this.searchPriority.value.searchTerm,
-        this.searchPriority.value.reachInOpt,
-        reachInValue,
-        this.searchPriority.value.status)
+      this.priorityService.searchPriorities(pageNumber, searchTerm, resolveInOpt, resolveIn, status)
 
         .subscribe(
           (data: Priority[]) => {
@@ -117,10 +111,7 @@ export class PriorityListComponent implements OnInit {
     this.subscriptions.push(
 
       // get total of priorities and total pages
-      this.priorityService.getTotalOfPriorities(this.searchPriority.value.searchTerm,
-        this.searchPriority.value.reachInOpt,
-        reachInValue,
-        this.searchPriority.value.status)
+      this.priorityService.getTotalOfPriorities(searchTerm, resolveInOpt, resolveIn, status)
 
         .subscribe(
           (data: number) => {
@@ -142,6 +133,7 @@ export class PriorityListComponent implements OnInit {
     }
 
     return totalOfPriorities / pageSize;
+
   } // end of calculateTotalPages()
 
   // count index for current page
@@ -162,13 +154,13 @@ export class PriorityListComponent implements OnInit {
     // if (1 <= currentPage <= totalPages) then go to specific page
     if (this.currentPage >= 1 && this.currentPage <= this.totalPages) {
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "n th element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get priorities, total of priorities and total of pages
-      this.searchPriorities(th_element, this.searchPriority.value.searchTerm,
-        this.searchPriority.value.reachInOpt,
-        this.searchPriority.value.reachIn,
+      this.searchPriorities(nth_element, this.searchPriority.value.searchTerm,
+        this.searchPriority.value.resolveInOpt,
+        this.searchPriority.value.resolveIn,
         this.searchPriority.value.status);
     }
 
@@ -187,13 +179,13 @@ export class PriorityListComponent implements OnInit {
 
       this.currentPage = 1;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the " th element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get priorities, total of priorities and total pages
-      this.searchPriorities(th_element, this.searchPriority.value.searchTerm,
-        this.searchPriority.value.reachInOpt,
-        this.searchPriority.value.reachIn,
+      this.searchPriorities(nth_element, this.searchPriority.value.searchTerm,
+        this.searchPriority.value.resolveInOpt,
+        this.searchPriority.value.resolveIn,
         this.searchPriority.value.status);
     }
 
@@ -207,13 +199,13 @@ export class PriorityListComponent implements OnInit {
 
       this.currentPage = this.currentPage + 1;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "n th element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
-      // get users, total of users and total pages
-      this.searchPriorities(th_element, this.searchPriority.value.searchTerm,
-        this.searchPriority.value.reachInOpt,
-        this.searchPriority.value.reachIn,
+      // get priorities, total of priorities and total pages
+      this.searchPriorities(nth_element, this.searchPriority.value.searchTerm,
+        this.searchPriority.value.resolveInOpt,
+        this.searchPriority.value.resolveIn,
         this.searchPriority.value.status);
     }
 
@@ -227,13 +219,13 @@ export class PriorityListComponent implements OnInit {
 
       this.currentPage = this.currentPage - 1;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "n th element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get priorities, total of priorities and total pages
-      this.searchPriorities(th_element, this.searchPriority.value.searchTerm,
-        this.searchPriority.value.reachInOpt,
-        this.searchPriority.value.reachIn,
+      this.searchPriorities(nth_element, this.searchPriority.value.searchTerm,
+        this.searchPriority.value.resolveInOpt,
+        this.searchPriority.value.resolveIn,
         this.searchPriority.value.status);
     }
 
@@ -247,13 +239,13 @@ export class PriorityListComponent implements OnInit {
 
       this.currentPage = this.totalPages;
 
-      // the "th element" in MySQL
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      // the "n th element" in MySQL
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get priorities, total of priorities and total pages
-      this.searchPriorities(th_element, this.searchPriority.value.searchTerm,
-        this.searchPriority.value.reachInOpt,
-        this.searchPriority.value.reachIn,
+      this.searchPriorities(nth_element, this.searchPriority.value.searchTerm,
+        this.searchPriority.value.resolveInOpt,
+        this.searchPriority.value.resolveIn,
         this.searchPriority.value.status);
     }
   }

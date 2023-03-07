@@ -1,12 +1,11 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CustomHttpRespone } from 'src/app/entity/CustomHttpResponse';
 import { User } from 'src/app/entity/User';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
-import { AuthenticationService } from 'src/app/service/authentication.service';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -51,7 +50,6 @@ export class ResetPasswordComponent implements OnInit {
     this.resetPasswordForm = this.formBuilder.group({
 
       email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]]
-      // email: ['', [Validators.required]]
 
     });
 
@@ -67,9 +65,7 @@ export class ResetPasswordComponent implements OnInit {
     // when this component is to be destroy then unsubscribe all these subscriptions
     this.subscriptions.push(
 
-      // this.resetPasswordForm.value = { "email": "nguoiquantri01@gmail.com" }
-      // this.authenticationService.resetPassword(this.resetPasswordForm.value.email).subscribe(
-      // this.authenticationService.resetPassword(this.resetPasswordForm.value).subscribe(
+      // this.resetPasswordForm.value = { "email": "nguoiquantri@proton.me" }
       this.userService.resetPassword(this.resetPasswordForm.value).subscribe(
 
         // reset password success

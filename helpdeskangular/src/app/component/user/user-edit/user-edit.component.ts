@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/entity/User';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -31,18 +31,13 @@ export class UserEditComponent implements OnInit {
 
   // error messages
   errorMessages = {
-    // email: [
-    //   { type: 'required', message: 'Please input an email' },
-    //   { type: 'pattern', message: 'Email is incorrect format' }
-    // ],
+
     firstName: [
       { type: 'required', message: 'Please input the first name' },
-      // { type: 'minlength', message: 'First name must be at least 1 character' },
       { type: 'maxlength', message: 'First name cannot be longer than 50 characters' },
     ],
     lastName: [
       { type: 'required', message: 'Please input the last name' },
-      // { type: 'minlength', message: 'Last name must be at least 1 character' },
       { type: 'maxlength', message: 'Last name cannot be longer than 50 characters' },
     ],
     phone: [
@@ -69,7 +64,6 @@ export class UserEditComponent implements OnInit {
 
       // do not need validate id because this "id" field is read only
       id: [''],
-
       
       // do not need validate email because this "email" field is read only.
       // email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
@@ -84,7 +78,7 @@ export class UserEditComponent implements OnInit {
     });
 
     // get user id from params of active route(from address path).
-    // and get user based on user id from database
+    // and then get user based on user id from database
     this.activatedRoute.paramMap.subscribe(
       
       (params: ParamMap) => {
@@ -96,6 +90,7 @@ export class UserEditComponent implements OnInit {
         // get user by user id
         this.userService.findById(this.id).subscribe(
 
+          // get data successful from database
           (data: User) => {
 
             this.user = data;
@@ -104,6 +99,7 @@ export class UserEditComponent implements OnInit {
             this.userForm.patchValue(data);
 
           },
+          // there are some errors when get data from database
           (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
@@ -127,7 +123,9 @@ export class UserEditComponent implements OnInit {
 
         // update user successful
         (data: User) => {
+
           this.user = data;
+
           // send notification to user
           this.sendNotification(NotificationType.SUCCESS, `${data.lastName} ${data.firstName} is updated successfully`);
 

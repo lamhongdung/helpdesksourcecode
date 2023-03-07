@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/entity/User';
-import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -41,7 +40,6 @@ export class UserListComponent implements OnInit {
 
 
   constructor(private userService: UserService,
-    private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
@@ -63,28 +61,23 @@ export class UserListComponent implements OnInit {
   // calculate total pages for pagination
   calculateTotalOfPages(totalOfUsers: number, pageSize: number): number {
 
-    // let totalPages: number = 0;
-
     if ((totalOfUsers % pageSize) != 0) {
       //  Math.floor: rounds down and returns the largest integer less than or equal to a given number
       // totalPages = (Math.floor(totalOfUsers / pageSize)) + 1;
       return (Math.floor(totalOfUsers / pageSize)) + 1;
     }
-    // else {
-    //   totalPages = totalOfUsers / pageSize;
-    // }
 
     return totalOfUsers / pageSize;
   }
 
   // get users, total of users and total pages
-  searchUsers(page: number, searchTerm: string, role: string, status: string) {
+  searchUsers(pageNumber: number, searchTerm: string, role: string, status: string) {
 
     // push to list of subscriptions for easily unsubscribes all subscriptions of the UserListComponent
     this.subscriptions.push(
 
       // get users
-      this.userService.searchUsers(page, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status)
+      this.userService.searchUsers(pageNumber, searchTerm, role, status)
         .subscribe(
           (data: User[]) => {
             return this.users = data
@@ -96,7 +89,7 @@ export class UserListComponent implements OnInit {
     this.subscriptions.push(
 
       // get total of users and total pages
-      this.userService.getTotalOfUsers(this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status)
+      this.userService.getTotalOfUsers(searchTerm, role, status)
         .subscribe(
           (data: number) => {
             // total of users
@@ -126,12 +119,12 @@ export class UserListComponent implements OnInit {
     // if (1 <= currentPage <= totalPages) then go to specific page
     if (this.currentPage >= 1 && this.currentPage <= this.totalPages) {
 
-      // the "th element" in MySQL
+      // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get users, total of users and total of pages
-      this.searchUsers(th_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
+      this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
     }
 
   }
@@ -149,15 +142,12 @@ export class UserListComponent implements OnInit {
 
       this.currentPage = 1;
 
-      // page number in mysql
+      // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-
-      // the "th element" in MySQL
-      // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get users, total of users and total pages
-      this.searchUsers(th_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
+      this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
     }
 
   }
@@ -170,15 +160,12 @@ export class UserListComponent implements OnInit {
 
       this.currentPage = this.currentPage + 1;
 
-      // page number in mysql
+      // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-
-      // the "th element" in MySQL
-      // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get users, total of users and total pages
-      this.searchUsers(th_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
+      this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
     }
 
   }
@@ -191,15 +178,12 @@ export class UserListComponent implements OnInit {
 
       this.currentPage = this.currentPage - 1;
 
-      // page number in mysql
+      // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-
-      // the "th element" in MySQL
-      // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get users, total of users and total of pages
-      this.searchUsers(th_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
+      this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
     }
 
   }
@@ -212,15 +196,12 @@ export class UserListComponent implements OnInit {
 
       this.currentPage = this.totalPages;
 
-      // page number in mysql
+      // the "nth element" in MySQL
       // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-
-      // the "th element" in MySQL
-      // let sqlPage = (this.currentPage * this.pageSize) - this.pageSize;
-      let th_element = (this.pageSize) * (this.currentPage - 1);
+      let nth_element = (this.pageSize) * (this.currentPage - 1);
 
       // get users, total of users and total of pages
-      this.searchUsers(th_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
+      this.searchUsers(nth_element, this.searchUser.value.searchTerm, this.searchUser.value.role, this.searchUser.value.status);
     }
   }
 

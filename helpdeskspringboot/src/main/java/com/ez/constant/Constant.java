@@ -41,4 +41,9 @@ public class Constant {
     //
     public static final String NO_CATEGORY_FOUND_BY_ID = "No category found for id: ";
 
+    //
+    // priority constants
+    //
+    public static final String NO_PRIORITY_FOUND_BY_ID = "No priority found for id: ";
+
 }

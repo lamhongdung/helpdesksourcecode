@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserService {
 
     // find user by user id
-    public User findById(Long id) throws UserNotFoundException;
+    public User findById(Long id) throws IDNotFoundException;
 
     // search users by pageNumber and based on the search criteria.
     // parameters:
@@ -39,10 +39,10 @@ public interface UserService {
     public User createUser(User user) throws MessagingException, EmailExistException;
 
     // update existing user
-    public User updateUser(User user) throws MessagingException, EmailExistException, UserNotFoundException;
+    public User updateUser(User user) throws MessagingException, EmailExistException, IDNotFoundException;
 
     // update user profile
-    public User updateProfile(EditProfile editProfile) throws MessagingException, UserNotFoundException;
+    public User updateProfile(EditProfile editProfile) throws MessagingException, IDNotFoundException;
 
     // reset password in case user forgot his/her password
     public void resetPassword(String email) throws MessagingException, EmailNotFoundException;

@@ -85,13 +85,8 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<HttpResponse> categoryNotFoundException(CategoryNotFoundException exception) {
+    @ExceptionHandler(IDNotFoundException.class)
+    public ResponseEntity<HttpResponse> idNotFoundException(IDNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
@@ -117,9 +112,6 @@ public class ExceptionHandling implements ErrorController {
     }
 
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
-
-//        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus,
-//                httpStatus.getReasonPhrase().toUpperCase(), message), httpStatus);
 
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), message), httpStatus);
 

@@ -1,14 +1,17 @@
 <div class="text-center">
     <h3>View user</h3>
+    <hr width="85%">
 </div>
-<hr width="9%">
 
 <div class="container">
+
     <form [formGroup]="userForm">
         <div class="row mt-5">
+
             <!-- the "Left" column -->
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 <div class="container">
+
                     <!-- ID -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -17,9 +20,10 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-8">
-                            <input class="form-control" type="id" formControlName="id" id="id" readonly>
+                            <input class="form-control" type="id" formControlName="id" id="id" title="Identity" readonly>
                         </div>
                     </div>
+
                     <!-- Email -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -28,9 +32,10 @@
                         </div>
                         <!-- textbox -->
                         <div class="col-8">
-                            <input class="form-control" type="email" formControlName="email" id="email" readonly>
+                            <input class="form-control" type="email" formControlName="email" id="email" title="Email" readonly>
                         </div>
                     </div>
+
                     <!-- First name -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -40,9 +45,10 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="firstName" placeholder="First name"
-                                id="firstName" readonly>
+                                id="firstName" title="First name" readonly>
                         </div>
                     </div>
+
                     <!-- Last name -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -52,15 +58,17 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="lastName" placeholder="Last name"
-                                id="lastName" readonly>
+                                id="lastName" title="Last name" readonly>
                         </div>
                     </div>
 
                 </div>
             </div>
+
             <!-- the "Right" column -->
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 <div class="container">
+
                     <!-- Phone -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -70,9 +78,10 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="phone"
-                                placeholder="ex: 0986111222(10 digits)" id="phone" readonly>
+                                placeholder="ex: 0986111222(10 digits)" id="phone" title="Phone number" readonly>
                         </div>
                     </div>
+
                     <!-- Address -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -82,9 +91,10 @@
                         <!-- textbox -->
                         <div class="col-8">
                             <input class="form-control" type="text" formControlName="address" id="address"
-                                placeholder="Address" readonly>
+                                placeholder="Address" title="Address" readonly>
                         </div>
                     </div>
+
                     <!-- Role -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -93,13 +103,14 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-8">
-                            <select id="role" class="form-control" formControlName="role" placeholder="Role">
+                            <select id="role" class="form-control" formControlName="role" placeholder="Role" title="User role">
                                 <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
                                 <option value="ROLE_SUPPORTER">ROLE_SUPPORTER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
                             </select>
                         </div>
                     </div>
+
                     <!-- Status -->
                     <div class="row mb-3">
                         <!-- label -->
@@ -108,7 +119,7 @@
                         </div>
                         <!-- dropdown -->
                         <div class="col-8">
-                            <select id="status" class="form-control" formControlName="status" placeholder="Status">
+                            <select id="status" class="form-control" formControlName="status" placeholder="Status" title="User status">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>

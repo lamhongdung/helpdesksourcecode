@@ -14,7 +14,8 @@ use hd;
 drop table if exists `user`;
 
 CREATE TABLE `user` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  -- `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(255) not NULL,
   `password` VARCHAR(255) not NULL,   
   `firstName` VARCHAR(255) not NULL,
@@ -28,16 +29,30 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `user`(email, password, firstName, lastName, phone, address, role, status) VALUES
+-- Admin
 ('dunglh@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hồng Dũng', 'Lâm', '0986814665', '90/12/1/6 Bong Sao', 'ROLE_ADMIN', 'Active'),
-
 ('dunglh+admin@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Quản Trị', 'Người', '1111111111', '123 Pham Hung', 'ROLE_ADMIN', 'Active'),
-('dunglh+supporter@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ', 'Người', '2222222222', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Active'),
-('dunglh+customer@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng', 'Khách', '3333333333', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('nguoiquantri@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Tuấn Nam', 'Trần', '1444444444', '79 Huyen Tran Cong Chua', 'ROLE_ADMIN', 'Active'),
 
-('nguoiquantri@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Tuấn Nam', 'Trần', '4444444444', '79 Huyen Tran Cong Chua', 'ROLE_ADMIN', 'Active'),
-('nguoiquantri_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Trường Vinh', 'Lê', '5555555555', '123 Tran Hung Dao', 'ROLE_ADMIN', 'Active'),
-('nguoihotro@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Anh Trung', 'Nguyễn', '6666666666', '22 Nguyen Thi Minh Khai', 'ROLE_SUPPORTER', 'Active'),
-('nguoihotro_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Trọng Tấn', 'Trương', '7777777777', '456 Nguyen Du', 'ROLE_SUPPORTER', 'Active'),
+-- supporter
+('dunglh+supporter@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ', 'Người', '2222222221', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Active'),
+('dunglh+supporter2@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ 2', 'Người', '2222222222', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Active'),
+('dunglh+supporter3@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ 3', 'Người', '2222222223', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Active'),
+('dunglh+supporter4@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ 4', 'Người', '2222222224', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Active'),
+('dunglh+supporter5@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ 5', 'Người', '2222222225', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Active'),
+('dunglh+supporter6@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hỗ Trợ 6', 'Người', '2222222226', '456 Suong Nguyet Anh', 'ROLE_SUPPORTER', 'Inactive'),
+('nguoihotro@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Anh Trung', 'Nguyễn', '2666666666', '22 Nguyen Thi Minh Khai', 'ROLE_SUPPORTER', 'Active'),
+
+-- customer
+('dunglh+customer@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng', 'Khách', '3333333330', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer2@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 2', 'Khách', '3333333332', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer3@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 3', 'Khách', '3333333333', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer4@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 4', 'Khách', '3333333334', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer5@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 5', 'Khách', '3333333335', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer6@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 6', 'Khách', '3333333336', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer7@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 7', 'Khách', '3333333337', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer8@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 8', 'Khách', '3333333338', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Active'),
+('dunglh+customer9@gmail.com', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Hàng 9', 'Khách', '3333333339', '789 Vo Van Kiet', 'ROLE_CUSTOMER', 'Inactive'),
 ('khachhang_hd@proton.me', '$2a$12$CR0useg0GQlwrYMvylhHROZg0Vq5nr7jRILz14lc.ArB9iuw1wsEC', 'Thị Quyên', 'Bùi', '8888888888', '789 Pham The Hien', 'ROLE_CUSTOMER', 'Active');
 
 
@@ -73,15 +88,61 @@ drop table if exists `priority`;
 CREATE TABLE `priority` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) not NULL,
-  `reachIn` int not NULL,
+  `resolveIn` int not NULL,
   `status` VARCHAR(255) not NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `priority`(name, reachIn, status) VALUES 
+INSERT INTO `priority`(name, resolveIn, status) VALUES 
+('Urgent', 8, 'Active'),
 ('High', 12, 'Active'),
 ('Normal', 24, 'Active'),
-('Low', 36, 'Active');
+('Low', 36, 'Active'),
+('Very Low', 0, 'Active');
+
+-- -----------------------------------------------------
+-- Table `team`
+-- -----------------------------------------------------
+
+drop table if exists `team`;
+
+CREATE TABLE `team` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) not NULL,
+  `assignmentMethod` VARCHAR(255) not NULL,
+  `status` VARCHAR(255) not NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `team`(name, assignmentMethod, status) VALUES 
+('Pepsi', 'A', 'Active'),
+('Coca', 'A', 'Active'),
+('Honda', 'M', 'Active');
+
+-- -----------------------------------------------------
+-- Table `team`
+-- -----------------------------------------------------
+
+drop table if exists `teamSupporter`;
+
+CREATE TABLE `teamSupporter` (
+  `teamid` int NOT NULL,
+  `supporterid` int NOT NULL,
+  
+  PRIMARY KEY (`teamid`, `supporterid`),
+  
+  CONSTRAINT `FK_team` FOREIGN KEY (`teamid`) REFERENCES `team` (`id`) 
+  ON DELETE NO ACTION ON UPDATE NO ACTION,
+  
+  CONSTRAINT `FK_user` FOREIGN KEY (`supporterid`) REFERENCES `user` (`id`) 
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+  
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `teamSupporter`(teamid, supporterid) VALUES 
+(1, 4),
+(1, 5),
+(1, 6);
 
 -- --
 -- -- -- ezbank
@@ -261,9 +322,3 @@ INSERT INTO `priority`(name, reachIn, status) VALUES
 --   KEY `customer_id` (`customer_id`),
 --   CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
 -- );
-
---  INSERT INTO `authorities` (`customer_id`, `name`)
---   VALUES (1, 'ROLE_USER');
-
---  INSERT INTO `authorities` (`customer_id`, `name`)
---   VALUES (1, 'ROLE_ADMIN');

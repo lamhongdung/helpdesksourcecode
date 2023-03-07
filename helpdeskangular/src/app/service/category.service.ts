@@ -12,7 +12,7 @@ export class CategoryService {
   // 'http://localhost:8080'
   host = environment.apiUrl;
 
-  // number of categories per a page(default = 5)
+  // number of categories per page(default = 5)
   pageSize = environment.pageSize;
 
   constructor(private http: HttpClient) { }
@@ -36,15 +36,15 @@ export class CategoryService {
 
   }
 
-   // create category
-   public createCategory(category: Category): Observable<Category> {
-     return this.http.post<Category>(`${this.host}/category-create`, category);
-   }
+  // create new category
+  public createCategory(category: Category): Observable<Category> {
+    return this.http.post<Category>(`${this.host}/category-create`, category);
+  }
 
-   // edit existing category
-   public editCategory(category: Category): Observable<Category> {
-     return this.http.put<Category>(`${this.host}/category-edit`, category);
-   }
+  // edit existing category
+  public editCategory(category: Category): Observable<Category> {
+    return this.http.put<Category>(`${this.host}/category-edit`, category);
+  }
 
   // find category by id
   findById(id: number): Observable<Category> {

@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/entity/User';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -24,11 +24,10 @@ export class UserViewComponent implements OnInit {
   // user id
   id: number;
 
-  constructor(private router: Router,
-    private userService: UserService,
+  constructor(private userService: UserService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute) { 
+    private activatedRoute: ActivatedRoute) {
 
   }
 
@@ -54,20 +53,20 @@ export class UserViewComponent implements OnInit {
     });
 
     // get user id from params of the active route.
-    // and get user based on user id from database
+    // and then get user based on user id from database
     this.activatedRoute.paramMap.subscribe(
-      
+
       (params: ParamMap) => {
 
         // get id from param of active route.
         // ex: http://localhost:4200/user-view/:id
         // ex: http://localhost:4200/user-view/3
-        // the sign "+": use to convert from string to number
+        // the sign "+": use to convert string to number
         this.id = +params.get('id');
 
         // get user by user id
         this.userService.findById(this.id).subscribe(
-          
+
           // if there is no error when get data from backend
           (data: User) => {
 

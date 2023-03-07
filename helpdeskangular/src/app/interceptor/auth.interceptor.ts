@@ -6,28 +6,36 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from '../service/authentication.service';
+import { AuthService } from '../service/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(private authService: AuthService) { }
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
-    // 
-    // if (httpRequest.url.includes(`${this.authenticationService.host}/user/login`)) {
-    if (httpRequest.url.includes(`${this.authenticationService.host}/login`)) {
+
+    if (httpRequest.url.includes(`${this.authService.host}/login`)) {
+
       // let forward it(do nothing)
       return httpHandler.handle(httpRequest);
+
     }
-    // if (httpRequest.url.includes(`${this.authenticationService.host}/user/register`)) {
-    if (httpRequest.url.includes(`${this.authenticationService.host}/reset-password`)) {
+
+    if (httpRequest.url.includes(`${this.authService.host}/reset-password`)) {
+
+      // let forward it(do nothing)
       return httpHandler.handle(httpRequest);
+
     }
-    this.authenticationService.loadToken();
-    const token = this.authenticationService.getToken();
+
+    this.authService.loadToken();
+    const token = this.authService.getToken();
+
     // add token in the header of the request
-    const request = httpRequest.clone({ setHeaders: { Authorization: `Bearer ${token}` }});
+    const request = httpRequest.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+
     return httpHandler.handle(request);
+
   }
 }

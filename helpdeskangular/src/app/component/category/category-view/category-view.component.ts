@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/entity/Category';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { CategoryService } from 'src/app/service/category.service';
 import { NotificationService } from 'src/app/service/notification.service';
 
@@ -25,8 +25,7 @@ export class CategoryViewComponent implements OnInit {
   // category id
   id: number;
 
-  constructor(private router: Router,
-    private categoryService: CategoryService,
+  constructor(private categoryService: CategoryService,
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute) {
@@ -48,7 +47,7 @@ export class CategoryViewComponent implements OnInit {
     });
 
     // get category id from params of the active route.
-    // and get category based on category id from database
+    // and then get category based on category id from database
     this.activatedRoute.paramMap.subscribe(
 
       (params: ParamMap) => {
@@ -67,14 +66,16 @@ export class CategoryViewComponent implements OnInit {
 
             this.category = data;
 
-            // load user information to the categoryForm
+            // load category information to the categoryForm
             this.categoryForm.patchValue(data);
 
           },
+
           // if there is error when get data from database
           (errorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
           }
+          
         );
       } // end of (params: ParamMap)
     ); // end of this.activatedRoute.paramMap.subscribe()

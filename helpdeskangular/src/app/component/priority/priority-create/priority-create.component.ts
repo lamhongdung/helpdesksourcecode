@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Priority } from 'src/app/entity/Priority';
-import { NotificationType } from 'src/app/enum/notification-type.enum';
+import { NotificationType } from 'src/app/enum/NotificationType.enum';
 import { NotificationService } from 'src/app/service/notification.service';
 import { PriorityService } from 'src/app/service/priority.service';
 
@@ -31,6 +31,10 @@ export class PriorityCreateComponent implements OnInit {
     name: [
       { type: 'required', message: 'Please input priority name' },
       { type: 'maxlength', message: 'Name cannot be longer than 50 characters' }
+    ],
+    resolveIn: [
+      { type: 'required', message: 'Please input Resolve in(hours)' },
+      { type: 'pattern', message: 'Value of the Resolve In must be greater than or equal to zero' }
     ]
   };
 
@@ -39,7 +43,7 @@ export class PriorityCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private notificationService: NotificationService) { }
 
-  // this method ngOnInit() is run after the component "CategoryCreateComponent" is contructed
+  // this method ngOnInit() is run after the component "PriorityCreateComponent" is contructed
   ngOnInit(): void {
 
     // initial form
@@ -48,14 +52,17 @@ export class PriorityCreateComponent implements OnInit {
       // required and max length = 50 characters
       name: ['', [Validators.required, Validators.maxLength(50)]],
 
+      // required and must be a positive number(>=0)
+      resolveIn: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
+
       // initial value = 'Active'
       status: ['Active']
     });
 
   } // end of ngOnInit()
 
-  // create category.
-  // when user click the "Save" button in the "Create category" screen
+  // create priority.
+  // when user click the "Save" button in the "Create priority" screen
   createPriority() {
 
     // allow to show spinner(circle)
@@ -64,10 +71,10 @@ export class PriorityCreateComponent implements OnInit {
     // push into the subscriptions list in order to unsubscribes all easily
     this.subscriptions.push(
 
-      // create category
+      // create priority
       this.priorityService.createPriority(this.priorityForm.value).subscribe(
 
-        // create category successful
+        // create priority successful
         (data: Priority) => {
 
           this.priority = data;
@@ -78,11 +85,11 @@ export class PriorityCreateComponent implements OnInit {
           // hide spinner(circle)
           this.showSpinner = false;
 
-          // navigate to the "category-list" page
+          // navigate to the "priority-list" page
           this.router.navigateByUrl("/priority-list");
         },
 
-        // create category failure
+        // create priority failure
         (errorResponse: HttpErrorResponse) => {
 
           // show the error message to user
@@ -94,7 +101,7 @@ export class PriorityCreateComponent implements OnInit {
       )
     );
 
-  } // end of createCategory()
+  } // end of createPriority()
 
   // send notification to user
   private sendNotification(notificationType: NotificationType, message: string): void {
@@ -105,9 +112,9 @@ export class PriorityCreateComponent implements OnInit {
     }
   }
 
-  // unsubscribe all subscriptions from this component "CategoryCreateComponent"
+  // unsubscribe all subscriptions from this component "PriorityCreateComponent"
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-} // end of the CategoryCreateComponent class
+} // end of the PriorityCreateComponent class
