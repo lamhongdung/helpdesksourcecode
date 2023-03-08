@@ -91,7 +91,7 @@ export class CategoryEditComponent implements OnInit {
   } // end of ngOnInit()
 
   // edit category.
-  // when user click the "Save" button in the "Edit category"
+  // when user clicks the "Save" button in the "Edit category"
   editCategory() {
 
     // allow to show spinner(circle)

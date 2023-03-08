@@ -84,7 +84,7 @@ export class UserCreateComponent implements OnInit {
   } // end of ngOnInit()
 
   // create user.
-  // when user click the "Save" button in the "Create user"
+  // when user clicks the "Save" button in the "Create user"
   createUser() {
 
     // allow to show spinner(circle)

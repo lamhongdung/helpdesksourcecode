@@ -96,7 +96,7 @@
             <div class="mr-auto">
 
                 <!-- the "Create priority" button. -->
-                <!-- when user click on the "Create priority" button -->
+                <!-- when user clicks on the "Create priority" button -->
                 <button class="btn btn-primary" routerLink="/priority-create"><i class="fa fa-plus"></i>
                     Create priority
                 </button>
@@ -144,25 +144,25 @@
                 <tr *ngFor="let priority of priorities, index as i">
 
                     <!-- column: order(line number) -->
-                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <!-- navigate to the "/priority-view/{id}" when user clicks on the table(except the column "Action") -->
                     <td style="text-align: right" class="pointer-link" (click)="viewPriority(priority.id)">
                         {{indexBasedPage(currentPage, i)}}</td>
 
                     <!-- column: ID -->
-                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <!-- navigate to the "/priority-view/{id}" when user clicks on the table(except the column "Action") -->
                     <td style="text-align: right" class="pointer-link" (click)="viewPriority(priority.id)">
                         {{priority.id}}</td>
 
                     <!-- column: Name -->
-                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <!-- navigate to the "/priority-view/{id}" when user clicks on the table(except the column "Action") -->
                     <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.name}}</td>
 
                     <!-- column: ResolveIn(hours) -->
-                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <!-- navigate to the "/priority-view/{id}" when user clicks on the table(except the column "Action") -->
                     <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.resolveIn}}</td>
 
                     <!-- column: Status -->
-                    <!-- navigate to the "/priority-view/{id}" when user click on the table(except the column "Action") -->
+                    <!-- navigate to the "/priority-view/{id}" when user clicks on the table(except the column "Action") -->
                     <td class="pointer-link" (click)="viewPriority(priority.id)">{{priority.status}}</td>
 
                     <!-- the "Edit" button -->

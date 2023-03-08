@@ -62,7 +62,7 @@ export class PriorityCreateComponent implements OnInit {
   } // end of ngOnInit()
 
   // create priority.
-  // when user click the "Save" button in the "Create priority" screen
+  // when user clicks the "Save" button in the "Create priority" screen
   createPriority() {
 
     // allow to show spinner(circle)

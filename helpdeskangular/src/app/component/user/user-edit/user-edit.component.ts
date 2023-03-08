@@ -109,7 +109,7 @@ export class UserEditComponent implements OnInit {
   } // end of ngOnInit()
 
   // edit user.
-  // when user click the "Save" button in the "Edit user"
+  // when user clicks the "Save" button in the "Edit user"
   editUser() {
 
     // allow to show spinner(circle)

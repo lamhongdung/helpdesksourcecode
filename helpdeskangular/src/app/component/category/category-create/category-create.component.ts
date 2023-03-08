@@ -55,7 +55,7 @@ export class CategoryCreateComponent implements OnInit {
   } // end of ngOnInit()
 
   // create category.
-  // when user click the "Save" button in the "Create category" screen
+  // when user clicks the "Save" button in the "Create category" screen
   createCategory() {
 
     // allow to show spinner(circle)

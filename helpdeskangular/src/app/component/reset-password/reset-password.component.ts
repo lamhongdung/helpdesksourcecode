@@ -55,7 +55,7 @@ export class ResetPasswordComponent implements OnInit {
 
   } // end of ngOnInit()
 
-  // when user click on the "Reset password" button
+  // when user clicks on the "Reset password" button
   public resetPassword(): void {
 
     // allow to show spinner(circle)

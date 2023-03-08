@@ -102,7 +102,7 @@ export class PriorityEditComponent implements OnInit {
   } // end of ngOnInit()
 
   // edit priority.
-  // when user click the "Save" button in the "Edit priority"
+  // when user clicks the "Save" button in the "Edit priority"
   editPriority() {
 
     // allow to show spinner(circle)
